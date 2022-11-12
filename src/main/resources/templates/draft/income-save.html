@@ -1,4 +1,4 @@
-<form action="#" th:action="@{/income/save}" th:object="${form}"
+<form action="#" th:action="@{/x/income}" th:object="${form}"
       method="post">
     <fieldset>
         <input type="submit" id="submitButton" th:value="Save">
@@ -11,9 +11,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="book, itemStat : *{books}">
-                <td><input th:field="*{books[__${itemStat.index}__].title}" /></td>
-                <td><input th:field="*{books[__${itemStat.index}__].author}" /></td>
+            <tr th:each="income, itemStat : *{incomeList}">
+                <td><input th:field="*{incomeList[__${incomeList.index}__].id}" /></td>
+                <td><input th:field="*{incomeList[__${incomeList.index}__].description}" /></td>
             </tr>
             </tbody>
         </table>

@@ -19,13 +19,13 @@ public class Income {
     @Setter
     private BigDecimal amount;
 
-    @Column(name = "income_date")
+   // @Column(name = "income_date")
     private LocalDate date;
 
-    @Column(name = "income_year")
+   // @Column(name = "income_year")
     private Integer year;
 
-    @Column(name = "income_month")
+   // @Column(name = "income_month")
     private Integer month;
     @Setter
     private String description;

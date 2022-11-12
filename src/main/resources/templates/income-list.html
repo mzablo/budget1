@@ -1,39 +1,69 @@
-<div th:switch="${incomeList}">
-    <h2 th:case="null">No users yet!</h2>
-    <div th:case="*">
-        <h2>Income</h2>
-        <table>
-            <thead>
-            <tr>
-                <th>id</th>
-                <th>date</th>
-                <th>description</th>
-                <th>amount</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="income : ${incomeList}">
-                <td th:text="${income.id}"></td>
-                <td th:text="${income.date}"></td>
-                <td th:text="${income.description}"></td>
-                <td th:text="${income.amount}"></td>
-                <td><a th:href="@{/edit/{id}(id=${income.id})}">Edit</a></td>
-                <td><a th:href="@{/delete/{id}(id=${income.id})}">Delete</a></td>
-            </tr>
-            </tbody>
-        </table>
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+            name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Thymeleaf Form handling Demo</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body class="container">
+<form class="col card p-2 my-3" method="post" th:action="@{/income}" th:object="${incomeDto}">
+    <div class="form-group">
+        <label for="id">Id</label>
+        <input class="form-control" id="id"  readonly
+               th:field="*{id}"
+               type="number"/>
     </div>
-    <p><a href="/signup">Add a new user</a></p>
+    <div class="form-group">
+        <label for="description">Description</label>
+        <input class="form-control" id="description" autocomplete="off"
+               th:field="*{description}"
+               type="text"/>
+    </div>
+    <div class="form-group">
+        <label for="description">Date</label>
+        <input class="form-control" id="date" placeholder="Enter date" required autocomplete="off"
+               th:field="*{date}"
+               th:value="${{defDate}}"
+               type="date"/>
+    </div>
+    <div class="form-group">
+        <label for="amount">Amount</label>
+        <input class="form-control" id="amount" placeholder="Enter amount" required  autocomplete="off"
+               th:field="*{amount}" step="0.01" data-decimals="2"
+               type="number"/>
+    </div>
+    <div>
+        <input class="btn btn-primary" type="submit" value="Create Income">
+        <input class="btn btn-dark" type="reset" value="Reset">
+    </div>
+</form>
 
-    <tr th:each="income, itemStat : ${incomeList}">
-        <td>
-            <input hidden th:name="|incomeList[${itemStat.index}].id|" th:value="${income.getId()}"/>
-        </td>
-        <td>
-            <input th:name="|incomeList[${itemStat.index}].title|" th:value="${income.getDescription()}"/>
-        </td>
-        <td>
-            <input th:name="|incomeList[${itemStat.index}].author|" th:value="${income.getDate()}"/>
-        </td>
+<table class="table table-striped table-bordered ">
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Description</th>
+        <th>Amount</th>
+        <th>Operation id</th>
+        <th>Actions</th>
     </tr>
-</div>
+    <tr th:if="${#lists.isEmpty(incomeList)}">
+        <td class="text-center" colspan="7">No Records found. Add some...!</td>
+    </tr>
+    <tr th:each="income : ${incomeList}">
+        <td class="align-middle" th:text="${income.id}"></td>
+        <td class="align-middle" th:text="${income.date}"></td>
+        <td class="align-middle" th:text="${income.description}"></td>
+        <td class="align-middle" th:text="${income.amount}"></td>
+        <td class="align-middle" th:text="${income.operationId}"></td>
+        <td class="align-middle text-center"><a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a></td>
+    </tr>
+</table>
+
+</body>
+</html>

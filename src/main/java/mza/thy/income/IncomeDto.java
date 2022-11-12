@@ -2,6 +2,7 @@ package mza.thy.income;
 
 import lombok.*;
 import mza.thy.domain.Income;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,10 +10,14 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter//na potrzeby thymeleaf
 @Getter
+@ToString
 public class IncomeDto {
     private Long id;
     private BigDecimal amount;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     private Integer year;
     private Integer month;

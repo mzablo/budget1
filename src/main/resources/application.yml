@@ -1,17 +1,20 @@
 spring:
   datasource:
-    driverClassName: org.h2.Driver
+    driverClassName: org.hsqldb.jdbc.JDBCDriver
+#    driverClassName: org.h2.Driver
 #    url: jdbc:h2:mem:db
-    url: jdbc:h2:file:C:/gosia/development/budget/db
-    username: sa
-    password: sa
+   # url: jdbc:h2:file:C:/gosia/development/budget/db
+    url: ${MZA.PATH:jdbc:hsqldb:file:db/budget}
+    username: SA
+    password:
   jpa:
     show-sql=true:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.HSQLDialect
   flyway:
+    enabled: false
     locations: classpath:db/migration
-
+budget.path: ${MZA.VAR:value}
 logging:
   level:
-    com:
+    mza:
       thy: DEBUG
