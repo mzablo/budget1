@@ -58,14 +58,40 @@
         </div>
     </div>
 </form>
-
+<div th:if="${isAscending}">
+    <a th:href="'/income?sortField=id&sortDirection=DESC'">Id</a>
+</div>
 <table class="table table-striped table-bordered ">
     <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Name</th>
-        <th>Description</th>
-        <th>Amount</th>
+        <th>
+            <div th:if="${isAscending}">
+               <a th:href="'/income?sortField=id&sortDirection=DESC'">Id</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/income?sortField=id&sortDirection=ASC'">Id</a>
+            </div>
+        </th>
+
+        <th>
+            <a th:href="'/income/?sortField=date'">Date</a>
+        </th>
+        <th>
+            <a th:href="'/income/?sortField=amount'">Amount</a>
+        </th>
+        <th>
+            <a th:href="'/income/?sortField=name'">Name</a>
+            <form class="col card p-3 my-5" method="post" th:action="@{/income/filter}" th:object="${filterName}">
+
+            <div class="form-group">
+                <input type="text" id="filterName" th:value="${filterName}"/>
+            </div>
+                <input class="btn btn-primary" type="submit" value="go">
+            </form>
+
+        </th>
+        <th>
+            <a th:href="'/income/?sortField=description'">Description</a>
+        </th>
         <th>Operation id</th>
         <th>Actions</th>
     </tr>
@@ -75,9 +101,9 @@
     <tr th:each="income : ${incomeList}">
         <td class="align-middle" th:text="${income.id}"></td>
         <td class="align-middle" th:text="${income.date}"></td>
+        <td class="align-middle" th:text="${income.amount}"></td>
         <td class="align-middle" th:text="${income.name}"></td>
         <td class="align-middle" th:text="${income.description}"></td>
-        <td class="align-middle" th:text="${income.amount}"></td>
         <td class="align-middle" th:text="${income.operationId}"></td>
         <td class="align-middle text-center form-inline">
             <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a>

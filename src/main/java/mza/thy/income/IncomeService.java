@@ -10,8 +10,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,10 +27,32 @@ public class IncomeService {
     private final IncomeRepository incomeRepository;
 
     @Transactional(readOnly = true)
-    List<IncomeDto> getIncomeList() {
-        return incomeRepository.findAll(Sort.by(Sort.Direction.DESC, "date")).stream()
+    List<IncomeDto> getIncomeList(FilterParams filterParams, Sort sort) {
+        if (Objects.nonNull(filterParams)) {
+            doFilter(filterParams);
+        }
+        return Optional.ofNullable(sort).map(s->incomeRepository.findAll(sort))
+                .orElse(incomeRepository.findAll()).stream()
                 .map(IncomeDto::convert)
                 .collect(Collectors.toList());
+    }
+
+    private List<IncomeDto> doFilter(FilterParams filterParams) {
+        if (Objects.nonNull(filterParams.getFilterId())) {
+            log.debug("Filter income by id " + filterParams.getFilterId());
+            return incomeRepository.findById(filterParams.getFilterId())
+                    .map(IncomeDto::convert)
+                    .map(List::of)
+                    .orElse(Collections.emptyList());
+        }
+        if (Objects.nonNull(filterParams.getFilterName())) {
+            log.debug("Filter income by name " + filterParams.getFilterName());
+            return incomeRepository.findAllByNameLike(filterParams.getFilterName())
+                    .stream()
+                    .map(IncomeDto::convert)
+                    .collect(Collectors.toList());
+        }
+        return Collections.emptyList();
     }
 
     @Transactional(readOnly = true)

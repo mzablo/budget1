@@ -9,8 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,31 +20,57 @@ import java.time.LocalDate;
 public class XController {
     private final IncomeService incomeService;
 
-    //confirm dletetion przez przekierowanie na strone do kasowania
-
     @GetMapping("income")
-    public String getIncomeList(Model model) {
-        model.addAttribute("incomeList", incomeService.getIncomeList());
+    public String getIncomeList(Model model,
+                                String filterName,
+                                @RequestParam(defaultValue = "date") String sortField,
+                                @RequestParam(required = false) Sort.Direction sortDirection) {
+        log.debug("mzaa " + filterName);
+        var filterParams = FilterParams.builder()
+                .filterName(filterName)
+                .build();
+        sortDirection = Optional.ofNullable(sortDirection)
+                .orElse(Sort.Direction.DESC);
+        model.addAttribute("incomeList", incomeService.getIncomeList(filterParams, Sort.by(sortDirection, sortField)));
         model.addAttribute("incomeDto", new IncomeDto());
+        //model.addAttribute("filterName", "nam");
+        model.addAttribute("isAscending", sortDirection.isAscending());
+        return "income-list";
+    }
+
+    @PostMapping("income/filter")
+    public String getIncomeList(Model model,
+                                String filterName) {
+        var filterParams = FilterParams.builder()
+                .filterName(filterName)
+                .build();
+        log.debug("Filter  " + filterName);
+
+        model.addAttribute("incomeList", incomeService.getIncomeList(filterParams,null));
+        model.addAttribute("incomeDto", new IncomeDto());
+        //model.addAttribute("filterName", "nam");
         return "income-list";
     }
 
     @GetMapping("/income/{id}")
-    public String getIncomeListWithGivenIncome(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("incomeList", incomeService.getIncomeList());
+    public String getIncomeListWithGivenIncome(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
+        sort = Optional.ofNullable(sort).orElse(Sort.by(Sort.Direction.DESC, "date"));
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, sort));
         model.addAttribute("incomeDto", incomeService.getIncome(id));
         return "income-list";
     }
+
     @GetMapping("/income/delete/{id}")
     public String getIncomeDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, null));
         model.addAttribute("incomeDto", incomeService.getIncome(id));
         return "income-delete";
     }
+
     @PostMapping("/income/delete/{id}")
     public String deleteIncome(Model model, @PathVariable("id") Long id) {
         incomeService.deleteIncome(id);
-        model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, null));
         model.addAttribute("incomeDto", new IncomeDto());
         return "income-list";
     }
@@ -51,7 +79,7 @@ public class XController {
     @PostMapping("/income")
     public String saveIncome(Model model, IncomeDto income) {
         incomeService.saveIncome(income);
-        model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, null));
         model.addAttribute("incomeDto", new IncomeDto());
         return "income-list";
     }
