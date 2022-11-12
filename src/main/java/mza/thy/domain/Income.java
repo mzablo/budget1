@@ -2,7 +2,10 @@ package mza.thy.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -16,19 +19,18 @@ public class Income {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Setter
-    private BigDecimal amount;
 
-   // @Column(name = "income_date")
+    private BigDecimal amount = BigDecimal.ZERO;
     private LocalDate date;
-
-   // @Column(name = "income_year")
     private Integer year;
-
-   // @Column(name = "income_month")
     private Integer month;
+
+    @Setter
+    private String name;
+
     @Setter
     private String description;
+
     @Setter
     private Long operationId;
 
@@ -36,6 +38,10 @@ public class Income {
         this.date = date;
         setMonth(date);
         setYear(date);
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = Optional.ofNullable(amount).orElse(BigDecimal.ZERO);
     }
 
     private void setMonth(LocalDate date) {

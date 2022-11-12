@@ -19,8 +19,7 @@ public class IncomeDto {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
-    private Integer year;
-    private Integer month;
+    private String name;
     private String description;
     private Long operationId;
 
@@ -29,8 +28,7 @@ public class IncomeDto {
                 .id(id)
                 .amount(amount)
                 .date(date)
-                .year(year)
-                .month(month)
+                .name(name)
                 .description(description)
                 .operationId(operationId)
                 .build();
@@ -41,8 +39,7 @@ public class IncomeDto {
                 .id(in.getId())
                 .amount(in.getAmount())
                 .date(in.getDate())
-                .year(in.getYear())
-                .month(in.getMonth())
+                .name(in.getName())
                 .description(in.getDescription())
                 .operationId(in.getOperationId())
                 .build();

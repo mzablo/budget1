@@ -49,8 +49,16 @@ public class IncomeService {
         if (Objects.nonNull(incomeDto.getId())) {
             updateIncome(incomeDto.getId(), incomeDto);
         } else {
+            saveNewIncome(incomeDto);
+        }
+    }
+
+    private void saveNewIncome(IncomeDto incomeDto) {
+        if (Objects.nonNull(incomeDto.getName())) {
             log.debug("Saving new income " + incomeDto);
             incomeRepository.save(incomeDto.convert());
+        } else {
+            log.debug("Not saved - empty income " + incomeDto);
         }
     }
 

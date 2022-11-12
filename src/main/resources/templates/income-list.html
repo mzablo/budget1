@@ -6,17 +6,37 @@
             content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
             name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <title>Thymeleaf Form handling Demo</title>
+    <title>Budget</title>
     <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
           rel="stylesheet">
 </head>
 <body class="container">
-<form class="col card p-2 my-3" method="post" th:action="@{/income}" th:object="${incomeDto}">
-    <div class="form-group">
+<form class="col card p-3 my-5" method="post" th:action="@{/income}" th:object="${incomeDto}">
+    <div class="form-group form-inline">
         <label for="id">Id</label>
         <input class="form-control" id="id" readonly
                th:field="*{id}"
+               type="text"/>
+    </div>
+    <div class="form-group form-inline">
+        <label for="description">Date</label>
+        <input class="form-control" id="date" placeholder="Enter date" required autocomplete="off"
+               th:field="*{date}"
+               th:value="${{defDate}}"
+               type="date"/>
+    </div>
+    <div class="form-group form-inline">
+        <label for="amount">Amount</label>
+        <input class="form-control" id="amount" placeholder="Enter amount" required  autocomplete="off"
+               th:field="*{amount}" step="0.01" data-decimals="2"
                type="number"/>
+    </div>
+
+    <div>
+        <label for="name">Name</label>
+        <input class="form-control" id="name" autocomplete="off"
+               th:field="*{name}"
+               type="text"/>
     </div>
     <div class="form-group">
         <label for="description">Description</label>
@@ -25,22 +45,17 @@
                type="text"/>
     </div>
     <div class="form-group">
-        <label for="description">Date</label>
-        <input class="form-control" id="date" placeholder="Enter date" required autocomplete="off"
-               th:field="*{date}"
-               th:value="${{defDate}}"
-               type="date"/>
-    </div>
-    <div class="form-group">
-        <label for="amount">Amount</label>
-        <input class="form-control" id="amount" placeholder="Enter amount" required  autocomplete="off"
-               th:field="*{amount}" step="0.01" data-decimals="2"
+        <label for="operation">Operation</label>
+        <input class="form-control" id="operation" autocomplete="off"
+               th:field="*{operationId}"
                type="number"/>
     </div>
     <div>
         <input class="btn btn-primary" type="submit" value="Update">
-        <input class="btn btn-dark" type="reset" value="Reset">
-        <a class="btn btn-secondary" th:href="'/income/delete/' + ${incomeDto.id}">X</a>
+        <a class="btn btn-primary" th:href="'/income/'">Reset</a>
+        <div class="btn btn-dark" th:if="${incomeDto.id > 0}">
+            <a th:href="'/income/delete/' + ${incomeDto.id}">Delete</a>
+        </div>
     </div>
 </form>
 
@@ -48,6 +63,7 @@
     <tr>
         <th>ID</th>
         <th>Date</th>
+        <th>Name</th>
         <th>Description</th>
         <th>Amount</th>
         <th>Operation id</th>
@@ -59,12 +75,13 @@
     <tr th:each="income : ${incomeList}">
         <td class="align-middle" th:text="${income.id}"></td>
         <td class="align-middle" th:text="${income.date}"></td>
+        <td class="align-middle" th:text="${income.name}"></td>
         <td class="align-middle" th:text="${income.description}"></td>
         <td class="align-middle" th:text="${income.amount}"></td>
         <td class="align-middle" th:text="${income.operationId}"></td>
-        <td class="align-middle text-center">
+        <td class="align-middle text-center form-inline">
             <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a>
-            <a class="btn btn-secondary" th:href="'/income/delete/' + ${income.id}">X</a>
+            <a th:href="'/income/delete/' + ${income.id}">X</a>
         </td>
     </tr>
 </table>
