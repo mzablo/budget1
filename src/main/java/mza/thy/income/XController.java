@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,15 +24,35 @@ public class XController {
     public String getIncomeList(Model model) {
         model.addAttribute("incomeList", incomeService.getIncomeList());
         model.addAttribute("incomeDto", new IncomeDto());
-      //  model.addAttribute("defDate", LocalDate.now());
         return "income-list";
     }
 
     @GetMapping("/income/{id}")
-    public String incomeEdit(Model model, @PathVariable("id") Long id) {
-        var income = incomeService.getIncome(id);
-        model.addAttribute("incomeDto", income);
+    public String getIncomeListWithGivenIncome(Model model, @PathVariable("id") Long id) {
         model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeDto", incomeService.getIncome(id));
+        return "income-list";
+    }
+    @GetMapping("/income/delete/{id}")
+    public String getIncomeDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeDto", incomeService.getIncome(id));
+        return "income-delete";
+    }
+    @PostMapping("/income/delete/{id}")
+    public String deleteIncome(Model model, @PathVariable("id") Long id) {
+        incomeService.deleteIncome(id);
+        model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeDto", new IncomeDto());
+        return "income-list";
+    }
+
+
+    @PostMapping("/income")
+    public String saveIncome(Model model, IncomeDto income) {
+        incomeService.saveIncome(income);
+        model.addAttribute("incomeList", incomeService.getIncomeList());
+        model.addAttribute("incomeDto", new IncomeDto());
         return "income-list";
     }
 
@@ -47,27 +66,17 @@ public class XController {
         model.addAttribute("defDate", LocalDate.now());
     }
 
-    @PostMapping("/income/{id}")
-    public String updateIncome(Model model, @PathVariable("id") Long id, IncomeDto income) {
-        if (Objects.nonNull(income.getDescription())) {
-            incomeService.updateIncome(id, income);
-        } else {
-            log.debug("Empty object");
+    /*
+        @PostMapping("/income/{id}")
+        public String updateIncome(Model model, @PathVariable("id") Long id, IncomeDto income) {
+            if (Objects.nonNull(income.getDescription())) {
+                incomeService.updateIncome(id, income);
+            } else {
+                log.debug("Empty object");
+            }
+            model.addAttribute("incomeList", incomeService.getIncomeList());
+            model.addAttribute("incomeDto", new IncomeDto());
+            return "income-list";
         }
-        model.addAttribute("incomeList", incomeService.getIncomeList());
-        model.addAttribute("incomeDto", new IncomeDto());
-        return "income-list";
-    }
-
-    @PostMapping("/income")
-    public String saveIncome(Model model, IncomeDto income) {
-        if (Objects.nonNull(income.getDescription())) {
-            incomeService.saveNewIncome(income);
-        } else {
-            log.debug("Empty object");
-        }
-        model.addAttribute("incomeList", incomeService.getIncomeList());
-        model.addAttribute("incomeDto", new IncomeDto());
-        return "income-list";
-    }
+    */
 }

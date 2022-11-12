@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,22 +45,30 @@ public class IncomeService {
     }
 
     @Transactional
-    IncomeDto saveNewIncome(IncomeDto incomeDto) {
-        log.debug("Saving new income " + incomeDto);
-        var income = incomeDto.convert();
-        return IncomeDto.convert(incomeRepository.save(income));
+    void saveIncome(IncomeDto incomeDto) {
+        if (Objects.nonNull(incomeDto.getId())) {
+            updateIncome(incomeDto.getId(), incomeDto);
+        } else {
+            log.debug("Saving new income " + incomeDto);
+            incomeRepository.save(incomeDto.convert());
+        }
     }
 
     @Transactional
-    IncomeDto updateIncome(Long id, IncomeDto incomeDto) {
+    void deleteIncome(Long id) {
+        incomeRepository.deleteById(id);
+        log.debug("Deleted income " + id);
+    }
+
+    private void updateIncome(Long id, IncomeDto incomeDto) {
         var income = incomeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Brak income " + id));
         income.setAmount(incomeDto.getAmount());
         income.setDate(incomeDto.getDate());
-        income.setOperationId(incomeDto.getOperationId());
         income.setDescription(incomeDto.getDescription());
-
-        return IncomeDto.convert(incomeRepository.save(income));
+        income.setOperationId(incomeDto.getOperationId());//!
+        log.debug("Update income " + incomeDto);
+        incomeRepository.save(income);
     }
 
 }

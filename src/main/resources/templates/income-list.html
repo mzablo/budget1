@@ -14,7 +14,7 @@
 <form class="col card p-2 my-3" method="post" th:action="@{/income}" th:object="${incomeDto}">
     <div class="form-group">
         <label for="id">Id</label>
-        <input class="form-control" id="id"  readonly
+        <input class="form-control" id="id" readonly
                th:field="*{id}"
                type="number"/>
     </div>
@@ -38,8 +38,9 @@
                type="number"/>
     </div>
     <div>
-        <input class="btn btn-primary" type="submit" value="Create Income">
+        <input class="btn btn-primary" type="submit" value="Update">
         <input class="btn btn-dark" type="reset" value="Reset">
+        <a class="btn btn-secondary" th:href="'/income/delete/' + ${incomeDto.id}">X</a>
     </div>
 </form>
 
@@ -61,7 +62,10 @@
         <td class="align-middle" th:text="${income.description}"></td>
         <td class="align-middle" th:text="${income.amount}"></td>
         <td class="align-middle" th:text="${income.operationId}"></td>
-        <td class="align-middle text-center"><a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a></td>
+        <td class="align-middle text-center">
+            <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a>
+            <a class="btn btn-secondary" th:href="'/income/delete/' + ${income.id}">X</a>
+        </td>
     </tr>
 </table>
 
