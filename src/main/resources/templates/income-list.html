@@ -27,7 +27,7 @@
     </div>
     <div class="form-group form-inline">
         <label for="amount">Amount</label>
-        <input class="form-control" id="amount" placeholder="Enter amount" required  autocomplete="off"
+        <input class="form-control" id="amount" placeholder="Enter amount"  autocomplete="off"
                th:field="*{amount}" step="0.01" data-decimals="2"
                type="number"/>
     </div>
@@ -80,12 +80,12 @@
         </th>
         <th>
             <a th:href="'/income/?sortField=name'">Name</a>
-            <form class="col card p-3 my-5" method="post" th:action="@{/income/filter}" th:object="${filterName}">
-
+            <form class="col card p-3 my-5" method="get" th:action="@{/income}">
             <div class="form-group">
-                <input type="text" id="filterName" th:value="${filterName}"/>
+                <input type="text" name="filterName" th:value="${filterName}"  size="50" >
+                <input type="submit" class="btn" value="Go"/>
             </div>
-                <input class="btn btn-primary" type="submit" value="go">
+
             </form>
 
         </th>

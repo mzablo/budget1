@@ -1,7 +1,6 @@
-package mza.thy.income;
+package mza.thy.domain.filter;
 
 import lombok.*;
-import mza.thy.domain.Income;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
@@ -17,7 +16,7 @@ public class FilterParams {
     private Long filterId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate filterDate;
-    private String filterName;
+    private FilterString filterName;
     private BigDecimal filterAmount;
-    private String filterDescription;
+    private FilterString filterDescription;
 }

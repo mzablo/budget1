@@ -2,6 +2,7 @@ package mza.thy.income;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.domain.filter.FilterParams;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -22,34 +23,29 @@ public class XController {
 
     @GetMapping("income")
     public String getIncomeList(Model model,
-                                String filterName,
+                                FilterParams filterParams,
                                 @RequestParam(defaultValue = "date") String sortField,
                                 @RequestParam(required = false) Sort.Direction sortDirection) {
-        log.debug("mzaa " + filterName);
-        var filterParams = FilterParams.builder()
-                .filterName(filterName)
-                .build();
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
+        //FilterParams filterParams=FilterParams.builder().filterName(filterName).build();
+        log.debug("Filter  " + filterParams);
         model.addAttribute("incomeList", incomeService.getIncomeList(filterParams, Sort.by(sortDirection, sortField)));
         model.addAttribute("incomeDto", new IncomeDto());
-        //model.addAttribute("filterName", "nam");
         model.addAttribute("isAscending", sortDirection.isAscending());
+        model.addAttribute("filterParams", new FilterParams());
         return "income-list";
     }
-
+//del?
     @PostMapping("income/filter")
     public String getIncomeList(Model model,
-                                String filterName) {
-        var filterParams = FilterParams.builder()
-                .filterName(filterName)
-                .build();
-        log.debug("Filter  " + filterName);
+                                FilterParams filterParams) {
+        log.debug("Filter  " + filterParams);
 
         model.addAttribute("incomeList", incomeService.getIncomeList(filterParams,null));
         model.addAttribute("incomeDto", new IncomeDto());
-        //model.addAttribute("filterName", "nam");
-        return "income-list";
+        model.addAttribute("filterParams", filterParams);
+        return "income-filtered-list";
     }
 
     @GetMapping("/income/{id}")
