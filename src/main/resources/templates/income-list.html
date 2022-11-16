@@ -10,6 +10,7 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
           rel="stylesheet">
 </head>
+<div th:replace="fragments/header :: header"></div>
 <body class="container">
 <form class="col card p-3 my-5" method="post" th:action="@{/income}" th:object="${incomeDto}">
     <div class="form-group form-inline">
@@ -70,28 +71,72 @@
             <div th:unless="${isAscending}">"
                 <a th:href="'/income?sortField=id&sortDirection=ASC'">Id</a>
             </div>
-        </th>
-
-        <th>
-            <a th:href="'/income/?sortField=date'">Date</a>
-        </th>
-        <th>
-            <a th:href="'/income/?sortField=amount'">Amount</a>
-        </th>
-        <th>
-            <a th:href="'/income/?sortField=name'">Name</a>
-            <form class="col card p-3 my-5" method="get" th:action="@{/income}">
-            <div class="form-group">
-                <input type="text" name="filterName" th:value="${filterName}"  size="50" >
-                <input type="submit" class="btn" value="Go"/>
+            <div>
+                <form method="get" th:action="@{/income}">
+                    <div class="form-group">
+                        <input type="number" name="filterId" th:value="${filterId}" size="10" >
+                    </div>
+                </form>
             </div>
+        </th>
 
+        <th>
+            <div th:if="${isAscending}">
+                <a th:href="'/income?sortField=date&sortDirection=DESC'">Date</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/income?sortField=date&sortDirection=ASC'">Date</a>
+            </div>
+            <form method="get" th:action="@{/income}">
+                <div class="form-group">
+                    <input type="date" name="filterDate" th:value="${filterDate}" size="8" >
+                    <input class="btn" type="submit" value="Go">
+                </div>
+            </form>
+        </th>
+
+        <th>
+            <div th:if="${isAscending}">
+                <a th:href="'/income?sortField=date&sortDirection=DESC'">Amount</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/income?sortField=date&sortDirection=ASC'">Amount</a>
+            </div>
+            <form method="get" th:action="@{/income}">
+                <div class="form-group">
+                    <input type="number" step="0.01" data-decimals="2" name="filterAmount" th:value="${filterAmount}" size="10" >
+                </div>
             </form>
 
         </th>
         <th>
-            <a th:href="'/income/?sortField=description'">Description</a>
+            <div th:if="${isAscending}">
+                <a th:href="'/income?sortField=name&sortDirection=DESC'">Name</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/income?sortField=name&sortDirection=ASC'">Name</a>
+            </div>
+            <form method="get" th:action="@{/income}">
+            <div class="form-group">
+                <input type="text" name="filterName" th:value="${filterName}" size="20" >
+            </div>
+            </form>
         </th>
+
+        <th>
+            <div th:if="${isAscending}">
+                <a th:href="'/income?sortField=description&sortDirection=DESC'">Description</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/income?sortField=description&sortDirection=ASC'">Description</a>
+            </div>
+            <form method="get" th:action="@{/income}">
+                <div class="form-group">
+                    <input type="description" name="filterDescription" th:value="${filterDescription}" size="20" >
+                </div>
+            </form>
+        </th>
+
         <th>Operation id</th>
         <th>Actions</th>
     </tr>
@@ -111,6 +156,5 @@
         </td>
     </tr>
 </table>
-
 </body>
 </html>

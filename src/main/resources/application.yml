@@ -1,4 +1,5 @@
 spring:
+#??  jpa.open-in-view: false
   datasource:
     driverClassName: org.hsqldb.jdbc.JDBCDriver
 #    driverClassName: org.h2.Driver

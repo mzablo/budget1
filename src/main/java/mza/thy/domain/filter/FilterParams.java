@@ -19,4 +19,5 @@ public class FilterParams {
     private FilterString filterName;
     private BigDecimal filterAmount;
     private FilterString filterDescription;
+    private FilterString filterBank;
 }

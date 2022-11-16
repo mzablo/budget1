@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+            name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Budget</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<div th:replace="fragments/header :: header"></div>
+<body class="container">
+<form class="col card p-3 my-5" method="post" th:action="@{/account}" th:object="${accountDto}">
+    <div class="form-group form-inline">
+        <label for="id">Id</label>
+        <input class="form-control" id="id" readonly
+               th:field="*{id}"
+               type="text"/>
+    </div>
+    <div>
+        <label for="name">Name</label>
+        <input class="form-control" id="name" autocomplete="off"
+               th:field="*{name}"
+               type="text"/>
+    </div>
+    <div class="form-group">
+        <label for="bank">Bank</label>
+        <input class="form-control" id="bank" autocomplete="off"
+               th:field="*{bank}"
+               type="text"/>
+    </div>
+    <div>
+        <input class="btn btn-primary" type="submit" value="Update">
+        <a class="btn btn-primary" th:href="'/account/'">Reset</a>
+        <div class="btn btn-dark" th:if="${accountDto.id > 0}">
+            <a th:href="'/account/delete/' + ${accountDto.id}">Delete</a>
+        </div>
+    </div>
+</form>
+
+<table class="table table-striped table-bordered ">
+    <tr>
+        <th>
+            <div th:if="${isAscending}">
+               <a th:href="'/account?sortField=id&sortDirection=DESC'">Id</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/account?sortField=id&sortDirection=ASC'">Id</a>
+            </div>
+            <div>
+                <form method="get" th:action="@{/account}">
+                    <div class="form-group">
+                        <input type="number" name="filterId" th:value="${filterId}" size="10" >
+                    </div>
+                </form>
+            </div>
+        </th>
+
+        <th>
+            <div th:if="${isAscending}">
+                <a th:href="'/account?sortField=name&sortDirection=DESC'">Name</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/account?sortField=name&sortDirection=ASC'">Name</a>
+            </div>
+            <form method="get" th:action="@{/account}">
+            <div class="form-group">
+                <input type="text" name="filterName" th:value="${filterName}" size="20" >
+            </div>
+            </form>
+        </th>
+
+        <th>
+            <div th:if="${isAscending}">
+                <a th:href="'/account?sortField=bank&sortDirection=DESC'">Bank</a>
+            </div>
+            <div th:unless="${isAscending}">"
+                <a th:href="'/account?sortField=bank&sortDirection=ASC'">Bank</a>
+            </div>
+            <form method="get" th:action="@{/account}">
+                <div class="form-group">
+                    <input type="bank" name="filterBank" th:value="${filterBank}" size="20" >
+                </div>
+            </form>
+        </th>
+        <th>Actions</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(accountList)}">
+        <td class="text-center" colspan="7">No Records found. Add some...!</td>
+    </tr>
+    <tr th:each="account : ${accountList}">
+        <td class="align-middle" th:text="${account.id}"></td>
+        <td class="align-middle" th:text="${account.name}"></td>
+        <td class="align-middle" th:text="${account.bank}"></td>
+        <td class="align-middle text-center form-inline">
+            <a class="btn btn-secondary" th:href="'/account/' + ${account.id}">✏</a>
+            <a th:href="'/account/delete/' + ${account.id}">X</a>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

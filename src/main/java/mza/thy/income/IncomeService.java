@@ -127,6 +127,7 @@ public class IncomeService {
                 .orElseThrow(() -> new RuntimeException("Brak income " + id));
         income.setAmount(incomeDto.getAmount());
         income.setDate(incomeDto.getDate());
+        income.setName(incomeDto.getName());
         income.setDescription(incomeDto.getDescription());
         income.setOperationId(incomeDto.getOperationId());//!
         log.debug("Update income " + incomeDto);
