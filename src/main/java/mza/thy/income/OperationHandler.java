@@ -9,6 +9,7 @@ import mza.thy.repository.AccountRepository;
 import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OperationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -40,7 +41,7 @@ public class OperationHandler {
     }
 
     private void deleteOperation(Income income, Operation operation) {
-        log.debug("!!!Delete operation {}", operation);
+        log.debug("Delete operation {}", operation);
         operationRepository.delete(operation);
         income.setOperation(null);
         incomeRepository.save(income);
@@ -60,7 +61,7 @@ public class OperationHandler {
         oldOperation.setDescription(income.getDescription());
         oldOperation.setAmount(income.getAmount());
         operationRepository.save(oldOperation);
-        log.debug("!!!Operation {} saved", oldOperation);
+        log.debug("Operation {} saved", oldOperation);
     }
 
     private void createNewOperation(String newAccountName, Income income) {
@@ -83,7 +84,7 @@ public class OperationHandler {
     }
 
     private boolean isOperationToBeDeleted(Operation oldOperation, String newBankName) {
-        return Objects.nonNull(oldOperation) && Objects.isNull(newBankName);
+        return Objects.nonNull(oldOperation) && !StringUtils.hasLength(newBankName);
     }
 
     public Operation getOperation(Long id) {//!!

@@ -24,7 +24,17 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
     @Transactional(readOnly = true)
-    public List<AccountDto> getAccountList(FilterParams filterParams, Sort sort) {
+    public List<AccountDto> getAccountList() {
+        var result = accountRepository.findAll()
+                .stream()
+                .map(AccountDto::convertToDto)
+                .collect(Collectors.toList());
+        result.add(new AccountDto());
+        return result;
+    }
+
+    @Transactional(readOnly = true)
+    List<AccountDto> getAccountList(FilterParams filterParams, Sort sort) {
         if (Objects.nonNull(filterParams)
                 && (Objects.nonNull(filterParams.getFilterId())
                 || Objects.nonNull(filterParams.getFilterName())

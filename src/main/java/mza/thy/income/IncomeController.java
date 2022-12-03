@@ -18,7 +18,11 @@ import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
 //!!! dorobic pagging
-//!!! flyway
+//!!! flywayif exist to nie rob
+//!!! dorobic ctrls
+//!!! dorobic templaty
+//!!!outcome. zdrowie, investment, sql, view, wykresy?
+//dzienniczek biegowy
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -38,7 +42,7 @@ public class IncomeController {
         model.addAttribute("incomeList", incomeService.getIncomeList(filterParams, Sort.by(sortDirection, sortField)));
         model.addAttribute("incomeDto", new IncomeDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));//!!!dodac pusty wiersz
+        model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
         return "income-list";
     }
@@ -48,7 +52,7 @@ public class IncomeController {
         sort = Optional.ofNullable(sort).orElse(defaultSort);
         model.addAttribute("incomeList", incomeService.getIncomeList(null, sort));
         model.addAttribute("incomeDto", incomeService.getIncomeDto(id));
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "income-list";
     }
 
@@ -56,7 +60,7 @@ public class IncomeController {
     public String getIncomeDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
         model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
         model.addAttribute("incomeDto", incomeService.getIncomeDto(id));
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "income-delete";
     }
 
@@ -65,7 +69,7 @@ public class IncomeController {
         incomeService.deleteIncome(id);
         model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
         model.addAttribute("incomeDto", new IncomeDto());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "income-list";
     }
 
@@ -74,7 +78,7 @@ public class IncomeController {
         incomeService.saveIncome(income);
         model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
         model.addAttribute("incomeDto", new IncomeDto());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "income-list";
     }
 

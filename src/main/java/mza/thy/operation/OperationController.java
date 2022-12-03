@@ -22,7 +22,7 @@ import java.util.Optional;
 public class OperationController {
     private final int pageNumberDefault = 0;
     private final int pageSizeDefault = 100;
-    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final PageRequest pageableDefault = PageRequest.of(pageNumberDefault, pageSizeDefault, defaultSort);
     private final OperationService operationService;
     private final AccountService accountService;
@@ -30,15 +30,15 @@ public class OperationController {
     @GetMapping("operation")
     public String getOperationList(Model model,
                                    FilterParams filterParams,
-                                   @RequestParam(defaultValue = "id") String sortField,
+                                   @RequestParam(defaultValue = "date") String sortField,
                                    @RequestParam(required = false) Sort.Direction sortDirection) {
         sortDirection = Optional.ofNullable(sortDirection)
-                .orElse(Sort.Direction.ASC);
+                .orElse(Sort.Direction.DESC);
         model.addAttribute("operationList", operationService.getOperationList(filterParams, getPageable(sortField, sortDirection)));
         model.addAttribute("operationDto", new OperationDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "operation-list";
     }
 
@@ -52,7 +52,7 @@ public class OperationController {
     public String getOperationListWithGivenOperation(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
         model.addAttribute("operationList", operationService.getOperationList(null, getPageable(null, null)));
         model.addAttribute("operationDto", operationService.getOperation(id));
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "operation-list";
     }
 
@@ -60,7 +60,7 @@ public class OperationController {
     public String getOperationDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
         model.addAttribute("operationList", operationService.getOperationList(null, getPageable(null, null)));
         model.addAttribute("operationDto", operationService.getOperation(id));
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "operation-delete";
     }
 
@@ -69,7 +69,7 @@ public class OperationController {
         operationService.deleteOperation(id);
         model.addAttribute("operationList", operationService.getOperationList(null, getPageable(null, null)));
         model.addAttribute("operationDto", new OperationDto());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "operation-list";
     }
 
@@ -78,7 +78,7 @@ public class OperationController {
         operationService.saveOperation(operationDto);
         model.addAttribute("operationList", operationService.getOperationList(null, getPageable(null, null)));
         model.addAttribute("operationDto", new OperationDto());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList());
         return "operation-list";
     }
 
