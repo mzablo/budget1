@@ -93,7 +93,7 @@ public class IncomeService {
                 .orElseThrow(() -> new RuntimeException("Income not found " + id));
         log.debug("Get income {}", result);
         if (Objects.nonNull(result.getOperationId())) {
-            log.debug("get oper {}", operationHandler.getOperation(result.getOperationId()));
+            log.debug("Get operation {}", operationHandler.getOperation(result.getOperationId()));
         }
         return result;
     }

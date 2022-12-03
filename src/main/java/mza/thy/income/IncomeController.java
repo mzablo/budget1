@@ -17,6 +17,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
+//!!! dorobic pagging
+//!!! flyway
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -36,7 +38,7 @@ public class IncomeController {
         model.addAttribute("incomeList", incomeService.getIncomeList(filterParams, Sort.by(sortDirection, sortField)));
         model.addAttribute("incomeDto", new IncomeDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList(null, null));//!!!dodac pusty wiersz
         model.addAttribute("filterParams", new FilterParams());
         return "income-list";
     }

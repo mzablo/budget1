@@ -54,7 +54,7 @@ public class AccountController {
     @PostMapping("/account/delete/{id}")
     public String deleteAccount(Model model, @PathVariable("id") Long id) {
         accountService.deleteAccount(id);
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
         model.addAttribute("accountDto", new AccountDto());
         return "account-list";
     }
@@ -62,7 +62,7 @@ public class AccountController {
     @PostMapping("/account")
     public String saveAccount(Model model, AccountDto accountDto) {
         accountService.saveAccount(accountDto);
-        model.addAttribute("accountList", accountService.getAccountList(null, null));
+        model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
         model.addAttribute("accountDto", new AccountDto());
         return "account-list";
     }

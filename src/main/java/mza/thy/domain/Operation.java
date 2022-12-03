@@ -16,6 +16,7 @@ import java.util.Optional;
 @ToString
 @Table(name = "account_operation")
 public class Operation {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,9 +33,6 @@ public class Operation {
 
     @Setter
     private String description;
-
-//    @Setter
-//    private Long accountId;
 
     @NotNull
     @Setter

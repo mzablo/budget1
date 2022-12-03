@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
+    int deleteByOperationId(Long operationId);
+
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name")
     Stream<Income> findAllByNameLike(String name);
@@ -29,9 +31,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
             "WHERE I.amount =:amount")
     Stream<Income> findAllByAmount(BigDecimal amount);
 
-    //@EntityGraph(attributePaths = {"operation"})
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
     Stream<Income> findTotalAll(Sort sort);
-    //Stream<Income> findAll(Sort sort);
 //    Page<Income> findAllX(Pageable pageable);
 }
