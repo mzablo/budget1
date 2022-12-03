@@ -112,7 +112,7 @@ public class OperationService {
     @Transactional
     void deleteOperation(Long id) {
         operationRepository.deleteById(id);
-        int result = incomeRepository.deleteByOperationId(id);
+        int result = incomeRepository.deleteByOperationId(id);//!!! nie dziala?
         log.debug("Deleted operation {}", id);
         log.debug("Number of deleted income {}", result);
         //!!!log.warn("If there is income/outcome for {} - it will not be removed ", id);

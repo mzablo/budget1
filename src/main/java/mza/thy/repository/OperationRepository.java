@@ -25,6 +25,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long> {
 
     Stream<Operation> findAllByAmount(BigDecimal amount);
 
+    boolean existsByAccountId(Long accountId);
     //@Query(value = "SELECT O FROM Operation O LEFT JOIN FETCH O.account A")
     Page<Operation> findAll(Pageable pageable);
 

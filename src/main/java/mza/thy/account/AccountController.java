@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -48,15 +49,22 @@ public class AccountController {
     public String getAccountDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
         model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
         model.addAttribute("accountDto", accountService.getAccount(id));
+        model.addAttribute("error", "");
         return "account-delete";
     }
 
     @PostMapping("/account/delete/{id}")
     public String deleteAccount(Model model, @PathVariable("id") Long id) {
-        accountService.deleteAccount(id);
-        model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
-        model.addAttribute("accountDto", new AccountDto());
-        return "account-list";
+        var result=accountService.deleteAccount(id);
+        if (Objects.isNull(result)){
+            model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
+            model.addAttribute("accountDto", new AccountDto());
+            return "account-list";
+        }
+        model.addAttribute("accountDto", accountService.getAccount(id));
+        model.addAttribute("error", result);
+        return "account-delete";
+
     }
 
     @PostMapping("/account")

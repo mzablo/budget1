@@ -23,7 +23,7 @@ public class OperationHandler {
     private final IncomeRepository incomeRepository;
 
     void handleOperation(Long operationId, String bankName, Income income) {
-        if (Objects.isNull(operationId) && Objects.isNull(bankName)) {
+        if (Objects.isNull(operationId) && !StringUtils.hasLength(bankName)) {
             log.debug("No change in operation");
             return;
         }
@@ -80,7 +80,7 @@ public class OperationHandler {
     }
 
     private boolean isNewOperationToBeCreated(Operation operation, String bankName) {
-        return Objects.isNull(operation) && Objects.nonNull(bankName);
+        return Objects.isNull(operation) && StringUtils.hasLength(bankName);
     }
 
     private boolean isOperationToBeDeleted(Operation oldOperation, String newBankName) {

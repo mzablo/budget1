@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.AccountRepository;
+import mza.thy.repository.OperationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class AccountService {
 
     private final AccountRepository accountRepository;
+    private final OperationRepository operationRepository;
 
     @Transactional(readOnly = true)
     public List<AccountDto> getAccountList() {
@@ -29,7 +31,7 @@ public class AccountService {
                 .stream()
                 .map(AccountDto::convertToDto)
                 .collect(Collectors.toList());
-        result.add(new AccountDto());
+        result.add(0, new AccountDto());
         return result;
     }
 
@@ -108,10 +110,14 @@ public class AccountService {
     }
 
     @Transactional
-    void deleteAccount(Long id) {
-        //!!!todo if operation exists - warning!
+    String deleteAccount(Long id) {
+        if (operationRepository.existsByAccountId(id)) {
+            log.debug("Cannot delete - operations exists for account {}", id);
+            return "Cannot delete - operations exists for account " + id;
+        }
         accountRepository.deleteById(id);
         log.debug("Deleted account {}", id);
+        return null;
     }
 
     private void updateAccount(Long id, AccountDto accountDto) {

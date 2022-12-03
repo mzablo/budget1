@@ -38,7 +38,6 @@ public class IncomeController {
                                 @RequestParam(required = false) Sort.Direction sortDirection) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        log.debug("Filter  " + filterParams);
         model.addAttribute("incomeList", incomeService.getIncomeList(filterParams, Sort.by(sortDirection, sortField)));
         model.addAttribute("incomeDto", new IncomeDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
