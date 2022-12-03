@@ -4,6 +4,7 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Income;
+import mza.thy.domain.OperationHandler;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.IncomeRepository;
 import org.springframework.beans.factory.annotation.Value;
@@ -121,7 +122,7 @@ public class IncomeService {
     }
 
     @Transactional
-    void deleteIncome(Long id) {
+    public void deleteIncome(Long id) {
         operationHandler.deleteOperation(getIncomeDto(id).getOperationId());
         incomeRepository.deleteById(id);
         log.debug("Deleted income {}", id);

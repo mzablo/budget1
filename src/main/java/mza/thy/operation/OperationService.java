@@ -7,6 +7,7 @@ import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.AccountRepository;
 import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OperationRepository;
+import mza.thy.repository.OutcomeRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,7 @@ public class OperationService {
 
     private final OperationRepository operationRepository;
     private final IncomeRepository incomeRepository;
-    //outcomerepo
+    private final OutcomeRepository outcomeRepository;
     private final AccountRepository accountRepository;
 
     @Transactional(readOnly = true)
@@ -112,10 +113,11 @@ public class OperationService {
     @Transactional
     void deleteOperation(Long id) {
         operationRepository.deleteById(id);
-        int result = incomeRepository.deleteByOperationId(id);//!!! nie dziala?
+        int deletedIncome = incomeRepository.deleteByOperationId(id);//!!! nie dziala?
+        int deletedOutcome = outcomeRepository.deleteByOperationId(id);
         log.debug("Deleted operation {}", id);
-        log.debug("Number of deleted income {}", result);
-        //!!!log.warn("If there is income/outcome for {} - it will not be removed ", id);
+        log.debug("Number of deleted income {}", deletedIncome);
+        log.debug("Number of deleted outcome {}", deletedOutcome);
     }
 
     /*  @Transactional(readOnly = true)

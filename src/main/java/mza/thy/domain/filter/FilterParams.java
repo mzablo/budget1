@@ -17,6 +17,7 @@ public class FilterParams {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate filterDate;
     private FilterString filterName;
+    private FilterString filterCategory;
     private BigDecimal filterAmount;
     private FilterString filterDescription;
     private FilterString filterBank;

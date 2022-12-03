@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class IncomeController {
-    private final Sort defaultSort=Sort.by(Sort.Direction.DESC, "date");
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final IncomeService incomeService;
     private final AccountService accountService;
 
