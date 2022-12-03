@@ -46,11 +46,18 @@
                type="text"/>
     </div>
     <div class="form-group">
-        <label for="operation">Operation</label>
-        <input class="form-control" id="operation" autocomplete="off"
+        <label for="operationId">Operation id</label>
+        <input class="form-control" id="operationId" autocomplete="off"
                th:field="*{operationId}"
-               type="number"/>
+               type="text"/>
     </div>
+    <div class="form-group col-md-8">
+        <label  class="col-form-label">Bank </label>
+        <select  id="bank" name="bank" th:field="*{bankName}" >
+            <option th:each="account : ${accountList}" th:value="${account.bank}" th:utext="${account.bank}"/>
+        </select>
+    </div>
+
     <div>
         <input class="btn btn-primary" type="submit" value="Update">
         <a class="btn btn-primary" th:href="'/income/'">Reset</a>
@@ -97,10 +104,10 @@
 
         <th>
             <div th:if="${isAscending}">
-                <a th:href="'/income?sortField=date&sortDirection=DESC'">Amount</a>
+                <a th:href="'/income?sortField=amount&sortDirection=DESC'">Amount</a>
             </div>
             <div th:unless="${isAscending}">"
-                <a th:href="'/income?sortField=date&sortDirection=ASC'">Amount</a>
+                <a th:href="'/income?sortField=amount&sortDirection=ASC'">Amount</a>
             </div>
             <form method="get" th:action="@{/income}">
                 <div class="form-group">
@@ -137,8 +144,10 @@
             </form>
         </th>
 
-        <th>Operation id</th>
-        <th>Actions</th>
+        <th>Bank name</th>
+        <th>Actions
+            <a th:href="'/income'">Clean</a>
+        </th>
     </tr>
     <tr th:if="${#lists.isEmpty(incomeList)}">
         <td class="text-center" colspan="7">No Records found. Add some...!</td>
@@ -149,7 +158,7 @@
         <td class="align-middle" th:text="${income.amount}"></td>
         <td class="align-middle" th:text="${income.name}"></td>
         <td class="align-middle" th:text="${income.description}"></td>
-        <td class="align-middle" th:text="${income.operationId}"></td>
+        <td class="align-middle" th:text="${income.bankName}"></td>
         <td class="align-middle text-center form-inline">
             <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a>
             <a th:href="'/income/delete/' + ${income.id}">X</a>

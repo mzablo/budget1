@@ -1,11 +1,14 @@
 package mza.thy.income;
 
 import lombok.*;
+import mza.thy.domain.Account;
 import mza.thy.domain.Income;
+import mza.thy.domain.Operation;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Builder
 @NoArgsConstructor
@@ -22,6 +25,7 @@ public class IncomeDto {
     private String name;
     private String description;
     private Long operationId;
+    private String bankName;
 
     Income convert() {
         return Income.builder()
@@ -30,7 +34,6 @@ public class IncomeDto {
                 .date(date)
                 .name(name)
                 .description(description)
-                .operationId(operationId)
                 .build();
     }
 
@@ -41,7 +44,18 @@ public class IncomeDto {
                 .date(in.getDate())
                 .name(in.getName())
                 .description(in.getDescription())
-                .operationId(in.getOperationId())
+                .operationId(getOperationIdSave(in.getOperation()))
+                .bankName(getBankNameSave(in.getOperation()))
                 .build();
+    }
+
+    private static String getBankNameSave(Operation operation) {
+        return Optional.ofNullable(operation).flatMap(o -> Optional.of(o.getAccount()).map(Account::getBank))
+                .orElse(null);
+    }
+
+    private static Long getOperationIdSave(Operation operation) {
+        return Optional.ofNullable(operation).map(Operation::getId)
+                .orElse(null);
     }
 }

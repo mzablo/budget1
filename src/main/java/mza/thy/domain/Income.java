@@ -2,10 +2,7 @@ package mza.thy.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -15,6 +12,7 @@ import java.util.Optional;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Income {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +30,9 @@ public class Income {
     private String description;
 
     @Setter
-    private Long operationId;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="operation_id")
+    private Operation operation;
 
     public void setDate(LocalDate date) {
         this.date = date;

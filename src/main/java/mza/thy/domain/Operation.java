@@ -1,11 +1,9 @@
 package mza.thy.domain;
 
+import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
@@ -15,25 +13,34 @@ import java.util.Optional;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
+@Table(name = "account_operation")
 public class Operation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Setter
-    private BigDecimal amount;
+    private BigDecimal amount = BigDecimal.ZERO;
 
-   // @Column(name = "income_date")
     private LocalDate date;
-
-   // @Column(name = "income_year")
     private Integer year;
-
-   // @Column(name = "income_month")
     private Integer month;
+
+    @Setter
+    private String name;
+
     @Setter
     private String description;
+
+//    @Setter
+//    private Long accountId;
+
+    @NotNull
     @Setter
-    private Long operationId;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "account_id")
+    private Account account;
 
     public void setDate(LocalDate date) {
         this.date = date;

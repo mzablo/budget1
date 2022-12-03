@@ -19,13 +19,14 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final AccountService accountService;
 
     @GetMapping("account")
     public String getAccountList(Model model,
-                                FilterParams filterParams,
-                                @RequestParam(defaultValue = "id") String sortField,
-                                @RequestParam(required = false) Sort.Direction sortDirection) {
+                                 FilterParams filterParams,
+                                 @RequestParam(defaultValue = "id") String sortField,
+                                 @RequestParam(required = false) Sort.Direction sortDirection) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.ASC);
         model.addAttribute("accountList", accountService.getAccountList(filterParams, Sort.by(sortDirection, sortField)));
@@ -45,8 +46,8 @@ public class AccountController {
 
     @GetMapping("/account/delete/{id}")
     public String getAccountDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
-        //model.addAttribute("accountList", accountService.getAccountList(null, null));
-        //model.addAttribute("accountDto", accountService.getAccount(id));
+        model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
+        model.addAttribute("accountDto", accountService.getAccount(id));
         return "account-delete";
     }
 

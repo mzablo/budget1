@@ -2,7 +2,8 @@ package mza.thy.account;
 
 import lombok.*;
 import mza.thy.domain.Account;
-import mza.thy.domain.Income;
+
+import java.util.Optional;
 
 @Builder
 @NoArgsConstructor
@@ -23,11 +24,13 @@ public class AccountDto {
                 .build();
     }
 
-    static AccountDto convert(Account in) {
-        return AccountDto.builder()
-                .id(in.getId())
-                .name(in.getName())
-                .bank(in.getBank())
-                .build();
+    public static AccountDto convertToDto(Account in) {
+        return Optional.ofNullable(in).map(a ->
+                        AccountDto.builder()
+                                .id(a.getId())
+                                .name(a.getName())
+                                .bank(a.getBank())
+                                .build())
+                .orElse(null);
     }
 }

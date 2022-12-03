@@ -2,6 +2,7 @@ package mza.thy.income;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.account.AccountService;
 import mza.thy.domain.filter.FilterParams;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -14,12 +15,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.Optional;
+
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
 @Controller
 @RequiredArgsConstructor
 @Slf4j
 public class IncomeController {
+    private final Sort defaultSort=Sort.by(Sort.Direction.DESC, "date");
     private final IncomeService incomeService;
+    private final AccountService accountService;
 
     @GetMapping("income")
     public String getIncomeList(Model model,
@@ -32,38 +36,43 @@ public class IncomeController {
         model.addAttribute("incomeList", incomeService.getIncomeList(filterParams, Sort.by(sortDirection, sortField)));
         model.addAttribute("incomeDto", new IncomeDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
+        model.addAttribute("accountList", accountService.getAccountList(null, null));
         model.addAttribute("filterParams", new FilterParams());
         return "income-list";
     }
 
     @GetMapping("/income/{id}")
     public String getIncomeListWithGivenIncome(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
-        sort = Optional.ofNullable(sort).orElse(Sort.by(Sort.Direction.DESC, "date"));
+        sort = Optional.ofNullable(sort).orElse(defaultSort);
         model.addAttribute("incomeList", incomeService.getIncomeList(null, sort));
-        model.addAttribute("incomeDto", incomeService.getIncome(id));
+        model.addAttribute("incomeDto", incomeService.getIncomeDto(id));
+        model.addAttribute("accountList", accountService.getAccountList(null, null));
         return "income-list";
     }
 
     @GetMapping("/income/delete/{id}")
     public String getIncomeDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("incomeList", incomeService.getIncomeList(null, null));
-        model.addAttribute("incomeDto", incomeService.getIncome(id));
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
+        model.addAttribute("incomeDto", incomeService.getIncomeDto(id));
+        model.addAttribute("accountList", accountService.getAccountList(null, null));
         return "income-delete";
     }
 
     @PostMapping("/income/delete/{id}")
     public String deleteIncome(Model model, @PathVariable("id") Long id) {
         incomeService.deleteIncome(id);
-        model.addAttribute("incomeList", incomeService.getIncomeList(null, null));
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
         model.addAttribute("incomeDto", new IncomeDto());
+        model.addAttribute("accountList", accountService.getAccountList(null, null));
         return "income-list";
     }
 
     @PostMapping("/income")
     public String saveIncome(Model model, IncomeDto income) {
         incomeService.saveIncome(income);
-        model.addAttribute("incomeList", incomeService.getIncomeList(null, null));
+        model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
         model.addAttribute("incomeDto", new IncomeDto());
+        model.addAttribute("accountList", accountService.getAccountList(null, null));
         return "income-list";
     }
 
@@ -71,6 +80,7 @@ public class IncomeController {
     public String start(Model model) {
         return "start";
     }
+
     private void extracted(Model model, Integer pageNumber, Integer pageSize) {
         var page = incomeService.getIncomePage(PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "date"));
         model.addAttribute("incomeList", page.stream().toList());

@@ -13,11 +13,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class MeasureExecutionTimeAspect {
 
-    @Pointcut("execution (public * mza.thy..*(..))")
+ //   @Pointcut("execution (public * mza.thy..*(..))")
     public void executeOnAnyPublicMethodForServices() {
     }
 
-    @Around("executeOnAnyPublicMethodForServices()")
+//    @Around("executeOnAnyPublicMethodForServices()")
     public Object runMeasure(ProceedingJoinPoint pjp) throws Throwable {
         val startTime = System.currentTimeMillis();
      //   log.info("Executing method {} started", pjp.getSignature().getName());

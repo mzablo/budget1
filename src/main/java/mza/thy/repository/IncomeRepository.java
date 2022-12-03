@@ -1,9 +1,9 @@
 package mza.thy.repository;
 
 import mza.thy.domain.Income;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -13,14 +13,25 @@ import java.util.stream.Stream;
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long> {
 
-    //Stream<Income> findAll(Sort sort);
+    @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
+            "WHERE I.name like :name")
     Stream<Income> findAllByNameLike(String name);
 
+    @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
+            "WHERE I.date =:date")
     Stream<Income> findAllByDate(LocalDate date);
 
-    Stream<Income> findAllByDescriptionLike(String name);
+    @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
+            "WHERE I.description like :description")
+    Stream<Income> findAllByDescriptionLike(String description);
 
+    @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
+            "WHERE I.amount =:amount")
     Stream<Income> findAllByAmount(BigDecimal amount);
 
-    Page<Income> findAll(Pageable pageable);
+    //@EntityGraph(attributePaths = {"operation"})
+    @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
+    Stream<Income> findTotalAll(Sort sort);
+    //Stream<Income> findAll(Sort sort);
+//    Page<Income> findAllX(Pageable pageable);
 }
