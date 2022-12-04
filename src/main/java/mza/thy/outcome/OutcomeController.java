@@ -34,6 +34,7 @@ public class OutcomeController {
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
+        model.addAttribute("categoryList", outcomeService.getCategoryList());
         return "outcome-list";
     }
 
@@ -43,6 +44,7 @@ public class OutcomeController {
         model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, sort));
         model.addAttribute("outcomeDto", outcomeService.getOutcomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
+        model.addAttribute("categoryList", outcomeService.getCategoryList());
         return "outcome-list";
     }
 
@@ -51,6 +53,7 @@ public class OutcomeController {
         model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, defaultSort));
         model.addAttribute("outcomeDto", outcomeService.getOutcomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
+        model.addAttribute("categoryList", outcomeService.getCategoryList());
         return "outcome-delete";
     }
 
@@ -60,6 +63,7 @@ public class OutcomeController {
         model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, defaultSort));
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("accountList", accountService.getAccountList());
+        model.addAttribute("categoryList", outcomeService.getCategoryList());
         return "outcome-list";
     }
 
@@ -69,6 +73,7 @@ public class OutcomeController {
         model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, defaultSort));
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("accountList", accountService.getAccountList());
+        model.addAttribute("categoryList", outcomeService.getCategoryList());
         return "outcome-list";
     }
 }

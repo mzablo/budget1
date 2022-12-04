@@ -18,7 +18,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
 
     @Modifying
     @Transactional
-        @Query("delete from Income I where I.operation.id =:operationId")
+    @Query("delete from Income I where I.operation.id =:operationId")
     int deleteByOperation_Id(Long operationId);
 
     Optional<Income> findByOperation_Id(Long operationId);

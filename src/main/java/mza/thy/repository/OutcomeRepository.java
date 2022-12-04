@@ -19,7 +19,7 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long> {
 
     @Modifying
     @Transactional
-        @Query("delete from Outcome O where O.operation.id =:operationId")
+    @Query("delete from Outcome O where O.operation.id =:operationId")
     int deleteByOperation_Id(Long operationId);
 
     Optional<Outcome> findByOperation_Id(Long operationId);

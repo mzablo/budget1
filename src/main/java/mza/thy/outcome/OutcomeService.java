@@ -1,7 +1,6 @@
 package mza.thy.outcome;
 
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.OperationHandler;
 import mza.thy.domain.Outcome;
@@ -13,17 +12,40 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class OutcomeService {
+
     private final OperationHandler operationHandler;
     private final OutcomeRepository outcomeRepository;
+    private final List<String> categoryList;
+
+    public OutcomeService(OperationHandler operationHandler, OutcomeRepository outcomeRepository) {
+        this.operationHandler = operationHandler;
+        this.outcomeRepository = outcomeRepository;
+        this.categoryList = prepareCategoryList();
+    }
+
+    List<String> getCategoryList() {
+        return categoryList;
+    }
+
+    private List<String> prepareCategoryList() {
+        try (InputStream input = new FileInputStream("src/config.properties")) {
+            Properties prop = new Properties();
+            prop.load(input);
+            String categories = prop.getProperty("outcomeCat", "brak");
+            return Arrays.asList(categories.split(";"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Arrays.asList("empty");
+    }
 
     @Transactional(readOnly = true)
     public List<OutcomeDto> getOutcomeList(FilterParams filterParams, @NotNull Sort sort) {

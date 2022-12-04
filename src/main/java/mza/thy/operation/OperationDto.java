@@ -17,8 +17,8 @@ import java.time.LocalDate;
 public class OperationDto {
     private Long id;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
-    private BigDecimal amount;
+    private LocalDate date = LocalDate.now();
+    private BigDecimal amount = BigDecimal.ZERO;
     private String name;
     private String description;
     private String bankName;

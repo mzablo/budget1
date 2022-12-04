@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class BudgetApplication {
 
     public static void main(String[] args) {
+
+        System.out.println(" "+args[0]);
         SpringApplication.run(BudgetApplication.class, args);
     }
 }

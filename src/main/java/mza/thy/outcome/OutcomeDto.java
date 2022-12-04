@@ -18,11 +18,11 @@ import java.util.Optional;
 @ToString
 public class OutcomeDto {
     private Long id;
-    private BigDecimal price;
-    private Integer counter;
+    private BigDecimal price = BigDecimal.ZERO;
+    private Integer counter = 1;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
     private String name;
     private String description;
     private String category;

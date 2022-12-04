@@ -18,10 +18,10 @@ import java.util.Optional;
 @ToString
 public class IncomeDto {
     private Long id;
-    private BigDecimal amount;
+    private BigDecimal amount = BigDecimal.ZERO;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+    private LocalDate date = LocalDate.now();
     private String name;
     private String description;
     private Long operationId;
