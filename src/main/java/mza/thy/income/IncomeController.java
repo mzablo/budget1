@@ -17,12 +17,17 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
+//!!!dlugo outcome
 //!!! dorobic pagging
 //!!! flywayif exist to nie rob
 //!!! dorobic ctrls
 //!!! dorobic templaty
 //!!!outcome. zdrowie, investment, sql, view, wykresy?
 //dzienniczek biegowy
+//!!! na gorze/dole strony podsumowanie jak zmienia sie total
+//!!!commitowanie jak wychodzi sie z aplikacji??
+//!!!zamykanie apki z gui?
+//!!!pogrubienie w menu na jakiej zakladce jestem
 @Controller
 @RequiredArgsConstructor
 @Slf4j

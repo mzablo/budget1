@@ -112,9 +112,11 @@ public class OperationService {
 
     @Transactional
     void deleteOperation(Long id) {
+        log.debug("Income to be deleted {}", incomeRepository.findByOperation_Id((id)));
+        log.debug("Outcome to be deleted {}", outcomeRepository.findByOperation_Id(id));
+        int deletedIncome = incomeRepository.deleteByOperation_Id(id);
+        int deletedOutcome = outcomeRepository.deleteByOperation_Id(id);
         operationRepository.deleteById(id);
-        int deletedIncome = incomeRepository.deleteByOperationId(id);//!!! nie dziala?
-        int deletedOutcome = outcomeRepository.deleteByOperationId(id);
         log.debug("Deleted operation {}", id);
         log.debug("Number of deleted income {}", deletedIncome);
         log.debug("Number of deleted outcome {}", deletedOutcome);
