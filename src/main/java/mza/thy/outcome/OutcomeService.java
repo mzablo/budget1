@@ -36,7 +36,7 @@ public class OutcomeService {
     }
 
     private List<String> prepareCategoryList() {
-        try (InputStream input = new FileInputStream("src/config.properties")) {
+        try (InputStream input = new FileInputStream("config.properties")) {
             Properties prop = new Properties();
             prop.load(input);
             String categories = prop.getProperty("outcomeCat", "brak");
