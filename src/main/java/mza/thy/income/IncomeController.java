@@ -83,11 +83,6 @@ public class IncomeController {
         return "income-list";
     }
 
-    @GetMapping("/start")
-    public String start(Model model) {
-        return "start";
-    }
-
     private void extracted(Model model, Integer pageNumber, Integer pageSize) {
         var page = incomeService.getIncomePage(PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "date"));
         model.addAttribute("incomeList", page.stream().toList());

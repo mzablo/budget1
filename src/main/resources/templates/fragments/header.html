@@ -1,33 +1,38 @@
-<header th:fragment="header" xmlns:th="http://www.w3.org/1999/xhtml">
-    <!-- Static navbar -->
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button type="button"  data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Budget</a>
-                <a href="/income/">Income</a>
-                <a href="/outcome/">Outcome</a>
-                <a href="/operation/">Operation</a>
-                <a href="/account/">Account</a>
-            </div>
-            <div id="navbar" class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                    <li><a href="#">About</a></li>
-                </ul>
-
-                <ul class="nav navbar-nav navbar-right">
-                    <li class="active"><a href="./">Default <span class="sr-only">(current)</span></a></li>
-                    <li><a href="/income/">Income</a></li>
-                    <li><a href="/account/">Accounts</a></li>
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
+<header th:fragment="header">
+    <nav class="navbar navbar-expand-md bg-dark navbar-dark">
+        <a class="navbar-brand" th:href="@{/todo}">
+            Todo
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="topNavbar">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/income}">Income</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/outcome}">Outcome</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/account}">Account</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/operation}">Operation</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/investment}">Investment-todo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/health}">Health-todo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/sql}">Sql-todo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/chart}">Chart-todo</a>
+                </li>
+            </ul>
+        </div>
     </nav>
 </header>
