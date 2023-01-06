@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountService;
 import mza.thy.domain.filter.FilterParams;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class OutcomeController {
+    private static final String pageNumberDefault = "0";
+    private static final String pageSizeDefault = "100";
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final OutcomeService outcomeService;
     private final AccountService accountService;
@@ -26,10 +29,13 @@ public class OutcomeController {
     public String getOutcomeList(Model model,
                                  FilterParams filterParams,
                                  @RequestParam(defaultValue = "date") String sortField,
-                                 @RequestParam(required = false) Sort.Direction sortDirection) {
+                                 @RequestParam(required = false) Sort.Direction sortDirection,
+                                 @RequestParam(defaultValue = pageNumberDefault) int pageNumber,
+                                 @RequestParam(defaultValue = pageSizeDefault) int pageSize
+    ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        model.addAttribute("outcomeList", outcomeService.getOutcomeList(filterParams, Sort.by(sortDirection, sortField)));
+        model.addAttribute("outcomeList", outcomeService.getOutcomeList(filterParams, PageRequest.of(pageNumber, pageSize, sortDirection, sortField)));
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
@@ -41,7 +47,7 @@ public class OutcomeController {
     @GetMapping("/outcome/{id}")
     public String getOutcomeListWithGivenIncome(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
         sort = Optional.ofNullable(sort).orElse(defaultSort);
-        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, sort));
+        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), sort)));
         model.addAttribute("outcomeDto", outcomeService.getOutcomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
@@ -50,7 +56,7 @@ public class OutcomeController {
 
     @GetMapping("/outcome/delete/{id}")
     public String getOutcomeDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, defaultSort));
+        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
         model.addAttribute("outcomeDto", outcomeService.getOutcomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
@@ -60,7 +66,7 @@ public class OutcomeController {
     @PostMapping("/outcome/delete/{id}")
     public String deleteOutcome(Model model, @PathVariable("id") Long id) {
         outcomeService.deleteOutcome(id);
-        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, defaultSort));
+        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
@@ -70,7 +76,7 @@ public class OutcomeController {
     @PostMapping("/outcome")
     public String saveOutcome(Model model, OutcomeDto outcome) {
         outcomeService.saveOutcome(outcome);
-        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, defaultSort));
+        model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());

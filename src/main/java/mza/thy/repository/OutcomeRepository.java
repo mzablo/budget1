@@ -1,6 +1,7 @@
 package mza.thy.repository;
 
 import mza.thy.domain.Outcome;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -24,7 +25,6 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long> {
 
     Optional<Outcome> findByOperation_Id(Long operationId);
 
-    @Async//?
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name")
     Stream<Outcome> findAllByNameLike(String name);
@@ -46,5 +46,5 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long> {
     Stream<Outcome> findAllByPrice(BigDecimal price);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
-    Stream<Outcome> findTotalAll(Sort sort);
+    Stream<Outcome> findTotalAll(Pageable page);
 }

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -44,11 +45,11 @@ public class OutcomeService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return Arrays.asList("empty");
+        return List.of("empty");
     }
 
     @Transactional(readOnly = true)
-    public List<OutcomeDto> getOutcomeList(FilterParams filterParams, @NotNull Sort sort) {
+    public List<OutcomeDto> getOutcomeList(FilterParams filterParams, @NotNull Pageable page) {
         if (Objects.nonNull(filterParams)
                 && (Objects.nonNull(filterParams.getFilterId())
                 || Objects.nonNull(filterParams.getFilterName())
@@ -59,7 +60,7 @@ public class OutcomeService {
         ) {
             return doFilter(filterParams);
         }
-        return outcomeRepository.findTotalAll(sort)
+        return outcomeRepository.findTotalAll(page)
                 .map(OutcomeDto::convert)
                 .collect(Collectors.toList());
     }
@@ -136,7 +137,7 @@ public class OutcomeService {
     }
 
     private Outcome saveNewOutcome(OutcomeDto outcomeDto) {
-        if (Objects.nonNull(outcomeDto.getName())) {
+        if (StringUtils.hasLength(outcomeDto.getName())) {
             log.debug("Saving new outcome {}", outcomeDto);
             return outcomeRepository.save(outcomeDto.convert());
         } else {

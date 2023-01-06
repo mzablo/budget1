@@ -53,7 +53,7 @@
     </div>
 
     <div>
-        <input class="btn btn-primary" type="submit" value="Update">
+        <input class="btn btn-primary" type="submit" value="&#10004;">
         <a class="btn btn-primary" th:href="'/operation/'">Reset</a>
         <div class="btn btn-dark" th:if="${operationDto.id > 0}">
             <a th:href="'/operation/delete/' + ${operationDto.id}">Delete</a>
@@ -147,15 +147,19 @@
         <td class="text-center" colspan="7">No Records found. Add some...!</td>
     </tr>
     <tr th:each="operation : ${operationList}">
-        <td class="align-middle" th:text="${operation.id}"></td>
+        <td class="align-middle">
+            <a th:href="'/operation/' + ${operation.id}">
+                <span th:text="${operation.id}"></span>
+            </a>
+        </td>
         <td class="align-middle" th:text="${operation.date}"></td>
         <td class="align-middle" th:text="${operation.amount}"></td>
         <td class="align-middle" th:text="${operation.name}"></td>
         <td class="align-middle" th:text="${operation.description}"></td>
         <td class="align-middle" th:text="${operation.bankName}"></td>
         <td class="align-middle text-center form-inline">
-            <a class="btn btn-secondary" th:href="'/operation/' + ${operation.id}">✏</a>
-            <a th:href="'/operation/delete/' + ${operation.id}">X</a>
+          <!--  <a class="btn btn-secondary" th:href="'/operation/' + ${operation.id}">✏</a> -->
+            <a th:href="'/operation/delete/' + ${operation.id}">&#9988;</a>
         </td>
     </tr>
 </table>

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -112,7 +113,7 @@ public class IncomeService {
     }
 
     private Income saveNewIncome(IncomeDto incomeDto) {
-        if (Objects.nonNull(incomeDto.getName())) {
+        if (StringUtils.hasLength(incomeDto.getName())) {
             log.debug("Saving new income {}", incomeDto);
             return incomeRepository.save(incomeDto.convert());
         } else {

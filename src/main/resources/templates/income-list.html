@@ -151,15 +151,19 @@
         <td class="text-center" colspan="7">No Records found. Add some...!</td>
     </tr>
     <tr th:each="income : ${incomeList}">
-        <td class="align-middle" th:text="${income.id}"></td>
+        <td class="align-middle">
+            <a th:href="'/income/' + ${income.id}">
+                <span th:text="${income.id}"></span>
+            </a>
+        </td>
         <td class="align-middle" th:text="${income.date}"></td>
         <td class="align-middle" th:text="${income.amount}"></td>
         <td class="align-middle" th:text="${income.name}"></td>
         <td class="align-middle" th:text="${income.description}"></td>
         <td class="align-middle" th:text="${income.bankName}"></td>
         <td class="align-middle text-center form-inline">
-            <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a>
-            <a th:href="'/income/delete/' + ${income.id}">X</a>
+        <!--    <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a> -->
+            <a th:href="'/income/delete/' + ${income.id}">&#9988;</a>
         </td>
     </tr>
 </table>

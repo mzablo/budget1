@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Collections;
 import java.util.List;
@@ -101,7 +102,7 @@ public class AccountService {
     }
 
     private void saveNewAccount(AccountDto accountDto) {
-        if (Objects.nonNull(accountDto.getName())) {
+        if (StringUtils.hasLength(accountDto.getName())) {
             log.debug("Saving new account {}", accountDto);
             accountRepository.save(accountDto.convert());
         } else {
