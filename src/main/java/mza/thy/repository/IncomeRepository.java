@@ -23,6 +23,13 @@ public interface IncomeRepository extends JpaRepository<Income, Long> {
 
     Optional<Income> findByOperation_Id(Long operationId);
 
+    @Query(value = "SELECT sum(amount) FROM Income")
+    BigDecimal sumIncome();
+    @Query(value = "SELECT sum(amount) FROM Income where year =:year")
+    BigDecimal sumIncome(Integer year);
+    @Query(value = "SELECT sum(amount) FROM Income where year =:year AND month =:month")
+    BigDecimal sumIncome(Integer year, Integer month);
+
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name")
     Stream<Income> findAllByNameLike(String name);

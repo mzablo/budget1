@@ -39,10 +39,10 @@ public class OperationService {
         ) {
             return doFilter(filterParams);
         }
-        return operationRepository.findAll(pageable)//!!!
+        return operationRepository.findAll(pageable)
                 .stream()
                 .map(OperationDto::convertToDto)
-                .collect(Collectors.toList());//!!! zwracac liste czy page?
+                .collect(Collectors.toList());//
     }
 
     private List<OperationDto> doFilter(FilterParams filterParams) {
@@ -123,12 +123,6 @@ public class OperationService {
         log.debug("Number of deleted outcome {}", deletedOutcome);
     }
 
-    /*  @Transactional(readOnly = true)
-      Page<OperationDto> getOperationPage(Pageable pageable) {
-          var page = operationRepository.findTotalAll(pageable);
-          return page.map(OperationDto::convertToDto);
-      }
-  */
     private void updateOperation(Long id, OperationDto operationDto) {
         var operation = operationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Operation not found " + id));

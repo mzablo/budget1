@@ -1,42 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    ...
+    <link href="../../../resources/css/bootstrap.min.css" rel="stylesheet" media="screen" th:href="@{/resources/css/bootstrap.min.css}"/>
 </head>
 <body>
-...
-<div th:replace="fragments/header :: header">
-    <!-- ============================================================================ -->
-    <!-- This content is only used for static prototyping purposes (natural templates)-->
-    <!-- and is therefore entirely optional, as this markup fragment will be included -->
-    <!-- from "fragments/header.html" at runtime.                                     -->
-    <!-- ============================================================================ -->
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Static header</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                </ul>
-            </div>
+<div th:replace="navbar">This content will be gone</div>
+<nav class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">mza project</a>
         </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li th:classappend="${module == 'home' ? 'active' : ''}">
+                    <a href="#" th:href="@{/}">Home</a>
+                </li>
+                <li th:classappend="${module == 'tasks' ? 'active' : ''}">
+                    <a href="#" th:href="@{/task}">Tasks</a>
+                </li>
+                <li th:classappend="${module == 'tasks-ld' ? 'active' : ''}">
+                    <a href="#" th:href="@{/task-ld}">Tasks (Layout Dialect)</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <a href="/signin" th:href="@{/signin}">
+                    <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span>&nbsp;Sign in
+                </a>
+                <a href="/logout" th:href="@{#}" onclick="$('#form').submit();">
+                    <span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout
+                </a>
+                <form style="visibility: hidden" id="form" method="post" action="#" th:action="@{/logout}"></form>
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
     </div>
-</div>
-<div class="container">
-    <div class="hero-unit">
-        <h1>Test</h1>
-        <p>
-            Welcome to the Spring MVC Quickstart application!
-            Get started quickly by signing up.
-        </p>
-        <p>
-            <a href="/signup" th:href="@{/signup}" class="btn btn-large btn-success">Sign up</a>
-        </p>
-    </div>
-    <div th:replace="fragments/footer :: footer">&copy; 2016 The Static Templates</div>
-</div>
-...
+</nav>
 </body>
 </html>

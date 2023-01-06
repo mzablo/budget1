@@ -17,7 +17,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
-//!!!dorobic pagging - outcome, przechodzenie miedzy stronami
 //!!! dorobic ctrls
 //!!! dorobic templaty
 //!!! zdrowie, investment, sql, view, wykresy?

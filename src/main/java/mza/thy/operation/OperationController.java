@@ -21,7 +21,7 @@ import java.util.Optional;
 @Slf4j
 public class OperationController {
     private final int pageNumberDefault = 0;
-    private final int pageSizeDefault = 100;
+    private final int pageSizeDefault = 100000;
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final PageRequest pageableDefault = PageRequest.of(pageNumberDefault, pageSizeDefault, defaultSort);
     private final OperationService operationService;
