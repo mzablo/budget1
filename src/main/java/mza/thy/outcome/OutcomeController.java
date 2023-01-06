@@ -35,12 +35,19 @@ public class OutcomeController {
     ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        model.addAttribute("outcomeList", outcomeService.getOutcomeList(filterParams, PageRequest.of(pageNumber, pageSize, sortDirection, sortField)));
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+        var outcomePage = outcomeService.getOutcomeList(filterParams, PageRequest.of(pageNumber, pageSize, sortDirection, sortField));
+        model.addAttribute("outcomeList", outcomePage);
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
+
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("total", outcomeService.getTotal());
         return "outcome-list";
     }
 
@@ -51,6 +58,9 @@ public class OutcomeController {
         model.addAttribute("outcomeDto", outcomeService.getOutcomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
+
+        model.addAttribute("pageNumber", 0);
+        model.addAttribute("total", outcomeService.getTotal());
         return "outcome-list";
     }
 
@@ -70,6 +80,8 @@ public class OutcomeController {
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
+        model.addAttribute("pageNumber", 0);
+        model.addAttribute("total", outcomeService.getTotal());
         return "outcome-list";
     }
 
@@ -80,6 +92,8 @@ public class OutcomeController {
         model.addAttribute("outcomeDto", new OutcomeDto());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
+        model.addAttribute("pageNumber", 0);
+        model.addAttribute("total", outcomeService.getTotal());
         return "outcome-list";
     }
 }

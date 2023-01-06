@@ -77,6 +77,12 @@
             <a th:href="'/outcome/delete/' + ${outcomeDto.id}">Delete</a>
         </div>
     </div>
+    <div>
+        <a th:href="@{'/outcome/?pageSize=100&pageNumber='+${pageNumber-1}}">Back</a>
+        Current page: [[${pageNumber}]]
+        <a th:href="@{'/outcome/?pageSize=100&pageNumber='+${pageNumber+1}}">Next</a>
+        Total records: [[${total}]]
+    </div>
 </form>
 <div th:if="${isAscending}">
     <a th:href="'/outcome?sortField=id&sortDirection=DESC'">Id</a>
