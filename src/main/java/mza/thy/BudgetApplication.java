@@ -16,7 +16,7 @@ public class BudgetApplication {
 
     public static void main(String[] args) {
 
-        System.out.println(" "+args[0]);
+        System.out.println("Input args: "+args[0]);
         SpringApplication.run(BudgetApplication.class, args);
     }
     @GetMapping("/")
