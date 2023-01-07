@@ -17,9 +17,12 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
+//!!! dorobic dodawanie na outcome
+//!!! po wpisaniu rekodu/aktualizacji - formularz zostawic na tym samym rekordzie
 //!!! dorobic ctrls
 //!!! dorobic templaty
 //!!! zdrowie, investment, sql, view, wykresy?
+//!!! sql - to moze per zakladka? jak updaty to brak wyniku - obsluzyc
 //dzienniczek biegowy
 //!!! na gorze/dole strony podsumowanie jak zmienia sie total
 //!!!commitowanie jak wychodzi sie z aplikacji??

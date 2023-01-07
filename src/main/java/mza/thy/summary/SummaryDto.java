@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 @Value
 @ToString
 public class SummaryDto {
-    BigDecimal totalIncome;
-    BigDecimal totalOutcome;
-    BigDecimal balance;
+    String totalIncome;
+    String totalOutcome;
+    String balance;
     Integer year;
     Integer month;
 }

@@ -7,6 +7,9 @@ import mza.thy.repository.OutcomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -18,13 +21,21 @@ public class SummaryService {
 
     @Transactional(readOnly = true)
     public SummaryDto getSummary() {
+        DecimalFormat df = new DecimalFormat("###,##0.00");
+
+        DecimalFormatSymbols customSymbol = new DecimalFormatSymbols();
+        customSymbol.setGroupingSeparator(' ');
+        df.setDecimalFormatSymbols(customSymbol);
+
         var income = incomeRepository.sumIncome();
         var outcome = outcomeRepository.sumOutcome();
+        var balance = income.subtract(outcome);
+
         log.debug("Getting summary {} - {}", income, outcome);
         return SummaryDto.builder()
-                .totalIncome(income)
-                .totalOutcome(outcome)
-                .balance(income.subtract(outcome))
+                .totalIncome(df.format(income))
+                .totalOutcome(df.format(outcome))
+                .balance(df.format(balance))
                 .build();
     }
 

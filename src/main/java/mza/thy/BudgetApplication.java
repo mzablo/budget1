@@ -16,7 +16,10 @@ public class BudgetApplication {
 
     public static void main(String[] args) {
 
-        System.out.println("Input args: "+args[0]);
+       // System.out.println("Input args: "+args[0]);
+
+        System.out.println("HOW TO RUN: java -jar -DDB.FIRST_TIME=false -DDB.URL=jdbc:hsqldb:file:C:\\gosia\\development\\budget\\db\\budget budget-1.0.jar");
+
         SpringApplication.run(BudgetApplication.class, args);
     }
     @GetMapping("/")
