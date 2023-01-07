@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 
 @Service
 @Slf4j
@@ -17,15 +16,10 @@ public class SummaryService {
 
     private final IncomeRepository incomeRepository;
     private final OutcomeRepository outcomeRepository;
-
+    private final DecimalFormat decimalFormat;
 
     @Transactional(readOnly = true)
     public SummaryDto getSummary() {
-        DecimalFormat df = new DecimalFormat("###,##0.00");
-
-        DecimalFormatSymbols customSymbol = new DecimalFormatSymbols();
-        customSymbol.setGroupingSeparator(' ');
-        df.setDecimalFormatSymbols(customSymbol);
 
         var income = incomeRepository.sumIncome();
         var outcome = outcomeRepository.sumOutcome();
@@ -33,9 +27,9 @@ public class SummaryService {
 
         log.debug("Getting summary {} - {}", income, outcome);
         return SummaryDto.builder()
-                .totalIncome(df.format(income))
-                .totalOutcome(df.format(outcome))
-                .balance(df.format(balance))
+                .totalIncome(decimalFormat.format(income))
+                .totalOutcome(decimalFormat.format(outcome))
+                .balance(decimalFormat.format(balance))
                 .build();
     }
 

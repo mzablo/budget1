@@ -72,6 +72,9 @@
                 </div>
             </form>
         </th>
+
+        <th>Balance</th>
+
         <th>Actions
             <a th:href="'/account'">Clean</a>
         </th>
@@ -87,6 +90,7 @@
         </td>
         <td class="align-middle" th:text="${account.name}"></td>
         <td class="align-middle" th:text="${account.bank}"></td>
+        <td class="align-middle" th:text="${account.balance}"></td>
         <td class="align-middle text-center form-inline">
           <!--  <a class="btn btn-secondary" th:href="'/account/' + ${account.id}">✏</a> -->
             <a th:href="'/account/delete/' + ${account.id}">&#9988;</a>

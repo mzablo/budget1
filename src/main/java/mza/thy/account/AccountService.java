@@ -2,6 +2,7 @@ package mza.thy.account;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.domain.Account;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.AccountRepository;
 import mza.thy.repository.OperationRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -25,12 +27,13 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final OperationRepository operationRepository;
+    private final DecimalFormat decimalFormat;
 
     @Transactional(readOnly = true)
     public List<AccountDto> getAccountList() {
         var result = accountRepository.findAll()
                 .stream()
-                .map(AccountDto::convertToDto)
+                .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                 .collect(Collectors.toList());
         result.add(0, new AccountDto());
         return result;
@@ -48,15 +51,23 @@ public class AccountService {
         return Optional.ofNullable(sort).map(s -> accountRepository.findAll(sort))
                 .orElse(accountRepository.findAll())
                 .stream()
-                .map(AccountDto::convertToDto)
+                .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                 .collect(Collectors.toList());
+    }
+
+    private String getAccountBalance(Account account) {
+        var balance = operationRepository.balanceByAccount(account.getId());
+        //log.debug("Balance for {}: {}", account.getName(), balance);
+        return Optional.ofNullable(balance)
+                .map(decimalFormat::format)
+                .orElse("-");
     }
 
     private List<AccountDto> doFilter(FilterParams filterParams) {
         if (Objects.nonNull(filterParams.getFilterId())) {
             log.debug("Filter account by id {}", filterParams.getFilterId());
             return accountRepository.findById(filterParams.getFilterId())
-                    .map(AccountDto::convertToDto)
+                    .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                     .map(List::of)
                     .orElse(Collections.emptyList());
         }
@@ -64,14 +75,14 @@ public class AccountService {
             log.debug("Filter account by name {}", filterParams.getFilterName());
             return accountRepository.findAllByNameLike(filterParams.getFilterName().getValue())
                     .stream()
-                    .map(AccountDto::convertToDto)
+                    .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                     .collect(Collectors.toList());
         }
         if (Objects.nonNull(filterParams.getFilterBank())) {
             log.debug("Filter account by bank {}", filterParams.getFilterBank());
             return accountRepository.findAllByBankLike(filterParams.getFilterBank().getValue())
                     .stream()
-                    .map(AccountDto::convertToDto)
+                    .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
@@ -80,13 +91,13 @@ public class AccountService {
     @Transactional(readOnly = true)
     Page<AccountDto> getAccountPage(Pageable pageable) {
         var page = accountRepository.findAll(pageable);
-        return page.map(AccountDto::convertToDto);
+        return page.map(a -> AccountDto.convertToDto(a, getAccountBalance(a)));
     }
 
     @Transactional(readOnly = true)
     AccountDto getAccount(Long id) {
         var result = accountRepository.findById(id)
-                .map(AccountDto::convertToDto)
+                .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                 .orElseThrow(() -> new RuntimeException("Account not found " + id));
         log.debug("Get account {}", result);
         return result;
