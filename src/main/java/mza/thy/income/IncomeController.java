@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountService;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -17,8 +18,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
-//!!! dorobic dodawanie na outcome
-//!!! po wpisaniu rekodu/aktualizacji - formularz zostawic na tym samym rekordzie
 //!!! dorobic ctrls
 //!!! dorobic templaty
 //!!! zdrowie, investment, sql, view, wykresy?
@@ -35,6 +34,7 @@ public class IncomeController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final IncomeService incomeService;
     private final AccountService accountService;
+    private final SummaryController summaryController;
 
     @GetMapping("income")
     public String getIncomeList(Model model,
@@ -48,6 +48,7 @@ public class IncomeController {
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
+        summaryController.getSummary(model);
         return "income-list";
     }
 
@@ -79,9 +80,9 @@ public class IncomeController {
 
     @PostMapping("/income")
     public String saveIncome(Model model, IncomeDto income) {
-        incomeService.saveIncome(income);
+        var id = incomeService.saveIncome(income);
         model.addAttribute("incomeList", incomeService.getIncomeList(null, defaultSort));
-        model.addAttribute("incomeDto", new IncomeDto());
+        model.addAttribute("incomeDto", incomeService.getIncomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
         return "income-list";
     }

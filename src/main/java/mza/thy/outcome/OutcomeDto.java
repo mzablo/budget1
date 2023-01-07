@@ -19,6 +19,7 @@ import java.util.Optional;
 public class OutcomeDto {
     private Long id;
     private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal add = BigDecimal.ZERO;
     private Integer counter = 1;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -32,7 +33,7 @@ public class OutcomeDto {
     Outcome convert() {
         return Outcome.builder()
                 .id(id)
-                .price(price)
+                .price(price.add(add))
                 .counter(counter)
                 .date(date)
                 .name(name)

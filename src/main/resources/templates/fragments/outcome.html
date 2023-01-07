@@ -16,17 +16,18 @@
                 </select>
             </div>
 
-            <div class="form-group form-inline">
+            <div class="form-group col-md-8">
                 <label for="date">Date</label>
                 <input id="date" placeholder="Enter date" required autocomplete="off"
                        th:field="*{date}"
                        th:value="${{defDate}}"
                        type="date"/>
-                <div class="col-form-label"><label for="category">Category</label></div>
+                <label for="category">Category</label>
                 <select  id="category" name="bank" th:field="*{category}" >
                     <option th:each="category : ${categoryList}" th:value="${category}" th:utext="${category}"/>
                 </select>
             </div>
+
             <div class="form-group col-md-8">
                 <label for="price">Price</label>
                 <input id="price" placeholder="Enter price"  autocomplete="off"
@@ -35,6 +36,13 @@
                 <label for="counter">Counter</label>
                 <input id="counter" placeholder="Counter"  autocomplete="off"
                        th:field="*{counter}" step="1.00" data-decimals="0"
+                       type="number"/>
+            </div>
+
+            <div class="form-group col-md-8">
+                <label for="add">Add</label>
+                <input id="add" placeholder="Add"  autocomplete="off"
+                       th:field="*{add}" step="0.01" data-decimals="2"
                        type="number"/>
             </div>
 

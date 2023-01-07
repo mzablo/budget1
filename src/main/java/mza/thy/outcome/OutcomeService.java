@@ -130,7 +130,7 @@ public class OutcomeService {
 
 
     @Transactional
-    void saveOutcome(OutcomeDto outcomeDto) {
+    long saveOutcome(OutcomeDto outcomeDto) {
         Outcome outcome;
         if (Objects.nonNull(outcomeDto.getId())) {
             outcome = updateOutcome(outcomeDto.getId(), outcomeDto);
@@ -138,6 +138,7 @@ public class OutcomeService {
             outcome = saveNewOutcome(outcomeDto);
         }
         operationHandler.handleOperation(outcomeDto.getOperationId(), outcomeDto.getBankName(), outcome);
+        return outcome.getId();
     }
 
     private Outcome saveNewOutcome(OutcomeDto outcomeDto) {
@@ -164,7 +165,7 @@ public class OutcomeService {
 
     private Outcome updateOutcome(Long id, OutcomeDto changedOutcomeDto) {
         var outcome = getOutcome(id);
-        outcome.setPrice(changedOutcomeDto.getPrice());
+        outcome.setPrice(changedOutcomeDto.getPrice().add(changedOutcomeDto.getAdd()));
         outcome.setDate(changedOutcomeDto.getDate());
         outcome.setName(changedOutcomeDto.getName());
         outcome.setCategory(changedOutcomeDto.getCategory());

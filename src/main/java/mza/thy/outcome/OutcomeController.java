@@ -90,9 +90,9 @@ public class OutcomeController {
 
     @PostMapping("/outcome")
     public String saveOutcome(Model model, OutcomeDto outcome) {
-        outcomeService.saveOutcome(outcome);
+        var id = outcomeService.saveOutcome(outcome);
         model.addAttribute("outcomeList", outcomeService.getOutcomeList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
-        model.addAttribute("outcomeDto", new OutcomeDto());
+        model.addAttribute("outcomeDto", outcomeService.getOutcomeDto(id));
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("categoryList", outcomeService.getCategoryList());
         model.addAttribute("pageNumber", 0);

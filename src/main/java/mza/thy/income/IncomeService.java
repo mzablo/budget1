@@ -102,7 +102,7 @@ public class IncomeService {
 
 
     @Transactional
-    void saveIncome(IncomeDto incomeDto) {
+    long saveIncome(IncomeDto incomeDto) {
         Income income;
         if (Objects.nonNull(incomeDto.getId())) {
             income = updateIncome(incomeDto.getId(), incomeDto);
@@ -110,6 +110,7 @@ public class IncomeService {
             income = saveNewIncome(incomeDto);
         }
         operationHandler.handleOperation(incomeDto.getOperationId(), incomeDto.getBankName(), income);
+        return income.getId();
     }
 
     private Income saveNewIncome(IncomeDto incomeDto) {
