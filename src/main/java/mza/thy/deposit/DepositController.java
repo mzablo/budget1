@@ -20,7 +20,7 @@ import java.util.Optional;
 @Slf4j
 public class DepositController {
     private static final String pageNumberDefault = "0";
-    private static final String pageSizeDefault = "100000";
+    private static final String pageSizeDefault = "1000";
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final DepositService depositService;
     private final SummaryController summaryController;
@@ -46,6 +46,7 @@ public class DepositController {
 
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("total", depositService.getTotal());
+        model.addAttribute("periodList", depositService.getPeriodList());
         summaryController.getSummary(model);
         return "deposit-list";
     }
@@ -58,6 +59,7 @@ public class DepositController {
 
         model.addAttribute("pageNumber", 0);
         model.addAttribute("total", depositService.getTotal());
+        model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
     }
 
@@ -70,21 +72,23 @@ public class DepositController {
 
     @PostMapping("/deposit/delete/{id}")
     public String deleteDeposit(Model model, @PathVariable("id") Long id) {
-        depositService.deleteOutcome(id);
+        depositService.deleteDeposit(id);
         model.addAttribute("depositList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
         model.addAttribute("depositDto", new DepositDto());
         model.addAttribute("pageNumber", 0);
         model.addAttribute("total", depositService.getTotal());
+        model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
     }
 
     @PostMapping("/deposit")
     public String saveDeposit(Model model, DepositDto deposit) {
         depositService.saveDeposit(deposit);
-        model.addAttribute("outcomeList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
-        model.addAttribute("outcomeDto", new DepositDto());
+        model.addAttribute("depositList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
+        model.addAttribute("depositDto", new DepositDto());
         model.addAttribute("pageNumber", 0);
         model.addAttribute("total", depositService.getTotal());
+        model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
     }
 }

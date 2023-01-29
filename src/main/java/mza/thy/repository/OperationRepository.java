@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
-//!!! zrobic graf aby pozenic pageable i fetch aby nie bylo n+1
+//!!!todo  zrobic graf aby pozenic pageable i fetch aby nie bylo n+1
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long> {
     @Query(value = "SELECT O FROM Operation O LEFT JOIN FETCH O.account A " +

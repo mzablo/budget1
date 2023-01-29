@@ -4,6 +4,7 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Deposit;
+import mza.thy.domain.DepositPeriod;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.DepositRepository;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,10 @@ public class DepositService {
 
     private final DepositRepository depositRepository;
 
+    public List<String> getPeriodList() {
+        return DepositPeriod.getAllPriods();
+    }
+
     @Transactional(readOnly = true)
     public long getTotal() {
         return depositRepository.count();
@@ -34,6 +39,7 @@ public class DepositService {
                 && (Objects.nonNull(filterParams.getFilterId())
                 || Objects.nonNull(filterParams.getFilterBank())
                 || Objects.nonNull(filterParams.getFilterDate())
+                || Objects.nonNull(filterParams.getFilterDescription())
                 || Objects.nonNull(filterParams.getFilterAmount()))
         ) {
             return doFilter(filterParams);
@@ -54,6 +60,13 @@ public class DepositService {
         if (Objects.nonNull(filterParams.getFilterBank())) {
             log.debug("Filter deposit by bank {}", filterParams.getFilterBank());
             return depositRepository.findAllByBankLike(filterParams.getFilterBank().getValue())
+                    .map(DepositDto::convert)
+                    .collect(Collectors.toList());
+        }
+
+        if (Objects.nonNull(filterParams.getFilterDescription())) {
+            log.debug("Filter deposit by description {}", filterParams.getFilterDescription());
+            return depositRepository.findAllByDescriptionLike(filterParams.getFilterDescription().getValue())
                     .map(DepositDto::convert)
                     .collect(Collectors.toList());
         }
@@ -88,23 +101,22 @@ public class DepositService {
         return result;
     }
 
-
     @Transactional
     void saveDeposit(DepositDto depositDto) {
         if (Objects.nonNull(depositDto.getId())) {
             updateDeposit(depositDto.getId(), depositDto);
         } else {
-            saveNewOutcome(depositDto);
+            saveNewDeposit(depositDto);
         }
     }
 
-    private Deposit saveNewOutcome(DepositDto depositDto) {
+    private Deposit saveNewDeposit(DepositDto depositDto) {
         log.debug("Saving new deposit {}", depositDto);
         return depositRepository.save(depositDto.convert());
     }
 
     @Transactional
-    void deleteOutcome(Long id) {
+    void deleteDeposit(Long id) {
         depositRepository.deleteById(id);
         log.debug("Deleted deposit {}", id);
     }
@@ -116,11 +128,17 @@ public class DepositService {
 
     private Deposit updateDeposit(Long id, DepositDto changedDepositDto) {
         var deposit = getDeposit(id);
-        deposit.setAmount(changedDepositDto.getAmount());
-        deposit.setDate(changedDepositDto.getDate());
-        deposit.setBank(changedDepositDto.getBankName());
-    //    deposit.setPeriod(changedDepositDto.getPeriod());
-        log.debug("Update deposit {}", changedDepositDto);
+        deposit.update(changedDepositDto.getAmount()
+                , changedDepositDto.getDate()
+                , changedDepositDto.getInterest()
+                , changedDepositDto.getDescription()
+                , changedDepositDto.getPercent()
+                , changedDepositDto.getPeriod()
+                , changedDepositDto.getBankName()
+                , changedDepositDto.getActive()
+                , changedDepositDto.getProlonged()
+        );
+        log.debug("Update deposit {}", deposit);
         return depositRepository.save(deposit);
     }
 

@@ -21,10 +21,13 @@ public interface DepositRepository extends JpaRepository<Deposit, Long> {
             "WHERE D.bank like :name")
     Stream<Deposit> findAllByBankLike(String name);
 
+    @Query(value = "SELECT D FROM Deposit D " +
+            "WHERE D.description like :description")
+    Stream<Deposit> findAllByDescriptionLike(String description);
+
     @Query(value = "SELECT D from Deposit D " +
             "WHERE D.date =:date")
     Stream<Deposit> findAllByDate(LocalDate date);
-
 
     @Query(value = "SELECT D from Deposit D " +
             "WHERE D.amount =:amount")
