@@ -1,14 +1,12 @@
 package mza.thy.deposit;
 
-import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Deposit;
 import mza.thy.domain.DepositPeriod;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.DepositRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +32,7 @@ public class DepositService {
     }
 
     @Transactional(readOnly = true)
-    public List<DepositDto> getDepositList(FilterParams filterParams, @NotNull Pageable page) {
+    public List<DepositDto> getDepositList(FilterParams filterParams, Sort sort) {
         if (Objects.nonNull(filterParams)
                 && (Objects.nonNull(filterParams.getFilterId())
                 || Objects.nonNull(filterParams.getFilterBank())
@@ -44,7 +42,8 @@ public class DepositService {
         ) {
             return doFilter(filterParams);
         }
-        return depositRepository.findTotalAll(page)
+        return depositRepository.findAll(sort)
+                .stream()
                 .map(DepositDto::convert)
                 .collect(Collectors.toList());
     }
@@ -84,12 +83,6 @@ public class DepositService {
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
-    }
-
-    @Transactional(readOnly = true)
-    Page<DepositDto> getDepositPage(Pageable pageable) {
-        var page = depositRepository.findAll(pageable);
-        return page.map(DepositDto::convert);
     }
 
     @Transactional(readOnly = true)
@@ -141,5 +134,4 @@ public class DepositService {
         log.debug("Update deposit {}", deposit);
         return depositRepository.save(deposit);
     }
-
 }

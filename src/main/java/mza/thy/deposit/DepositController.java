@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,8 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class DepositController {
-    private static final String pageNumberDefault = "0";
-    private static final String pageSizeDefault = "1000";
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final DepositService depositService;
     private final SummaryController summaryController;
@@ -28,25 +25,20 @@ public class DepositController {
     @GetMapping("deposit")
     public String getDepositList(Model model,
                                  FilterParams filterParams,
-                                 @RequestParam(defaultValue = "date") String sortField,
-                                 @RequestParam(required = false) Sort.Direction sortDirection,
-                                 @RequestParam(defaultValue = pageNumberDefault) int pageNumber,
-                                 @RequestParam(defaultValue = pageSizeDefault) int pageSize
+                                 @RequestParam(defaultValue = "id") String sortField,
+                                 @RequestParam(required = false) Sort.Direction sortDirection
     ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        if (pageNumber < 0) {
-            pageNumber = 0;
-        }
-        var depositList = depositService.getDepositList(filterParams, PageRequest.of(pageNumber, pageSize, sortDirection, sortField));
+        var depositList = depositService.getDepositList(filterParams, Sort.by(sortDirection, sortField));
         model.addAttribute("depositList", depositList);
         model.addAttribute("depositDto", new DepositDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
 
-        model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
+
         summaryController.getSummary(model);
         return "deposit-list";
     }
@@ -54,10 +46,9 @@ public class DepositController {
     @GetMapping("/deposit/{id}")
     public String getDepositListWithGivenIncome(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
         sort = Optional.ofNullable(sort).orElse(defaultSort);
-        model.addAttribute("depositList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), sort)));
+        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), sort));
         model.addAttribute("depositDto", depositService.getDepositDto(id));
 
-        model.addAttribute("pageNumber", 0);
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
@@ -65,7 +56,7 @@ public class DepositController {
 
     @GetMapping("/deposit/delete/{id}")
     public String getDepositDeleteConfirmationView(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("depositList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
+        model.addAttribute("depositList", depositService.getDepositList(null, defaultSort));
         model.addAttribute("depositDto", depositService.getDepositDto(id));
         return "deposit-delete";
     }
@@ -73,9 +64,8 @@ public class DepositController {
     @PostMapping("/deposit/delete/{id}")
     public String deleteDeposit(Model model, @PathVariable("id") Long id) {
         depositService.deleteDeposit(id);
-        model.addAttribute("depositList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
+        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
         model.addAttribute("depositDto", new DepositDto());
-        model.addAttribute("pageNumber", 0);
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
@@ -84,9 +74,8 @@ public class DepositController {
     @PostMapping("/deposit")
     public String saveDeposit(Model model, DepositDto deposit) {
         depositService.saveDeposit(deposit);
-        model.addAttribute("depositList", depositService.getDepositList(null, PageRequest.of(Integer.parseInt(pageNumberDefault), Integer.parseInt(pageSizeDefault), defaultSort)));
+        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
         model.addAttribute("depositDto", new DepositDto());
-        model.addAttribute("pageNumber", 0);
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
