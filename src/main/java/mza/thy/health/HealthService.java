@@ -7,8 +7,6 @@ import mza.thy.domain.Illness;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.repository.CureRepository;
 import mza.thy.repository.IllnessRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +38,21 @@ public class HealthService {
         return illnessRepository.findAll(sort)
                 .stream()
                 .map(IllnessDto::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<CureDto> getCureList() {
+        return cureRepository.findAll()
+                .stream()
+                .map(CureDto::convert)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<CureDto> getCureForIllness(Long illnessId) {
+        return cureRepository.findAllByIllnessId(illnessId)
+                .map(CureDto::convert)
                 .collect(Collectors.toList());
     }
 
@@ -110,7 +123,6 @@ public class HealthService {
 
     @Transactional
     public void deleteIllness(Long id) {
-        //deeletecure todo
         illnessRepository.deleteById(id);
         log.debug("Deleted illness {}", id);
     }

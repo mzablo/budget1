@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 
 @Controller
@@ -28,6 +30,8 @@ public class HealthController {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
         model.addAttribute("illnessList", healthService.getIllnessList(filterParams, Sort.by(sortDirection, sortField)));
+        model.addAttribute("cureList", healthService.getCureList());
+        model.addAttribute("cureForIllnessList", Collections.emptyList());
         model.addAttribute("illnessDto", new IllnessDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
@@ -38,6 +42,8 @@ public class HealthController {
     public String getIllnessListWithGivenIllness(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
         sort = Optional.ofNullable(sort).orElse(defaultSort);
         model.addAttribute("illnessList", healthService.getIllnessList(null, sort));
+        model.addAttribute("cureList", healthService.getCureList());
+        model.addAttribute("cureForIllnessList", healthService.getCureForIllness(id));
         model.addAttribute("illnessDto", healthService.getIllnessDto(id));
         return "health-list";
     }
@@ -53,7 +59,9 @@ public class HealthController {
     public String deleteIIllness(Model model, @PathVariable("id") Long id) {
         healthService.deleteIllness(id);
         model.addAttribute("illnessList", healthService.getIllnessList(null, defaultSort));
-        model.addAttribute("illnessDto", new CureDto());
+        model.addAttribute("illnessDto", new IllnessDto());
+        model.addAttribute("cureList", healthService.getCureList());
+        model.addAttribute("cureForIllnessList", Collections.emptyList());
         return "health-list";
     }
 
@@ -62,6 +70,8 @@ public class HealthController {
         var id = healthService.saveIllness(illnessDto);
         model.addAttribute("illnessList", healthService.getIllnessList(null, defaultSort));
         model.addAttribute("illnessDto", healthService.getIllnessDto(id));
+        model.addAttribute("cureList", healthService.getCureList());
+        model.addAttribute("cureForIllnessList", Collections.emptyList());
         return "health-list";
     }
 }

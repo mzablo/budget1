@@ -17,4 +17,8 @@ public interface CureRepository extends JpaRepository<Cure, Long> {
     @Query(value = "SELECT C FROM Cure C " +
             "WHERE C.description like :description")
     Stream<Cure> findAllByDescriptionLike(String description);
+
+    @Query(value = "SELECT C FROM Cure C " +
+            "WHERE C.illnessId =:illnessId")
+    Stream<Cure> findAllByIllnessId(Long illnessId);
 }
