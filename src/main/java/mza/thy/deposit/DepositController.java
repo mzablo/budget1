@@ -18,7 +18,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class DepositController {
-    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final DepositService depositService;
     private final SummaryController summaryController;
 
@@ -43,8 +43,19 @@ public class DepositController {
         return "deposit-list";
     }
 
+    @GetMapping("/deposit/process")
+    public String depositProcess(Model model) {
+        depositService.process();
+        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
+        model.addAttribute("depositDto", new DepositDto());
+
+        model.addAttribute("total", depositService.getTotal());
+        model.addAttribute("periodList", depositService.getPeriodList());
+        return "deposit-list";
+    }
+
     @GetMapping("/deposit/{id}")
-    public String getDepositListWithGivenIncome(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
+    public String getDepositListWithGivenDeposit(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
         sort = Optional.ofNullable(sort).orElse(defaultSort);
         model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), sort));
         model.addAttribute("depositDto", depositService.getDepositDto(id));
@@ -73,9 +84,9 @@ public class DepositController {
 
     @PostMapping("/deposit")
     public String saveDeposit(Model model, DepositDto deposit) {
-        depositService.saveDeposit(deposit);
+        var result = depositService.saveDeposit(deposit);
         model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
-        model.addAttribute("depositDto", new DepositDto());
+        model.addAttribute("depositDto", result);
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";

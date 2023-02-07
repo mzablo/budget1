@@ -1,19 +1,14 @@
 package mza.thy.repository;
 
 import mza.thy.domain.Deposit;
-import mza.thy.domain.Outcome;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
@@ -35,9 +30,10 @@ public interface DepositRepository extends JpaRepository<Deposit, Long> {
             "WHERE D.amount =:amount")
     Stream<Deposit> findAllByAmount(BigDecimal amount);
 
-   // @Query(value = "SELECT D FROM Deposit D")
     List<Deposit> findAll(Sort sort);
 
-    Stream<Deposit> findAllByActive(Sort sort, boolean active);
+    @Query(value = "SELECT D from Deposit D " +
+            "WHERE D.endDate >=:endDate and D.active is true")
+    Stream<Deposit> findAllToProcess(LocalDate endDate);
 
 }

@@ -51,7 +51,6 @@ public class Deposit {
     public Deposit update(BigDecimal amount, LocalDate date, BigDecimal interest, String description, BigDecimal percent, String period, String bank, Boolean active, Boolean prolonged) {
         this.amount = amount;
         this.date = date;
-        this.interest = interest;
         this.description = description;
         this.percent = percent;
         this.period = period;
@@ -62,10 +61,9 @@ public class Deposit {
         return this;
     }
 
-    public Deposit(BigDecimal amount, LocalDate date, BigDecimal interest, String description, BigDecimal percent, String period, String bank, Boolean active, Boolean prolonged) {
+    public Deposit(BigDecimal amount, LocalDate date, String description, BigDecimal percent, String period, String bank, Boolean active, Boolean prolonged) {
         this.amount = amount;
         this.date = date;
-        this.interest = interest;
         this.description = description;
         this.percent = percent;
         this.period = period;
@@ -84,25 +82,9 @@ public class Deposit {
         calculateTotalAmount();
     }
 
-    /*
-        public void setDate(LocalDate date) {
-            this.date = date;
-            setMonth(date);
-            setYear(date);
-            setEndDate();
-        }
-
-        public void setPeriod(DepositPeriod depositPeriod) {
-            this.period = depositPeriod;
-            setEndDate();
-            setInterestNet();
-            setTotalAmount();
-
-        }
-    */
     private void setEndDate() {
         if (Objects.nonNull(date)) {
-            endDate = date.plusMonths(DepositPeriod.getMonths(period));
+            this.endDate = date.plusMonths(DepositPeriod.getMonths(period));
         }
     }
 
@@ -122,7 +104,7 @@ public class Deposit {
 
     private void calculateInterestNet() {
         var belkaValue = interest.multiply(BigDecimal.valueOf(0.19));
-        interestNet = amount.add(belkaValue);
+        interestNet = interest.subtract(belkaValue);
     }
 
     private void calculateInterest() {

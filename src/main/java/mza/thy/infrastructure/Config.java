@@ -5,9 +5,14 @@ import org.springframework.context.annotation.Configuration;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.Clock;
 
 @Configuration
 public class Config {
+    @Bean
+    public Clock clock() {
+        return Clock.systemDefaultZone();
+    }
 
     @Bean
     DecimalFormat getDecimalFormat() {

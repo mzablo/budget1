@@ -10,6 +10,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -19,20 +21,47 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 public class DepositService {
+    private final Clock clock;
 
     private final DepositRepository depositRepository;
 
-    public List<String> getPeriodList() {
+    @Transactional
+    public String process() {
+        return "Closed:" + depositRepository.findAllToProcess(LocalDate.now(clock))
+                .map(this::closeDeposit)
+                .map(Deposit::getId)
+                .map(String::valueOf)
+                .collect(Collectors.joining(", "));
+    }
+
+    private Deposit closeDeposit(Deposit deposit) {
+        deposit.setActive(false);
+        if (deposit.getProlonged()) {
+            prolonge(deposit);
+        }
+        log.debug("Closing {} ", deposit.getId());
+        return depositRepository.save(deposit);
+    }
+
+    private void prolonge(Deposit deposit) {
+        Deposit newDeposit = new Deposit(deposit.getTotalAmount(), deposit.getEndDate(),
+                deposit.getDescription() + " id: " + deposit.getId(),
+                deposit.getPercent(), deposit.getPeriod(), deposit.getBank(), true, true);
+        newDeposit= depositRepository.save(newDeposit);
+        log.debug("Prolonge {}, new {} with amount {} ", deposit.getId(), newDeposit.getId(), newDeposit.getAmount());
+    }
+
+    List<String> getPeriodList() {
         return DepositPeriod.getAllPriods();
     }
 
     @Transactional(readOnly = true)
-    public long getTotal() {
+    long getTotal() {
         return depositRepository.count();
     }
 
     @Transactional(readOnly = true)
-    public List<DepositDto> getDepositList(FilterParams filterParams, Sort sort) {
+    List<DepositDto> getDepositList(FilterParams filterParams, Sort sort) {
         if (Objects.nonNull(filterParams)
                 && (Objects.nonNull(filterParams.getFilterId())
                 || Objects.nonNull(filterParams.getFilterBank())
@@ -95,11 +124,11 @@ public class DepositService {
     }
 
     @Transactional
-    void saveDeposit(DepositDto depositDto) {
+    DepositDto saveDeposit(DepositDto depositDto) {
         if (Objects.nonNull(depositDto.getId())) {
-            updateDeposit(depositDto.getId(), depositDto);
+            return DepositDto.convert(updateDeposit(depositDto.getId(), depositDto));
         } else {
-            saveNewDeposit(depositDto);
+            return DepositDto.convert(saveNewDeposit(depositDto));
         }
     }
 

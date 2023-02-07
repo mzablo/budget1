@@ -1,4 +1,10 @@
 <deposit th:fragment="deposit">
+  <div>
+      <div class="btn btn-dark">
+          <a th:href="'/deposit/process/'">Process</a>
+      </div>
+  </div>
+
     <form method="post" th:action="@{/deposit}" th:object="${depositDto}">
         <div class="table">
             <div class="form-group form-inline">
