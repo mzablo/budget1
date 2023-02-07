@@ -21,4 +21,5 @@ public class FilterParams {
     private BigDecimal filterAmount;
     private FilterString filterDescription;
     private FilterString filterBank;
+    private FilterString filterWho;
 }

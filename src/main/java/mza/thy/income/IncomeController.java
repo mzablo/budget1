@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
-//!! investment - odestki - zaokraglenia, we wczesniejszym odsetki byly wieksze, process
 //!!! pytanie czy zapisac zmiany
 //!!! dorobic ctrls
 //!!! zdrowie,  sql, view, wykresy?

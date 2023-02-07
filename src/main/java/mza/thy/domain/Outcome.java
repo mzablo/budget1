@@ -35,7 +35,7 @@ public class Outcome {
 
     @Setter
     @Column(name = "cathegory")
-    private String category;//!!! ciagnac z pliku
+    private String category;
 
     @Setter
     @OneToOne(fetch = FetchType.EAGER)

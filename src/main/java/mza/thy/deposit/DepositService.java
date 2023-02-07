@@ -9,6 +9,7 @@ import mza.thy.repository.DepositRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.util.StringUtils;
 
 import java.time.Clock;
 import java.time.LocalDate;
@@ -54,7 +55,7 @@ public class DepositService {
 
     private void prolongation(Deposit deposit) {
         Deposit newDeposit = new Deposit(deposit.getTotalAmount(), deposit.getEndDate(),
-                deposit.getDescription() + " id: " + deposit.getId(),
+                StringUtils.abbreviate(deposit.getDescription() + " id: " + deposit.getId(), 200),
                 deposit.getPercent(), deposit.getPeriod(), deposit.getBank(), true, true);
         newDeposit = depositRepository.save(newDeposit);
         log.debug("Prolongation {}, new {} with amount {} ", deposit.getId(), newDeposit.getId(), newDeposit.getAmount());
