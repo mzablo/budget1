@@ -44,11 +44,16 @@ public class DepositController {
     }
 
     @GetMapping("/deposit/process")
-    public String depositProcess(Model model) {
+    public String getDepositProcessConfirmationView(Model model) {
+        model.addAttribute("process", depositService.getProcessInfo());
+        return "deposit-process";
+    }
+
+    @PostMapping("/deposit/process")
+    public String process(Model model) {
         depositService.process();
         model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
         model.addAttribute("depositDto", new DepositDto());
-
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";

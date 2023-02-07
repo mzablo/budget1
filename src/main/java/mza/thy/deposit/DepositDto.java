@@ -39,9 +39,6 @@ public class DepositDto {
     }
 
     static DepositDto convert(Deposit in) {
-        if (in.getId()==954){
-            log.debug("mza!! "+in.getId());
-        }
         return DepositDto.builder()
                 .id(in.getId())
                 .amount(in.getAmount())

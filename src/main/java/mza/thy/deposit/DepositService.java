@@ -25,30 +25,39 @@ public class DepositService {
 
     private final DepositRepository depositRepository;
 
-    @Transactional
-    public String process() {
-        return "Closed:" + depositRepository.findAllToProcess(LocalDate.now(clock))
-                .map(this::closeDeposit)
-                .map(Deposit::getId)
-                .map(String::valueOf)
-                .collect(Collectors.joining(", "));
+    @Transactional(readOnly = true)
+    public Process getProcessInfo() {
+        List<String> closedResult = depositRepository.findAllToProcess(LocalDate.now(clock))
+                .map(d -> d.getId() + " " + d.getTotalAmount())
+                .collect(Collectors.toList());
+        var prolongedResult = depositRepository.findAllToProcess(LocalDate.now(clock))
+                .filter(Deposit::getProlonged)
+                .map(d -> d.getId() + " " + d.getTotalAmount() + " " + d.getEndDate())
+                .collect(Collectors.toList());
+        return new Process(closedResult, prolongedResult);
     }
 
-    private Deposit closeDeposit(Deposit deposit) {
+    @Transactional
+    public void process() {
+        depositRepository.findAllToProcess(LocalDate.now(clock))
+                .forEach(this::closeDeposit);
+    }
+
+    private void closeDeposit(Deposit deposit) {
         deposit.setActive(false);
         if (deposit.getProlonged()) {
-            prolonge(deposit);
+            prolongation(deposit);
         }
         log.debug("Closing {} ", deposit.getId());
-        return depositRepository.save(deposit);
+        depositRepository.save(deposit);
     }
 
-    private void prolonge(Deposit deposit) {
+    private void prolongation(Deposit deposit) {
         Deposit newDeposit = new Deposit(deposit.getTotalAmount(), deposit.getEndDate(),
                 deposit.getDescription() + " id: " + deposit.getId(),
                 deposit.getPercent(), deposit.getPeriod(), deposit.getBank(), true, true);
-        newDeposit= depositRepository.save(newDeposit);
-        log.debug("Prolonge {}, new {} with amount {} ", deposit.getId(), newDeposit.getId(), newDeposit.getAmount());
+        newDeposit = depositRepository.save(newDeposit);
+        log.debug("Prolongation {}, new {} with amount {} ", deposit.getId(), newDeposit.getId(), newDeposit.getAmount());
     }
 
     List<String> getPeriodList() {

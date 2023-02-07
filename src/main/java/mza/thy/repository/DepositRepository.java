@@ -33,7 +33,7 @@ public interface DepositRepository extends JpaRepository<Deposit, Long> {
     List<Deposit> findAll(Sort sort);
 
     @Query(value = "SELECT D from Deposit D " +
-            "WHERE D.endDate >=:endDate and D.active is true")
+            "WHERE D.endDate <=:endDate and D.active is true")
     Stream<Deposit> findAllToProcess(LocalDate endDate);
 
 }
