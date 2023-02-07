@@ -20,11 +20,9 @@ import java.util.Optional;
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
 //!!! pytanie czy zapisac zmiany
 //!!! dorobic ctrls
-//!!! zdrowie,  sql, view, wykresy?
+//!!! sql, view, wykresy?
 //!!! sql - to moze per zakladka? jak updaty to brak wyniku - obsluzyc
 //dzienniczek biegowy
-//!!! na gorze/dole strony podsumowanie jak zmienia sie total
-//!!!commitowanie jak wychodzi sie z aplikacji??
 //!!!zamykanie apki z gui?
 //!!!pogrubienie w menu na jakiej zakladce jestem
 //czy stara apka zadziala na zmienionej nową bazie
