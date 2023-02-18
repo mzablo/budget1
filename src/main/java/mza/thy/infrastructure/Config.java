@@ -14,16 +14,6 @@ import java.time.Clock;
 @Configuration
 public class Config {
 
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    @Bean
-    public Session getSession() {
-        SessionFactory sessionFactory = entityManagerFactory.unwrap(SessionFactory.class);
-        var session = sessionFactory.openSession();
-        return session;
-    }
-
     @Bean
     public Clock clock() {
         return Clock.systemDefaultZone();

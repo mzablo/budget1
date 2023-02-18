@@ -14,6 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -165,7 +166,7 @@ public class OutcomeService {
 
     private Outcome updateOutcome(Long id, OutcomeDto changedOutcomeDto) {
         var outcome = getOutcome(id);
-        outcome.setPrice(changedOutcomeDto.getPrice().add(changedOutcomeDto.getAdd()));
+        outcome.setPrice(changedOutcomeDto.getPrice().add(getAddSafe(changedOutcomeDto.getAdd())));
         outcome.setDate(changedOutcomeDto.getDate());
         outcome.setName(changedOutcomeDto.getName());
         outcome.setCategory(changedOutcomeDto.getCategory());
@@ -175,4 +176,7 @@ public class OutcomeService {
         return outcomeRepository.save(outcome);
     }
 
+    private BigDecimal getAddSafe(BigDecimal add) {
+        return Optional.ofNullable(add).orElse(BigDecimal.ZERO);
+    }
 }

@@ -22,7 +22,7 @@ import java.util.Optional;
 public class OutcomeController {
     private static final String pageNumberDefault = "0";
     private static final String pageSizeDefault = "100";
-    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final OutcomeService outcomeService;
     private final AccountService accountService;
     private final SummaryController summaryController;

@@ -18,6 +18,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
+//!!! extracty dorobic
+//!!! KATEGORIA BY BYLA EDYTOWALNA
 //!!! pytanie czy zapisac zmiany
 //!!! dorobic ctrls
 //!!! sql, view, wykresy?
@@ -25,7 +27,7 @@ import java.util.Optional;
 //dzienniczek biegowy
 //!!!zamykanie apki z gui?
 //!!!pogrubienie w menu na jakiej zakladce jestem
-//czy stara apka zadziala na zmienionej nową bazie
+
 @Controller
 @RequiredArgsConstructor
 @Slf4j
