@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Deposit;
 import mza.thy.domain.DepositPeriod;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.filter.FilterHandler;
 import mza.thy.repository.DepositRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -13,18 +14,22 @@ import org.thymeleaf.util.StringUtils;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-@RequiredArgsConstructor
 class DepositService {
     private final Clock clock;
-
     private final DepositRepository depositRepository;
+    private FilterHandler<Deposit> filter;
+
+    public DepositService(Clock clock, DepositRepository depositRepository) {
+        this.clock = clock;
+        this.depositRepository = depositRepository;
+        this.filter = depositRepository.getFilter();
+    }
 
     @Transactional(readOnly = true)
     public Process getProcessInfo() {
@@ -72,8 +77,7 @@ class DepositService {
 
     @Transactional(readOnly = true)
     public List<DepositDto> getDepositList(FilterParams filterParams, Sort sort) {
-        if (FilterParams.isFilled(filterParams))
-        {
+        if (FilterParams.isFilled(filterParams)) {
             return doFilter(filterParams);
         }
         return depositRepository.findAll(sort)
@@ -83,6 +87,10 @@ class DepositService {
     }
 
     private List<DepositDto> doFilter(FilterParams filterParams) {
+        return filter.getFiltered(filterParams)
+                .map(DepositDto::convert)
+                .collect(Collectors.toList());
+        /*
         if (Objects.nonNull(filterParams.getFilterId())) {
             log.debug("Filter deposit by id {}", filterParams.getFilterId());
             return depositRepository.findById(filterParams.getFilterId())
@@ -117,6 +125,7 @@ class DepositService {
                     .collect(Collectors.toList());
         }
         return Collections.emptyList();
+   */
     }
 
     @Transactional(readOnly = true)

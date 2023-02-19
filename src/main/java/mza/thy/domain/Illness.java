@@ -17,6 +17,8 @@ public class Illness {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDate date;
+    private Integer year;
+    private Integer month;
     private String name;
     private String who;
     @Column(name = "descr")

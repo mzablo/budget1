@@ -1,6 +1,7 @@
 package mza.thy.repository;
 
 import mza.thy.domain.Outcome;
+import mza.thy.filter.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -14,7 +15,19 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Repository
-public interface OutcomeRepository extends JpaRepository<Outcome, Long> {
+public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
+        FilterCommonType<Outcome>, FilterNameType<Outcome>, FilterDescriptionType<Outcome>, FilterDateType<Outcome>, FilterCategoryType<Outcome>, FilterAmountType<Outcome> {
+
+    @Override
+    default FilterHandler<Outcome> getFilter() {
+        var filter = new FilterHandler<Outcome>(this);
+        filter.setNameFilter(this);
+        filter.setDateFilter(this);
+        filter.setAmountFilter(this);
+        filter.setCategoryFilter(this);
+        filter.setDescriptionFilter(this);
+        return filter;
+    }
 
     @Modifying
     @Transactional
@@ -62,7 +75,7 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long> {
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.price =:price order by id desc")
-    Stream<Outcome> findAllByPrice(BigDecimal price);
+    Stream<Outcome> findAllByAmount(BigDecimal price);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
     Stream<Outcome> findTotalAll(Pageable page);

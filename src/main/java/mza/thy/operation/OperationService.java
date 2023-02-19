@@ -1,9 +1,10 @@
 package mza.thy.operation;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Account;
+import mza.thy.domain.Operation;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.filter.FilterHandler;
 import mza.thy.repository.AccountRepository;
 import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OperationRepository;
@@ -13,13 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 class OperationService {
 
@@ -27,16 +26,19 @@ class OperationService {
     private final IncomeRepository incomeRepository;
     private final OutcomeRepository outcomeRepository;
     private final AccountRepository accountRepository;
+    private FilterHandler<Operation> filter;
+
+    public OperationService(OperationRepository operationRepository, IncomeRepository incomeRepository, OutcomeRepository outcomeRepository, AccountRepository accountRepository) {
+        this.operationRepository = operationRepository;
+        this.incomeRepository = incomeRepository;
+        this.outcomeRepository = outcomeRepository;
+        this.accountRepository = accountRepository;
+        this.filter = operationRepository.getFilter();
+    }
 
     @Transactional(readOnly = true)
     public List<OperationDto> getOperationList(FilterParams filterParams, Pageable pageable) {
-        if (Objects.nonNull(filterParams)
-                && (Objects.nonNull(filterParams.getFilterId())
-                || Objects.nonNull(filterParams.getFilterAmount())
-                || Objects.nonNull(filterParams.getFilterName())
-                || Objects.nonNull(filterParams.getFilterDescription())
-                || Objects.nonNull(filterParams.getFilterDate()))
-        ) {
+        if (FilterParams.isFilled(filterParams)) {
             return doFilter(filterParams);
         }
         return operationRepository.findAll(pageable)
@@ -46,38 +48,9 @@ class OperationService {
     }
 
     private List<OperationDto> doFilter(FilterParams filterParams) {
-        if (Objects.nonNull(filterParams.getFilterId())) {
-            log.debug("Filter operation by id " + filterParams.getFilterId());
-            return operationRepository.findById(filterParams.getFilterId())
-                    .map(OperationDto::convertToDto)
-                    .map(List::of)
-                    .orElse(Collections.emptyList());
-        }
-        if (Objects.nonNull(filterParams.getFilterDate())) {
-            log.debug("Filter operation by date {}", filterParams.getFilterDate());
-            return operationRepository.findAllByDate(filterParams.getFilterDate())
-                    .map(OperationDto::convertToDto)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterAmount())) {
-            log.debug("Filter operation by amount {}", filterParams.getFilterAmount());
-            return operationRepository.findAllByAmount(filterParams.getFilterAmount())
-                    .map(OperationDto::convertToDto)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterName())) {
-            log.debug("Filter operation by name {}", filterParams.getFilterName());
-            return operationRepository.findAllByNameLike(filterParams.getFilterName().getValue())
-                    .map(OperationDto::convertToDto)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterDescription())) {
-            log.debug("Filter operation by description {}", filterParams.getFilterDescription());
-            return operationRepository.findAllByDescriptionLike(filterParams.getFilterDescription().getValue())
-                    .map(OperationDto::convertToDto)
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return filter.getFiltered(filterParams)
+                .map(OperationDto::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -108,7 +81,7 @@ class OperationService {
     }
 
     private Account getAccountForBankName(String bankName) {
-        return accountRepository.findAllByBankLike(bankName).get(0);
+        return accountRepository.findAllByBankLike(bankName).findFirst().orElse(null);
     }
 
     @Transactional

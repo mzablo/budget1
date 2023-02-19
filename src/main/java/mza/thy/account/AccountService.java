@@ -1,9 +1,9 @@
 package mza.thy.account;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Account;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.filter.FilterHandler;
 import mza.thy.repository.AccountRepository;
 import mza.thy.repository.OperationRepository;
 import org.springframework.data.domain.Page;
@@ -14,20 +14,26 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
-class AccountService implements  AccountFacade {
+class AccountService implements AccountFacade {
 
     private final AccountRepository accountRepository;
     private final OperationRepository operationRepository;
     private final DecimalFormat decimalFormat;
+    private FilterHandler<Account> filter;
+
+    public AccountService(AccountRepository accountRepository, OperationRepository operationRepository, DecimalFormat decimalFormat) {
+        this.accountRepository = accountRepository;
+        this.operationRepository = operationRepository;
+        this.decimalFormat = decimalFormat;
+        this.filter = accountRepository.getFilter();
+    }
 
     @Transactional(readOnly = true)
     public List<AccountDto> getAccountList() {
@@ -40,12 +46,8 @@ class AccountService implements  AccountFacade {
     }
 
     @Transactional(readOnly = true)
-    List<AccountDto> getAccountList(FilterParams filterParams, Sort sort) {
-        if (Objects.nonNull(filterParams)
-                && (Objects.nonNull(filterParams.getFilterId())
-                || Objects.nonNull(filterParams.getFilterName())
-                || Objects.nonNull(filterParams.getFilterBank()))
-        ) {
+    public List<AccountDto> getAccountList(FilterParams filterParams, Sort sort) {
+        if (FilterParams.isFilled(filterParams)) {
             return doFilter(filterParams);
         }
         return Optional.ofNullable(sort).map(s -> accountRepository.findAll(sort))
@@ -57,35 +59,15 @@ class AccountService implements  AccountFacade {
 
     private String getAccountBalance(Account account) {
         var balance = operationRepository.balanceByAccount(account.getId());
-        //log.debug("Balance for {}: {}", account.getName(), balance);
         return Optional.ofNullable(balance)
                 .map(decimalFormat::format)
                 .orElse("-");
     }
 
     private List<AccountDto> doFilter(FilterParams filterParams) {
-        if (Objects.nonNull(filterParams.getFilterId())) {
-            log.debug("Filter account by id {}", filterParams.getFilterId());
-            return accountRepository.findById(filterParams.getFilterId())
-                    .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
-                    .map(List::of)
-                    .orElse(Collections.emptyList());
-        }
-        if (Objects.nonNull(filterParams.getFilterName())) {
-            log.debug("Filter account by name {}", filterParams.getFilterName());
-            return accountRepository.findAllByNameLike(filterParams.getFilterName().getValue())
-                    .stream()
-                    .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterBank())) {
-            log.debug("Filter account by bank {}", filterParams.getFilterBank());
-            return accountRepository.findAllByBankLike(filterParams.getFilterBank().getValue())
-                    .stream()
-                    .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return filter.getFiltered(filterParams)
+                .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

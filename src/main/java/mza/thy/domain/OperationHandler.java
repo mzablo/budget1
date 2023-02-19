@@ -144,7 +144,6 @@ public class OperationHandler {
 
     private Account getAccount(String bankName) {
         return accountRepository.findAllByBankLike(bankName)
-                .stream()
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Account not found " + bankName));
     }

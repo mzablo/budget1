@@ -77,6 +77,8 @@
             </div>
             <form method="get" th:action="@{/operation}">
                 <div class="form-group">
+                    <input type="number" name="filterYear" th:value="${filterYear}" size="4" >
+                    <input type="number" name="filterMonth" th:value="${filterMonth}" size="2" >
                     <input type="date" name="filterDate" th:value="${filterDate}" size="8" >
                     <input class="btn" type="submit" value="Go">
                 </div>

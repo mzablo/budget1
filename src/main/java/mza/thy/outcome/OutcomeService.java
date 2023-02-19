@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.OperationHandler;
 import mza.thy.domain.Outcome;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.filter.FilterHandler;
 import mza.thy.repository.OutcomeRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,10 +26,12 @@ class OutcomeService {
     private final OperationHandler operationHandler;
     private final OutcomeRepository outcomeRepository;
     private final List<String> categoryList;
+    private FilterHandler<Outcome> filter;
 
     public OutcomeService(OperationHandler operationHandler, OutcomeRepository outcomeRepository) {
         this.operationHandler = operationHandler;
         this.outcomeRepository = outcomeRepository;
+        this.filter = outcomeRepository.getFilter();
         this.categoryList = prepareCategoryList();
     }
 
@@ -64,62 +67,9 @@ class OutcomeService {
     }
 
     private List<OutcomeDto> doFilter(FilterParams filterParams) {
-        if (Objects.nonNull(filterParams.getFilterId())) {
-            log.debug("Filter outcome by id {}", filterParams.getFilterId());
-            return outcomeRepository.findById(filterParams.getFilterId())
-                    .map(OutcomeDto::convert)
-                    .map(List::of)
-                    .orElse(Collections.emptyList());
-        }
-        if (Objects.nonNull(filterParams.getFilterName())) {
-            log.debug("Filter outcome by name {}", filterParams.getFilterName());
-            return outcomeRepository.findAllByNameLike(filterParams.getFilterName().getValue())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterDescription())) {
-            log.debug("Filter outcome by description {}", filterParams.getFilterDescription());
-            return outcomeRepository.findAllByDescriptionLike(filterParams.getFilterDescription().getValue())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterCategory())) {
-            log.debug("Filter outcome by category {}", filterParams.getFilterCategory());
-            return outcomeRepository.findAllByCategoryLike(filterParams.getFilterCategory().getValue())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterDate())) {
-            log.debug("Filter outcome by date {}", filterParams.getFilterDate());
-            return outcomeRepository.findAllByDate(filterParams.getFilterDate())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterYear()) && Objects.nonNull(filterParams.getFilterMonth())) {
-            log.debug("Filter outcome by month/year {} {}", filterParams.getFilterMonth(), filterParams.getFilterYear());
-            return outcomeRepository.findAllByYearAndMonth(filterParams.getFilterYear(), filterParams.getFilterMonth())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterYear()) && Objects.isNull(filterParams.getFilterMonth())) {
-            log.debug("Filter outcome by year {}", filterParams.getFilterYear());
-            return outcomeRepository.findAllByYear(filterParams.getFilterYear())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterMonth()) && Objects.isNull(filterParams.getFilterYear())) {
-            log.debug("Filter outcome by month {}", filterParams.getFilterMonth());
-            return outcomeRepository.findAllByMonth(filterParams.getFilterMonth())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterAmount())) {
-            log.debug("Filter outcome by amount {}", filterParams.getFilterAmount());
-            return outcomeRepository.findAllByPrice(filterParams.getFilterAmount())
-                    .map(OutcomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return filter.getFiltered(filterParams)
+                .map(OutcomeDto::convert)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

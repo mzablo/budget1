@@ -1,11 +1,11 @@
 package mza.thy.income;
 
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Income;
 import mza.thy.domain.OperationHandler;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.filter.FilterHandler;
 import mza.thy.repository.IncomeRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -15,23 +15,28 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 class IncomeService {
     @Value("${budget.path}")
     private String x;
     private final OperationHandler operationHandler;
     private final IncomeRepository incomeRepository;
+    private FilterHandler<Income> filterHandler;
+
+    public IncomeService(OperationHandler operationHandler, IncomeRepository incomeRepository) {
+        this.operationHandler = operationHandler;
+        this.incomeRepository = incomeRepository;
+        filterHandler = incomeRepository.getFilter();
+    }
 
     @Transactional(readOnly = true)
     public List<IncomeDto> getIncomeList(FilterParams filterParams, @NotNull Sort sort) {
-        if (FilterParams.isFilled(filterParams)){
+        if (FilterParams.isFilled(filterParams)) {
             return doFilter(filterParams);
         }
         return incomeRepository.findTotalAll(sort)
@@ -40,38 +45,9 @@ class IncomeService {
     }
 
     private List<IncomeDto> doFilter(FilterParams filterParams) {
-        if (Objects.nonNull(filterParams.getFilterId())) {
-            log.debug("Filter income by id {}", filterParams.getFilterId());
-            return incomeRepository.findById(filterParams.getFilterId())
-                    .map(IncomeDto::convert)
-                    .map(List::of)
-                    .orElse(Collections.emptyList());
-        }
-        if (Objects.nonNull(filterParams.getFilterName())) {
-            log.debug("Filter income by name {}", filterParams.getFilterName());
-            return incomeRepository.findAllByNameLike(filterParams.getFilterName().getValue())
-                    .map(IncomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterDescription())) {
-            log.debug("Filter income by description {}", filterParams.getFilterDescription());
-            return incomeRepository.findAllByDescriptionLike(filterParams.getFilterDescription().getValue())
-                    .map(IncomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterDate())) {
-            log.debug("Filter income by date {}", filterParams.getFilterDate());
-            return incomeRepository.findAllByDate(filterParams.getFilterDate())
-                    .map(IncomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterAmount())) {
-            log.debug("Filter income by amount {}", filterParams.getFilterAmount());
-            return incomeRepository.findAllByAmount(filterParams.getFilterAmount())
-                    .map(IncomeDto::convert)
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return filterHandler.getFiltered(filterParams)
+                .map(IncomeDto::convert)
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
