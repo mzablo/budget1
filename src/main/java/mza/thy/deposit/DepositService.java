@@ -71,14 +71,9 @@ public class DepositService {
     }
 
     @Transactional(readOnly = true)
-    List<DepositDto> getDepositList(FilterParams filterParams, Sort sort) {
-        if (Objects.nonNull(filterParams)
-                && (Objects.nonNull(filterParams.getFilterId())
-                || Objects.nonNull(filterParams.getFilterBank())
-                || Objects.nonNull(filterParams.getFilterDate())
-                || Objects.nonNull(filterParams.getFilterDescription())
-                || Objects.nonNull(filterParams.getFilterAmount()))
-        ) {
+    public List<DepositDto> getDepositList(FilterParams filterParams, Sort sort) {
+        if (FilterParams.isFilled(filterParams))
+        {
             return doFilter(filterParams);
         }
         return depositRepository.findAll(sort)

@@ -18,8 +18,8 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
+//filtr na rok
 //!!! extracty dorobic
-//!!! KATEGORIA BY BYLA EDYTOWALNA
 //!!! pytanie czy zapisac zmiany
 //!!! dorobic ctrls
 //!!! sql, view, wykresy?
@@ -32,7 +32,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class IncomeController {
-    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final IncomeService incomeService;
     private final AccountService accountService;
     private final SummaryController summaryController;
@@ -40,7 +40,7 @@ public class IncomeController {
     @GetMapping("income")
     public String getIncomeList(Model model,
                                 FilterParams filterParams,
-                                @RequestParam(defaultValue = "date") String sortField,
+                                @RequestParam(defaultValue = "id") String sortField,
                                 @RequestParam(required = false) Sort.Direction sortDirection) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);

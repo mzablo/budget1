@@ -23,9 +23,12 @@
                        th:value="${{defDate}}"
                        type="date"/>
                 <label for="category">Category</label>
-                <select  id="category" name="bank" th:field="*{category}" >
+                <select id="category" name="bank" th:field="*{category}" >
                     <option th:each="category : ${categoryList}" th:value="${category}" th:utext="${category}"/>
                 </select>
+                <input autocomplete="off"
+                       th:field="*{categoryFreeText}"
+                       type="text"/>
             </div>
 
             <div class="form-group col-md-8">

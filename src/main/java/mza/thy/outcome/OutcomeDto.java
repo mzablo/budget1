@@ -5,6 +5,7 @@ import mza.thy.domain.Account;
 import mza.thy.domain.Operation;
 import mza.thy.domain.Outcome;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -27,6 +28,7 @@ public class OutcomeDto {
     private String name;
     private String description;
     private String category;
+    private String categoryFreeText;
     private Long operationId;
     private String bankName;
 
@@ -38,8 +40,12 @@ public class OutcomeDto {
                 .date(date)
                 .name(name)
                 .description(description)
-                .category(category)
+                .category(getAnyCategory())
                 .build();
+    }
+
+    String getAnyCategory() {
+        return StringUtils.hasLength(categoryFreeText) ? categoryFreeText : category;
     }
 
     static OutcomeDto convert(Outcome in) {
@@ -51,6 +57,7 @@ public class OutcomeDto {
                 .name(in.getName())
                 .description(in.getDescription())
                 .category(in.getCategory())
+                .categoryFreeText(in.getCategory())
                 .operationId(getOperationIdSave(in.getOperation()))
                 .bankName(getBankNameSave(in.getOperation()))
                 .build();

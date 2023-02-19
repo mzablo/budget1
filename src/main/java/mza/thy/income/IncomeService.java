@@ -31,18 +31,10 @@ public class IncomeService {
 
     @Transactional(readOnly = true)
     public List<IncomeDto> getIncomeList(FilterParams filterParams, @NotNull Sort sort) {
-        if (Objects.nonNull(filterParams)
-                && (Objects.nonNull(filterParams.getFilterId())
-                || Objects.nonNull(filterParams.getFilterName())
-                || Objects.nonNull(filterParams.getFilterDate())
-                || Objects.nonNull(filterParams.getFilterAmount())
-                || Objects.nonNull(filterParams.getFilterDescription()))
-        ) {
+        if (FilterParams.isFilled(filterParams)){
             return doFilter(filterParams);
         }
         return incomeRepository.findTotalAll(sort)
-//                .orElse(incomeRepository.findAll())
-                // .stream()
                 .map(IncomeDto::convert)
                 .collect(Collectors.toList());
     }

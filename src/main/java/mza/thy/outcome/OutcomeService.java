@@ -55,14 +55,7 @@ public class OutcomeService {
 
     @Transactional(readOnly = true)
     public List<OutcomeDto> getOutcomeList(FilterParams filterParams, @NotNull Pageable page) {
-        if (Objects.nonNull(filterParams)
-                && (Objects.nonNull(filterParams.getFilterId())
-                || Objects.nonNull(filterParams.getFilterName())
-                || Objects.nonNull(filterParams.getFilterCategory())
-                || Objects.nonNull(filterParams.getFilterDate())
-                || Objects.nonNull(filterParams.getFilterAmount())
-                || Objects.nonNull(filterParams.getFilterDescription()))
-        ) {
+        if (FilterParams.isFilled(filterParams)) {
             return doFilter(filterParams);
         }
         return outcomeRepository.findTotalAll(page)
@@ -169,7 +162,7 @@ public class OutcomeService {
         outcome.setPrice(changedOutcomeDto.getPrice().add(getAddSafe(changedOutcomeDto.getAdd())));
         outcome.setDate(changedOutcomeDto.getDate());
         outcome.setName(changedOutcomeDto.getName());
-        outcome.setCategory(changedOutcomeDto.getCategory());
+        outcome.setCategory(changedOutcomeDto.getAnyCategory());
         outcome.setCounter(changedOutcomeDto.getCounter());
         outcome.setDescription(changedOutcomeDto.getDescription());
         log.debug("Update outcome {}", changedOutcomeDto);
