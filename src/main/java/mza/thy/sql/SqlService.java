@@ -10,7 +10,7 @@ import javax.persistence.EntityManager;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SqlService {
+class SqlService {
     private final EntityManager entityManager;
 
     //dorobic predefiniowane sql z pliku

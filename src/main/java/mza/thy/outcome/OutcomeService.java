@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class OutcomeService {
+class OutcomeService {
 
     private final OperationHandler operationHandler;
     private final OutcomeRepository outcomeRepository;

@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class IncomeService {
+class IncomeService {
     @Value("${budget.path}")
     private String x;
     private final OperationHandler operationHandler;

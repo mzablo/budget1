@@ -17,7 +17,7 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class DepositController {
+class DepositController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final DepositService depositService;
     private final SummaryController summaryController;

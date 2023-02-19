@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class AccountService {
+class AccountService implements  AccountFacade {
 
     private final AccountRepository accountRepository;
     private final OperationRepository operationRepository;

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class HealthService {
+class HealthService {
     private final IllnessRepository illnessRepository;
     private final CureRepository cureRepository;
 

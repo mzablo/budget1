@@ -2,7 +2,7 @@ package mza.thy.operation;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mza.thy.account.AccountService;
+import mza.thy.account.AccountFacade;
 import mza.thy.domain.filter.FilterParams;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +25,7 @@ public class OperationController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
     private final PageRequest pageableDefault = PageRequest.of(pageNumberDefault, pageSizeDefault, defaultSort);
     private final OperationService operationService;
-    private final AccountService accountService;
+    private final AccountFacade accountService;
 
     @GetMapping("operation")
     public String getOperationList(Model model,

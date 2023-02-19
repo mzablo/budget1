@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class DepositService {
+class DepositService {
     private final Clock clock;
 
     private final DepositRepository depositRepository;

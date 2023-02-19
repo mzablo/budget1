@@ -2,7 +2,7 @@ package mza.thy.income;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mza.thy.account.AccountService;
+import mza.thy.account.AccountFacade;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
@@ -34,7 +34,7 @@ import java.util.Optional;
 public class IncomeController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final IncomeService incomeService;
-    private final AccountService accountService;
+    private final AccountFacade accountService;
     private final SummaryController summaryController;
 
     @GetMapping("income")

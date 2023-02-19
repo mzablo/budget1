@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OperationService {
+class OperationService {
 
     private final OperationRepository operationRepository;
     private final IncomeRepository incomeRepository;

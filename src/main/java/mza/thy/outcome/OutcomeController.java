@@ -2,7 +2,7 @@ package mza.thy.outcome;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mza.thy.account.AccountService;
+import mza.thy.account.AccountFacade;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
@@ -24,7 +24,7 @@ public class OutcomeController {
     private static final String pageSizeDefault = "100";
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final OutcomeService outcomeService;
-    private final AccountService accountService;
+    private final AccountFacade accountService;
     private final SummaryController summaryController;
 
     @GetMapping("outcome")
