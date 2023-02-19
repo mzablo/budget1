@@ -95,6 +95,24 @@ public class OutcomeService {
                     .map(OutcomeDto::convert)
                     .collect(Collectors.toList());
         }
+        if (Objects.nonNull(filterParams.getFilterYear()) && Objects.nonNull(filterParams.getFilterMonth())) {
+            log.debug("Filter outcome by month/year {} {}", filterParams.getFilterMonth(), filterParams.getFilterYear());
+            return outcomeRepository.findAllByYearAndMonth(filterParams.getFilterYear(), filterParams.getFilterMonth())
+                    .map(OutcomeDto::convert)
+                    .collect(Collectors.toList());
+        }
+        if (Objects.nonNull(filterParams.getFilterYear()) && Objects.isNull(filterParams.getFilterMonth())) {
+            log.debug("Filter outcome by year {}", filterParams.getFilterYear());
+            return outcomeRepository.findAllByYear(filterParams.getFilterYear())
+                    .map(OutcomeDto::convert)
+                    .collect(Collectors.toList());
+        }
+        if (Objects.nonNull(filterParams.getFilterMonth()) && Objects.isNull(filterParams.getFilterYear())) {
+            log.debug("Filter outcome by month {}", filterParams.getFilterMonth());
+            return outcomeRepository.findAllByMonth(filterParams.getFilterMonth())
+                    .map(OutcomeDto::convert)
+                    .collect(Collectors.toList());
+        }
         if (Objects.nonNull(filterParams.getFilterAmount())) {
             log.debug("Filter outcome by amount {}", filterParams.getFilterAmount());
             return outcomeRepository.findAllByPrice(filterParams.getFilterAmount())

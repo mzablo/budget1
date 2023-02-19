@@ -86,6 +86,13 @@
                 <div th:unless="${isAscending}">"
                     <a th:href="'/deposit?sortField=id&sortDirection=ASC'">Id</a>
                 </div>
+                <div>
+                    <form method="get" th:action="@{/deposit}">
+                        <div class="form-group">
+                            <input type="number" name="filterId" th:value="${filterId}" size="10" >
+                        </div>
+                    </form>
+                </div>
             </th>
 
             <th>
@@ -194,7 +201,10 @@
         </tr>
     </table>
     </div>
+
     <!-- active-->
+
+
     <div class="form-group col-md-8 h2">
         <label >Active deposits </label>
     </div>
