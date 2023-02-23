@@ -54,7 +54,7 @@ class OperationService {
     }
 
     @Transactional(readOnly = true)
-    OperationDto getOperation(Long id) {
+    public OperationDto getOperation(Long id) {
         var result = operationRepository.findById(id)
                 .map(OperationDto::convertToDto)
                 .orElseThrow(() -> new RuntimeException("Operation not found " + id));
@@ -63,7 +63,7 @@ class OperationService {
     }
 
     @Transactional
-    void saveOperation(OperationDto operationDto) {
+    public void saveOperation(OperationDto operationDto) {
         if (Objects.nonNull(operationDto.getId())) {
             updateOperation(operationDto.getId(), operationDto);
         } else {
@@ -85,7 +85,7 @@ class OperationService {
     }
 
     @Transactional
-    void deleteOperation(Long id) {
+    public void deleteOperation(Long id) {
         log.debug("Income to be deleted {}", incomeRepository.findByOperation_Id((id)));
         log.debug("Outcome to be deleted {}", outcomeRepository.findByOperation_Id(id));
         int deletedIncome = incomeRepository.deleteByOperation_Id(id);

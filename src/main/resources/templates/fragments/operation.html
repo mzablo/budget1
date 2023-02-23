@@ -15,7 +15,7 @@
     </div>
     <div class="form-group form-inline">
         <label for="amount">Amount</label>
-        <input class="form-control" id="amount" placeholder="Enter amount"  autocomplete="off"
+        <input class="form-control" id="amount" placeholder="Enter amount" required autocomplete="off"
                th:field="*{amount}" step="0.01" data-decimals="2"
                type="number"/>
     </div>
@@ -34,7 +34,7 @@
     </div>
     <div class="form-group col-md-8">
         <label  class="col-form-label">Bank </label>
-        <select  id="bank" name="bank" th:field="*{bankName}" >
+        <select  id="bank" name="bank" th:field="*{bankName}" required>
             <option th:each="account : ${accountList}" th:value="${account.bank}" th:utext="${account.bank}"/>
         </select>
     </div>

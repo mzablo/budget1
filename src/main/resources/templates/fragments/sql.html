@@ -8,7 +8,11 @@
                type="text"/>
     </div>
     <div>
-        <label for="sql">Sql</label>
+        <label for="defaultSql">Sql</label>
+        <select  id="defaultSql" name="bank" th:field="*{defaultSql}" >
+            <option th:each="defaultSql : ${sqlList}" th:value="${defaultSql}" th:utext="${defaultSql}"/>
+        </select>
+
         <textarea cols="100" id="description" autocomplete="off" rows="3"
                   th:field="*{result}"
                   type="text"/>
@@ -16,6 +20,25 @@
 
 </form>
 
+    <div>
+        <table>
+            <thead>
+            <tr class="headings">
+                <th th:each="header: ${headers}" class="column-title" th:text="${header}" />
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr class="even pointer" th:each="row: ${rows}" id="tablerow">
+                <td th:each="header: ${headers}" th:text="${row.get(header)}" />
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+
+    <label>stare</label>
     <div class="pre-scrollable" th:object="${sqlDto}">
         <div class="form-group">
             <label for="result">Result</label>
@@ -24,29 +47,4 @@
                    type="text"/>
         </div>
     </div>
-        <!--
-                <table class="table table-striped table-bordered ">
-                    <tr>
-                        <th>Id</th>
-                        <th>Medicine</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Dose</th>
-                        <th>Illness id</th>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(cureForIllnessList)}">
-                        <td class="text-center" colspan="7">No Records found. Add some...!</td>
-                    </tr>
-                    <tr th:each="cure : ${cureForIllnessList}">
-                        <td class="align-middle" th:text="${cure.id}"></td>
-                        <td class="align-middle" th:text="${cure.medicine}"></td>
-                        <td class="align-middle" th:text="${cure.price}"></td>
-                        <td class="align-middle" th:text="${cure.description}"></td>
-                        <td class="align-middle" th:text="${cure.dose}"></td>
-                        <td class="align-middle" th:text="${cure.illnessId}"></td>
-                    </tr>
-                </table>
-            </div>
-        -->
-
-        </sql>
+</sql>

@@ -62,7 +62,7 @@ class HealthService {
     }
 
     @Transactional(readOnly = true)
-    IllnessDto getIllnessDto(Long id) {
+    public IllnessDto getIllnessDto(Long id) {
         var result = illnessRepository.findById(id)
                 .map(IllnessDto::convert)
                 .orElseThrow(() -> new RuntimeException("Illness not found " + id));
@@ -71,7 +71,7 @@ class HealthService {
     }
 
     @Transactional
-    long saveIllness(IllnessDto illnessDto) {
+    public long saveIllness(IllnessDto illnessDto) {
         Illness illness;
         if (Objects.nonNull(illnessDto.getId())) {
             illness = updateIllness(illnessDto.getId(), illnessDto);

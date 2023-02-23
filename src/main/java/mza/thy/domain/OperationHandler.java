@@ -7,6 +7,7 @@ import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OperationRepository;
 import mza.thy.repository.OutcomeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
@@ -22,6 +23,7 @@ public class OperationHandler {
     private final IncomeRepository incomeRepository;
     private final OutcomeRepository outcomeRepository;
 
+    @Transactional
     public void handleOperation(Long operationId, String bankName, Income income) {
         if (Objects.isNull(operationId) && !StringUtils.hasLength(bankName)) {
             log.debug("No change in operation");

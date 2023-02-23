@@ -22,7 +22,7 @@ import java.util.Optional;
 public class OperationController {
     private final int pageNumberDefault = 0;
     private final int pageSizeDefault = 100000;
-    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "date");
+    private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final PageRequest pageableDefault = PageRequest.of(pageNumberDefault, pageSizeDefault, defaultSort);
     private final OperationService operationService;
     private final AccountFacade accountService;
@@ -30,7 +30,7 @@ public class OperationController {
     @GetMapping("operation")
     public String getOperationList(Model model,
                                    FilterParams filterParams,
-                                   @RequestParam(defaultValue = "date") String sortField,
+                                   @RequestParam(defaultValue = "id") String sortField,
                                    @RequestParam(required = false) Sort.Direction sortDirection) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);

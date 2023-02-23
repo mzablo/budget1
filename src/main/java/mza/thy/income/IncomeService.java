@@ -51,13 +51,13 @@ class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    Page<IncomeDto> getIncomePage(Pageable pageable) {
+    public Page<IncomeDto> getIncomePage(Pageable pageable) {
         var page = incomeRepository.findAll(pageable);
         return page.map(IncomeDto::convert);
     }
 
     @Transactional(readOnly = true)
-    IncomeDto getIncomeDto(Long id) {
+    public IncomeDto getIncomeDto(Long id) {
         var result = incomeRepository.findById(id)
                 .map(IncomeDto::convert)
                 .orElseThrow(() -> new RuntimeException("Income not found " + id));
@@ -70,7 +70,7 @@ class IncomeService {
 
 
     @Transactional
-    long saveIncome(IncomeDto incomeDto) {
+    public long saveIncome(IncomeDto incomeDto) {
         Income income;
         if (Objects.nonNull(incomeDto.getId())) {
             income = updateIncome(incomeDto.getId(), incomeDto);
@@ -112,5 +112,4 @@ class IncomeService {
         log.debug("Update income {}", changedIncomeDto);
         return incomeRepository.save(income);
     }
-
 }

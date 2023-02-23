@@ -25,7 +25,7 @@ public class HealthController {
     @GetMapping("health")
     public String getIllnessList(Model model,
                                  FilterParams filterParams,
-                                 @RequestParam(defaultValue = "date") String sortField,
+                                 @RequestParam(defaultValue = "id") String sortField,
                                  @RequestParam(required = false) Sort.Direction sortDirection) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);

@@ -30,7 +30,7 @@ public class OutcomeController {
     @GetMapping("outcome")
     public String getOutcomeList(Model model,
                                  FilterParams filterParams,
-                                 @RequestParam(defaultValue = "date") String sortField,
+                                 @RequestParam(defaultValue = "id") String sortField,
                                  @RequestParam(required = false) Sort.Direction sortDirection,
                                  @RequestParam(defaultValue = pageNumberDefault) int pageNumber,
                                  @RequestParam(defaultValue = pageSizeDefault) int pageSize

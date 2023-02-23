@@ -26,7 +26,7 @@ class OutcomeService {
     private final OperationHandler operationHandler;
     private final OutcomeRepository outcomeRepository;
     private final List<String> categoryList;
-    private FilterHandler<Outcome> filter;
+    private final FilterHandler<Outcome> filter;
 
     public OutcomeService(OperationHandler operationHandler, OutcomeRepository outcomeRepository) {
         this.operationHandler = operationHandler;
@@ -73,13 +73,13 @@ class OutcomeService {
     }
 
     @Transactional(readOnly = true)
-    Page<OutcomeDto> getOutcomePage(Pageable pageable) {
+    public Page<OutcomeDto> getOutcomePage(Pageable pageable) {
         var page = outcomeRepository.findAll(pageable);
         return page.map(OutcomeDto::convert);
     }
 
     @Transactional(readOnly = true)
-    OutcomeDto getOutcomeDto(Long id) {
+    public OutcomeDto getOutcomeDto(Long id) {
         var result = outcomeRepository.findById(id)
                 .map(OutcomeDto::convert)
                 .orElseThrow(() -> new RuntimeException("Outcome not found " + id));
@@ -92,7 +92,7 @@ class OutcomeService {
 
 
     @Transactional
-    long saveOutcome(OutcomeDto outcomeDto) {
+    public long saveOutcome(OutcomeDto outcomeDto) {
         Outcome outcome;
         if (Objects.nonNull(outcomeDto.getId())) {
             outcome = updateOutcome(outcomeDto.getId(), outcomeDto);
@@ -114,7 +114,7 @@ class OutcomeService {
     }
 
     @Transactional
-    void deleteOutcome(Long id) {
+    public void deleteOutcome(Long id) {
         operationHandler.deleteOperation(getOutcomeDto(id).getOperationId());
         outcomeRepository.deleteById(id);
         log.debug("Deleted outcome {}", id);

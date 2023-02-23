@@ -14,7 +14,11 @@ public class SqlController {
 
     @GetMapping("sql")
     public String getResult(Model model, SqlDto sql) {
-        model.addAttribute("sqlDto", sqlService.getResult(sql));
+        var sqlResult=sqlService.getResult(sql);
+        model.addAttribute("sqlDto", sqlResult);
+        model.addAttribute("headers", sqlResult.getHeaders());
+        model.addAttribute("rows", sqlResult.getRows());
+        model.addAttribute("sqlList", sqlService.getSqlList());
         return "sql-list";
     }
 }

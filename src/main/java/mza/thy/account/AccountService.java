@@ -71,13 +71,13 @@ class AccountService implements AccountFacade {
     }
 
     @Transactional(readOnly = true)
-    Page<AccountDto> getAccountPage(Pageable pageable) {
+    public Page<AccountDto> getAccountPage(Pageable pageable) {
         var page = accountRepository.findAll(pageable);
         return page.map(a -> AccountDto.convertToDto(a, getAccountBalance(a)));
     }
 
     @Transactional(readOnly = true)
-    AccountDto getAccount(Long id) {
+    public AccountDto getAccount(Long id) {
         var result = accountRepository.findById(id)
                 .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
                 .orElseThrow(() -> new RuntimeException("Account not found " + id));
@@ -86,7 +86,7 @@ class AccountService implements AccountFacade {
     }
 
     @Transactional
-    void saveAccount(AccountDto accountDto) {
+    public void saveAccount(AccountDto accountDto) {
         if (Objects.nonNull(accountDto.getId())) {
             updateAccount(accountDto.getId(), accountDto);
         } else {
@@ -104,7 +104,7 @@ class AccountService implements AccountFacade {
     }
 
     @Transactional
-    String deleteAccount(Long id) {
+    public String deleteAccount(Long id) {
         if (operationRepository.existsByAccountId(id)) {
             log.debug("Cannot delete - operations exists for account {}", id);
             return "Cannot delete - operations exists for account " + id;

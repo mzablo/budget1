@@ -71,7 +71,7 @@ class DepositService {
     }
 
     @Transactional(readOnly = true)
-    long getTotal() {
+    public long getTotal() {
         return depositRepository.count();
     }
 
@@ -129,7 +129,7 @@ class DepositService {
     }
 
     @Transactional(readOnly = true)
-    DepositDto getDepositDto(Long id) {
+    public DepositDto getDepositDto(Long id) {
         var result = depositRepository.findById(id)
                 .map(DepositDto::convert)
                 .orElseThrow(() -> new RuntimeException("Deposit not found " + id));
@@ -138,7 +138,7 @@ class DepositService {
     }
 
     @Transactional
-    DepositDto saveDeposit(DepositDto depositDto) {
+    public DepositDto saveDeposit(DepositDto depositDto) {
         if (Objects.nonNull(depositDto.getId())) {
             return DepositDto.convert(updateDeposit(depositDto.getId(), depositDto));
         } else {
@@ -152,7 +152,7 @@ class DepositService {
     }
 
     @Transactional
-    void deleteDeposit(Long id) {
+    public void deleteDeposit(Long id) {
         depositRepository.deleteById(id);
         log.debug("Deleted deposit {}", id);
     }
