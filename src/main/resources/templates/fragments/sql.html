@@ -1,23 +1,32 @@
 <sql th:fragment="sql">
 <form class="col card p-3 my-5" method="get" th:action="@{/sql}" th:object="${sqlReqDto}">
-
     <div>
-        <label for="sql">Sql</label>
-        <input class="form-control" id="sql" autocomplete="off"
-               th:field="*{sql}"
-               type="text"/>
+        <label>Sql</label>
     </div>
     <div>
-        <label for="defaultSql">Sql</label>
-        <select  id="defaultSql" name="defaultSql" th:field="*{defaultSql}" >
-            <option th:each="defaultSql : ${sqlList}" th:value="${defaultSql}" th:utext="${defaultSql}"/>
-        </select>
-
+        <textarea cols="130" id="s" autocomplete="off" rows="3"
+                  th:field="*{sql}"
+                  type="text"/>
     </div>
-
+    <div>
+        <input class="btn btn-primary" type="submit" value="Go">
+    </div>
 </form>
+    <div th:include="fragments/error :: error"></div>
+
+<div class="col card p-3 my-5">
+    <label>Helpers</label>
+    <div>
+        <textarea cols="130" autocomplete="off" rows="4"
+                  th:text="${sqls}"/>
+    </div>
+</div>
 
     <div>
+        <label>Result</label>
+    </div>
+
+    <div class="pre-scrollable">
         <table>
             <thead>
             <tr class="headings">
@@ -31,17 +40,5 @@
             </tr>
             </tbody>
         </table>
-
-    </div>
-
-
-    <label>stare</label>
-    <div class="pre-scrollable" th:object="${sqlDto}">
-        <div class="form-group">
-            <label for="result">Result</label>
-            <input class="form-control" id="result" readonly
-                   th:field="*{result}"
-                   type="text"/>
-        </div>
     </div>
 </sql>

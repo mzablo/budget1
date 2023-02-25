@@ -18,7 +18,6 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
-//!!filtr na operation po banku
 //!! jak blad przy zapisie to ladnie obsluzyc
 //!!! extracty dorobic
 //!!! pytanie czy zapisac zmiany

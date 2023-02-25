@@ -11,16 +11,15 @@ import java.util.Map;
 @Builder
 @Value
 @ToString
-public class SqlReqDto {
+class SqlReqDto {
     String sql;
-    String defaultSql;
 
     public String getSql() {
-        return StringUtils.hasLength(sql) ? sql : "select i.name from Income i where i.id > 1000";
+        return StringUtils.hasLength(sql) ? sql : "select * from outcome where name like '%jedz%' order by date desc";
     }
 
     boolean isSelect() {
-        return sql.toUpperCase().contains("SELECT");
+        return getSql().toUpperCase().contains("SELECT");
     }
 }
 
