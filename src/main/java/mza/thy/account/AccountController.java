@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -22,6 +23,7 @@ import java.util.Optional;
 public class AccountController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final AccountService accountService;
+    private final Clock clock;
 
     @GetMapping("account")
     public String getAccountList(Model model,
@@ -83,6 +85,6 @@ public class AccountController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("incomePage", page);
         model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("defDate", LocalDate.now());
+        model.addAttribute("defDate", LocalDate.now(clock));
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.Clock;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class IncomeController {
     private final IncomeService incomeService;
     private final AccountFacade accountService;
     private final SummaryController summaryController;
+    private final Clock clock;
 
     @GetMapping("income")
     public String getIncomeList(Model model,
@@ -96,6 +98,6 @@ public class IncomeController {
         model.addAttribute("totalPages", page.getTotalPages());
         model.addAttribute("incomePage", page);
         model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("defDate", LocalDate.now());
+        model.addAttribute("defDate", LocalDate.now(clock));
     }
 }

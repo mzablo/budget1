@@ -1,0 +1,4 @@
+income=1000 pensja firma
+outcome=100.48 szynka Spozywka opis
+outcome=800.48 czynsz Dom ops
+outcome=807.48 prąd Prad
