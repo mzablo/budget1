@@ -2,6 +2,7 @@ package mza.thy.deposit;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.TabType;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.Sort;
@@ -39,7 +40,7 @@ class DepositController {
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
 
-        summaryController.getSummary(model);
+        summaryController.getSummary(model, TabType.DEPOSIT);
         return "deposit-list";
     }
 

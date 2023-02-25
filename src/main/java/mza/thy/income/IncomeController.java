@@ -3,6 +3,7 @@ package mza.thy.income;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountFacade;
+import mza.thy.common.TabType;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
@@ -19,16 +20,11 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
-//!!mysql sterownik podpiac
 //!! jak blad przy zapisie to ladnie obsluzyc
 //!!! extracty dorobic
 //!!! pytanie czy zapisac zmiany
-//!!! dorobic ctrls
 //!!! sql, view, wykresy?
-//!!! sql - to moze per zakladka? jak updaty to brak wyniku - obsluzyc
 //dzienniczek biegowy
-//!!!zamykanie apki z gui?
-//!!!pogrubienie w menu na jakiej zakladce jestem
 
 @Controller
 @RequiredArgsConstructor
@@ -52,7 +48,7 @@ public class IncomeController {
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
-        summaryController.getSummary(model);
+        summaryController.getSummary(model, TabType.INCOME);
         return "income-list";
     }
 

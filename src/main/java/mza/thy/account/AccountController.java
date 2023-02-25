@@ -2,7 +2,9 @@ package mza.thy.account;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.TabType;
 import mza.thy.domain.filter.FilterParams;
+import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -21,6 +23,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
+    private final SummaryController summaryController;
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final AccountService accountService;
     private final Clock clock;
@@ -36,6 +39,7 @@ public class AccountController {
         model.addAttribute("accountDto", new AccountDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
+        summaryController.getSummary(model, TabType.ACCOUNT);
         return "account-list";
     }
 
