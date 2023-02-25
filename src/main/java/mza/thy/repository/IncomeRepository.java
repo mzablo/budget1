@@ -6,6 +6,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ import java.util.stream.Stream;
 
 @Repository
 public interface IncomeRepository extends JpaRepository<Income, Long>,
-        FilterCommonType<Income>, FilterNameType<Income>, FilterDescriptionType<Income>, FilterDateType<Income>, FilterAmountType<Income> {
+        FilterCommonType<Income>, FilterNameType<Income>, FilterDescriptionType<Income>, FilterDateType<Income>, FilterAmountType<Income>, FilterBankNameType<Income> {
 
     @Override
     default FilterHandler<Income> getFilter() {
@@ -25,6 +26,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
         filter.setDateFilter(this);
         filter.setAmountFilter(this);
         filter.setDescriptionFilter(this);
+        filter.setBankFilter(this);
         return filter;
     }
 
@@ -71,6 +73,10 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.amount =:amount order by id desc")
     Stream<Income> findAllByAmount(BigDecimal amount);
+
+    @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
+            "WHERE A.bank like :bankName order by id desc")
+    Stream<Income> findAllByBankLike(@Param("bankName") String bankName);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
     Stream<Income> findTotalAll(Sort sort);

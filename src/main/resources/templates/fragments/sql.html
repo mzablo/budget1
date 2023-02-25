@@ -1,5 +1,5 @@
 <sql th:fragment="sql">
-<form class="col card p-3 my-5" method="get" th:action="@{/sql}" th:object="${sqlDto}">
+<form class="col card p-3 my-5" method="get" th:action="@{/sql}" th:object="${sqlReqDto}">
 
     <div>
         <label for="sql">Sql</label>
@@ -9,13 +9,10 @@
     </div>
     <div>
         <label for="defaultSql">Sql</label>
-        <select  id="defaultSql" name="bank" th:field="*{defaultSql}" >
+        <select  id="defaultSql" name="defaultSql" th:field="*{defaultSql}" >
             <option th:each="defaultSql : ${sqlList}" th:value="${defaultSql}" th:utext="${defaultSql}"/>
         </select>
 
-        <textarea cols="100" id="description" autocomplete="off" rows="3"
-                  th:field="*{result}"
-                  type="text"/>
     </div>
 
 </form>

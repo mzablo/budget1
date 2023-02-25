@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 //!!!todo  zrobic graf aby pozenic pageable i fetch aby nie bylo n+1
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long>,
-        FilterCommonType<Operation>, FilterNameType<Operation>, FilterDescriptionType<Operation>, FilterDateType<Operation>, FilterAmountType<Operation> {
+        FilterCommonType<Operation>, FilterNameType<Operation>, FilterDescriptionType<Operation>, FilterDateType<Operation>, FilterAmountType<Operation>, FilterBankNameType<Operation> {
 
     @Override
     default FilterHandler<Operation> getFilter() {
@@ -24,6 +25,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
         filter.setDateFilter(this);
         filter.setAmountFilter(this);
         filter.setDescriptionFilter(this);
+        filter.setBankFilter(this);
         return filter;
     }
 
@@ -34,11 +36,18 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
     Stream<Operation> findAllByDescriptionLike(String description);
 
     Stream<Operation> findAllByDate(LocalDate date);
+
     Stream<Operation> findAllByMonth(int month);
+
     Stream<Operation> findAllByYear(int year);
+
     Stream<Operation> findAllByYearAndMonth(int year, int month);
 
-    Stream<Operation> findAllByAmount(BigDecimal amount);
+    @Query("select o from Operation o where amount =:amount")
+    Stream<Operation> findAllByAmount(@Param("amount") BigDecimal amount);
+
+    @Query("select o from Operation o left join fetch o.account a where a.bank like :bankName")
+    Stream<Operation> findAllByBankLike(@Param("bankName") String bankName);
 
     boolean existsByAccountId(Long accountId);
 

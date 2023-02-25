@@ -13,7 +13,7 @@ public class SqlController {
     private final SqlService sqlService;
 
     @GetMapping("sql")
-    public String getResult(Model model, SqlDto sql) {
+    public String getResult(Model model, SqlReqDto sql) {
         var sqlResult=sqlService.getResult(sql);
         model.addAttribute("sqlDto", sqlResult);
         model.addAttribute("headers", sqlResult.getHeaders());

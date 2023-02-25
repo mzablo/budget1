@@ -44,7 +44,7 @@ class OperationService {
         return operationRepository.findAll(pageable)
                 .stream()
                 .map(OperationDto::convertToDto)
-                .collect(Collectors.toList());//
+                .collect(Collectors.toList());
     }
 
     private List<OperationDto> doFilter(FilterParams filterParams) {

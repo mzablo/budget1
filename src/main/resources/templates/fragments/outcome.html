@@ -167,7 +167,13 @@
                     </div>
                 </form>
             </th>
-            <th>Bank name</th>
+            <th>Bank name
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="text" name="filterBank" th:value="${filterBank}" size="20" >
+                    </div>
+                </form>
+            </th>
             <th>Actions
                 <a th:href="'/outcome'">Clean</a>
             </th>

@@ -122,12 +122,18 @@
             </div>
             <form method="get" th:action="@{/operation}">
                 <div class="form-group">
-                    <input type="description" name="filterDescription" th:value="${filterDescription}" size="20" >
+                    <input type="text" name="filterDescription" th:value="${filterDescription}" size="20" >
                 </div>
             </form>
         </th>
 
-        <th>Bank name</th>
+        <th>Bank name
+            <form method="get" th:action="@{/operation}">
+                <div class="form-group">
+                    <input type="text" name="filterBank" th:value="${filterBank}" size="20" >
+                </div>
+            </form>
+        </th>
         <th>Actions
             <a th:href="'/operation'">Clean</a>
         </th>

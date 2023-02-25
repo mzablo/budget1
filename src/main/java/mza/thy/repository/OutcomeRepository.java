@@ -1,11 +1,13 @@
 package mza.thy.repository;
 
+import mza.thy.domain.Income;
 import mza.thy.domain.Outcome;
 import mza.thy.filter.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +18,7 @@ import java.util.stream.Stream;
 
 @Repository
 public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
-        FilterCommonType<Outcome>, FilterNameType<Outcome>, FilterDescriptionType<Outcome>, FilterDateType<Outcome>, FilterCategoryType<Outcome>, FilterAmountType<Outcome> {
+        FilterCommonType<Outcome>, FilterNameType<Outcome>, FilterDescriptionType<Outcome>, FilterDateType<Outcome>, FilterCategoryType<Outcome>, FilterAmountType<Outcome>, FilterBankNameType<Outcome> {
 
     @Override
     default FilterHandler<Outcome> getFilter() {
@@ -26,6 +28,7 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
         filter.setAmountFilter(this);
         filter.setCategoryFilter(this);
         filter.setDescriptionFilter(this);
+        filter.setBankFilter(this);
         return filter;
     }
 
@@ -76,6 +79,10 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.price =:price order by id desc")
     Stream<Outcome> findAllByAmount(BigDecimal price);
+
+    @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
+            "WHERE A.bank like :bankName order by id desc")
+    Stream<Outcome> findAllByBankLike(@Param("bankName") String bankName);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
     Stream<Outcome> findTotalAll(Pageable page);

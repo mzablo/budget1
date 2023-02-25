@@ -1,6 +1,7 @@
 package mza.thy.sql;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -8,6 +9,8 @@ import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -37,22 +40,28 @@ class SqlService {
     }
 
     @Transactional(readOnly = true)
-    public SqlDto getResult(SqlDto sql) {
+    public SqlDto getResult(SqlReqDto sql) {
         log.debug("Sql: {}", sql);
-        var x = getQuery(sql);
+        var x = getQuery(sql.getSql());
+        var resultList = entityManager.createNativeQuery(sql.getSql()).getResultList();
+        try {
+            var cos = ((org.hibernate.engine.spi.SessionImplementor) entityManager.getDelegate()).connection().getMetaData();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return SqlDto.builder()
                 .sql(sql.getSql())
                 .headers(List.of("h1"))
-                .rows(getBetterResult(sql))
+                .rows(getBetterResult(resultList))
                 //.rows(List.of(List.of(x)))
                 .result(x)
                 //  .resultList(x.getResultList().stream().toList())
                 .build();
     }
 
-    private String getQuery(SqlDto sql) {
+    private String getQuery(String sql) {
         try {
-            var resultList = entityManager.createNativeQuery(sql.getSql()).getResultList();
+            var resultList = entityManager.createNativeQuery(sql).getResultList();
             log.debug("result {}", resultList.size());
             return resultList.toString();
         } catch (Exception e) {
@@ -60,12 +69,11 @@ class SqlService {
             return "error " + e.getMessage();
         }
     }
-    private List<Map<String,Object>> getBetterResult(SqlDto sql) {
+    private List<Map<String,Object>> getBetterResult(List result) {
         try {
-            var resultList = entityManager.createNativeQuery(sql.getSql()).getResultList();
-            log.debug("result better {}", resultList.size());
-            return (List<Map<String, Object>>) resultList.stream()
-                    .map(r->Map.of("h1", r.toString()))
+            log.debug("result better {}", result.size());
+            return (List<Map<String, Object>>) result.stream()
+                    .map(r->Map.of("h1", result.toString()))
                     .collect(Collectors.toList());
         } catch (Exception e) {
             log.error(e.getMessage());

@@ -1,0 +1,63 @@
+select * from outcome
+select * from outcome where cathegory
+select * from outcome where name like '% %' order by date desc
+select * from account
+select * from account_operation
+select * from account_operation where account_id=1 order by date desc
+select * from lokata
+select * from illness
+select * from cure
+
+-- 1. open the console
+-- 2. log as root (myszka)
+-- 3. cd  /home/rafko
+-- 4.mysqldump -u root -p budget > budgetdump2010.08.14.txt (passw:root)
+
+hsql migration: insert - usunac ciapki 'outcome' -> outcome
+
+To get a dump of the hsqldb - In an sql tools dialog use:SCRIPT 'c:\path\to\db\db_sql.sql';
+
+select sum(price*counter),year from outcome where cathegory='Spozywka' group by year
+select i.year, sum(i.amount), o.year,sum(o.price*o.counter) from outcome o join income i on o.year=i.year group by i.year,o.year 
+select i.year, sum(i.amount) from income i group by i.year
+select o.year, sum(o.price*counter) from outcome o group by o.year
+
+
+-- change and compile
+--rafko@rafko-desktop:~/bazy/Jbudget$ javac -classpath . javasources/Jbudget.java
+-- how to run the mysql script
+--1 run the console
+--2 put the script in home/rafko
+--3 loggin into root: su - root [myszka]
+--4 cd /home/rafko
+--5 mysql  (use budget)  mysql -u root -p  haselko:root
+--6 source budget.sql
+--7 exit
+-- ************to import from csv:
+-- 1. run console
+-- 2. loggin into root: su - root [rzablo]
+-- 3. create script in /home/rafko, f.ex. LOAD DATA INFILE '/home/rafko/wydALL.txt' replace INTO TABLE outcome1 FIELDS TERMINATED BY ';' OPTIONALLY ENCLOSED BY '"' LINES TERMINATED BY '\r\n' (id,date,name,price,counter,place,cathegory,description);
+-- 4. the name of the script f.ex. import_budget_outcome.sql (REPLACE THE , BY . in float fields!!!!!)
+-- 5. in console run command: mysql;   use budget;
+-- 6. in console run command: source /home/rafko/import_budget_outcome.sql;
+-- 7. exit
+-- to have the connection to db - use in project properties variable: the mysql-connector-java-3.1.10-bin.jar 
+-- usefull sql statements:
+-- select id,price,counter,date,0,0,name,cathegory,concat(place,' ',description) from outcome1
+
+-- insert into outcome (select id,price,counter,date,0,0,name,cathegory,concat(place,' ',description) from outcome1 order by date)
+-- update outcome set year=substring(date,1,4), month=substring(date,6,2)
+-- update outcome set cathegory = 'Dom' where cathegory='Mieszkanko'
+-- update outcome set cathegory = 'Rozrywka' where cathegory='rozrywka'
+
+-- insert into income (select id,amount,date,0,0, ' ',description from income1 order by date)
+-- update income set year=substring(date,1,4), month=substring(date,6,2)
+
+-- select sum(price*counter),year from outcome where cathegory='Spozywka' group by year
+---********************** to store the BUDGET database 
+-- 1. open the console
+-- 2. log as root (myszka)
+-- 3. cd  /home/rafko
+-- 4.mysqldump -u root -p budget > budgetdump2010.08.14.txt (passw:root)
+
+
