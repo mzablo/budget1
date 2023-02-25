@@ -15,7 +15,7 @@ class SqlReqDto {
     String sql;
 
     public String getSql() {
-        return StringUtils.hasLength(sql) ? sql : "select * from outcome where name like '%jedz%' order by date desc";
+        return StringUtils.hasLength(sql) ? sql : "select top 100 * from outcome order by id desc";
     }
 
     boolean isSelect() {

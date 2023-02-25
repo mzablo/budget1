@@ -28,13 +28,12 @@ public class IncomeDto {
     private String bankName;
 
     Income convert() {
-        return Income.builder()
-                .id(id)
-                .amount(amount)
-                .date(date)
-                .name(name)
-                .description(description)
-                .build();
+        var income = new Income();
+        income.setAmount(amount);
+        income.setDate(date);
+        income.setName(name);
+        income.setDescription(description);
+        return income;
     }
 
     static IncomeDto convert(Income in) {

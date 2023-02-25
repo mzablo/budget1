@@ -33,15 +33,14 @@ public class OutcomeDto {
     private String bankName;
 
     Outcome convert() {
-        return Outcome.builder()
-                .id(id)
-                .price(price.add(add))
-                .counter(counter)
-                .date(date)
-                .name(name)
-                .description(description)
-                .category(getAnyCategory())
-                .build();
+        var outcome = new Outcome();
+        outcome.setPrice(price.add(add));
+        outcome.setCounter(counter);
+        outcome.setDate(date);
+        outcome.setName(name);
+        outcome.setDescription(description);
+        outcome.setCategory(getAnyCategory());
+        return outcome;
     }
 
     String getAnyCategory() {

@@ -15,7 +15,6 @@ import java.util.Optional;
 @Entity
 @Table(name = "lokata")
 @Getter
-//@Builder
 @NoArgsConstructor
 @ToString
 public class Deposit {

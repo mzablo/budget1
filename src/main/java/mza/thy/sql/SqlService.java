@@ -61,7 +61,7 @@ class SqlService {
             var statement = ((org.hibernate.engine.spi.SessionImplementor) entityManager.getDelegate()).connection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
             return sql.isSelect() ? processSelect(statement, sql.getSql()) : processUpdate(statement, sql.getSql());
         } catch (SQLException e) {
-            log.error(e.getMessage());
+            e.printStackTrace();
             error = e.getMessage();
         }
         return SqlDto.builder().build();

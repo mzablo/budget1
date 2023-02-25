@@ -102,14 +102,12 @@ public class OperationHandler {
     }
 
     private void createNewOperation(String newAccountName, Income income) {
-        Operation newOperation;
-        newOperation = Operation.builder()
-                .amount(income.getAmount())
-                .name(income.getName())
-                .description(income.getDescription())
-                .date(income.getDate())
-                .account(getAccount(newAccountName))
-                .build();
+        Operation newOperation = new Operation();
+        newOperation.setAmount(income.getAmount());
+        newOperation.setName(income.getName());
+        newOperation.setDescription(income.getDescription());
+        newOperation.setDate(income.getDate());
+        newOperation.setAccount(getAccount(newAccountName));
         newOperation = operationRepository.save(newOperation);
         income.setOperation(newOperation);
         incomeRepository.save(income);
@@ -117,14 +115,12 @@ public class OperationHandler {
     }
 
     private void createNewOperation(String newAccountName, Outcome outcome) {
-        Operation newOperation;
-        newOperation = Operation.builder()
-                .amount(BigDecimal.ZERO.subtract(outcome.getPrice()).multiply(BigDecimal.valueOf(outcome.getCounter())))
-                .name(outcome.getName())
-                .description(outcome.getDescription())
-                .date(outcome.getDate())
-                .account(getAccount(newAccountName))
-                .build();
+        Operation newOperation = new Operation();
+        newOperation.setAmount(BigDecimal.ZERO.subtract(outcome.getPrice()).multiply(BigDecimal.valueOf(outcome.getCounter())));
+        newOperation.setName(outcome.getName());
+        newOperation.setDescription(outcome.getDescription());
+        newOperation.setDate(outcome.getDate());
+        newOperation.setAccount(getAccount(newAccountName));
         newOperation = operationRepository.save(newOperation);
         outcome.setOperation(newOperation);
         outcomeRepository.save(outcome);

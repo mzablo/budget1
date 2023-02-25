@@ -24,14 +24,13 @@ public class OperationDto {
     private String bankName;
 
     Operation convert(Account account) {
-        return Operation.builder()
-                .id(id)
-                .date(date)
-                .amount(amount)
-                .name(name)
-                .account(account)
-                .description(description)
-                .build();
+        var operation = new Operation();
+        operation.setDate(date);
+        operation.setAmount(amount);
+        operation.setName(name);
+        operation.setAccount(account);
+        operation.setDescription(description);
+        return operation;
     }
 
     static OperationDto convertToDto(Operation in) {

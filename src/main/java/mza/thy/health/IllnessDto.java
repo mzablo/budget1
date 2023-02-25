@@ -1,13 +1,10 @@
 package mza.thy.health;
 
 import lombok.*;
-import mza.thy.domain.Account;
 import mza.thy.domain.Illness;
-import mza.thy.domain.Operation;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.Optional;
 
 @Builder
 @NoArgsConstructor
@@ -26,14 +23,13 @@ public class IllnessDto {
     private Integer free = 0;
 
     Illness convert() {
-        return Illness.builder()
-                .id(id)
-                .date(date)
-                .name(name)
-                .description(description)
-                .who(who)
-                .free(free)
-                .build();
+        var illness = new Illness();
+        illness.setDate(date);
+        illness.setName(name);
+        illness.setDescription(description);
+        illness.setWho(who);
+        illness.setFree(free);
+        return illness;
     }
 
     static IllnessDto convert(Illness in) {

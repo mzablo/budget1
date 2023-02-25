@@ -9,7 +9,6 @@ import java.util.Optional;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString

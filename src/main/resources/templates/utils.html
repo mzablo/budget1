@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+    <div th:replace="fragments/header :: header"></div>
+        <div class="col card p-3 my-5">
+            <div>
+                <label>Import old database</label>
+            </div>
+            <div class="alert-info">
+                <textarea cols="130" autocomplete="off" rows="4"
+                          th:text="${info}"/>
+            </div>
+        </div>
+    </div>
+
+    <div th:include="fragments/error :: error"></div>
+
+</body>
+</html>
