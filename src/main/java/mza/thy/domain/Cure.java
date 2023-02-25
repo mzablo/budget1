@@ -18,6 +18,7 @@ public class Cure {
     private Long id;
     private String medicine;
     private BigDecimal price = BigDecimal.ZERO;
+    @Column(name = "descr")
     private String description;
     private String dose;
     @Column(name = "id_il")

@@ -7,7 +7,9 @@ import mza.thy.repository.OutcomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -21,8 +23,8 @@ public class SummaryService {
     @Transactional(readOnly = true)
     public SummaryDto getSummary() {
 
-        var income = incomeRepository.sumIncome();
-        var outcome = outcomeRepository.sumOutcome();
+        var income = Optional.ofNullable(incomeRepository.sumIncome()).orElse(BigDecimal.ZERO);
+        var outcome = Optional.ofNullable(outcomeRepository.sumOutcome()).orElse(BigDecimal.ZERO);
         var balance = income.subtract(outcome);
 
         log.debug("Getting summary {} - {}", income, outcome);
