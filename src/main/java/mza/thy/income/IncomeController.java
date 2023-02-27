@@ -3,7 +3,6 @@ package mza.thy.income;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountFacade;
-import mza.thy.common.TabType;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
@@ -21,10 +20,10 @@ import java.util.Optional;
 
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
 //!! jak blad przy zapisie to ladnie obsluzyc
-//!!! extracty dorobic
 //!!! pytanie czy zapisac zmiany
-//!!! sql, view, wykresy?
+//!!! view, wykresy?
 //dzienniczek biegowy
+//sql utrzymywanie stanu
 
 @Controller
 @RequiredArgsConstructor
@@ -48,7 +47,7 @@ public class IncomeController {
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
-        summaryController.getSummary(model, TabType.INCOME);
+        summaryController.getSummary(model);
         return "income-list";
     }
 

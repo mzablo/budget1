@@ -100,7 +100,7 @@ class UtilsService {
         if (values.length > 3) {
             outcome.setDescription(values[3]);
         }
-        //!!outcome=outcomeRepository.save(outcome);
+        outcome = outcomeRepository.save(outcome);
         log.debug("Created outcome {}", outcome);
         return outcome;
     }
@@ -124,7 +124,7 @@ class UtilsService {
             income.setDescription(values[2]);
         }
 
-        //!!income=incomeRepository.save(income);
+        income = incomeRepository.save(income);
         log.debug("Created income {}", income);
         return income;
     }

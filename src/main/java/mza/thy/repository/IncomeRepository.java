@@ -1,5 +1,7 @@
 package mza.thy.repository;
 
+import mza.thy.common.MonthlyBalanceDto;
+import mza.thy.common.YearlyBalanceDto;
 import mza.thy.domain.Income;
 import mza.thy.filter.*;
 import org.springframework.data.domain.Sort;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -43,9 +46,12 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     @Query(value = "SELECT sum(amount) FROM Income where year =:year")
     BigDecimal sumIncome(Integer year);
 
-    @Query(value = "SELECT sum(amount) FROM Income where year =:year AND month =:month")
-    BigDecimal sumIncome(Integer year, Integer month);
+    @Query(value = "select new mza.thy.common.YearlyBalanceDto(year, sum(amount)) from Income group by year order by year desc")
+    List<YearlyBalanceDto> yearlyBalanceIncome();
 
+ /*   @Query(value = "select new mza.thy.common.MonthlyBalanceDto(year, month, sum(amount)) from Income group by year, month order by year, month desc")
+    List<MonthlyBalanceDto> monthlyBalanceIncome();
+*/
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name order by id desc")
     Stream<Income> findAllByNameLike(String name);

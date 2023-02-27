@@ -3,7 +3,6 @@ package mza.thy.outcome;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountFacade;
-import mza.thy.common.TabType;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +50,7 @@ public class OutcomeController {
 
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("total", outcomeService.getTotal());
-        summaryController.getSummary(model, TabType.OUTCOME);
+        summaryController.getSummary(model);
         return "outcome-list";
     }
 

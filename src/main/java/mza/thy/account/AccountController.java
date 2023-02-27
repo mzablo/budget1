@@ -2,7 +2,6 @@ package mza.thy.account;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mza.thy.common.TabType;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +38,7 @@ public class AccountController {
         model.addAttribute("accountDto", new AccountDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
-        summaryController.getSummary(model, TabType.ACCOUNT);
+        summaryController.getSummary(model);
         return "account-list";
     }
 
@@ -61,8 +60,8 @@ public class AccountController {
 
     @PostMapping("/account/delete/{id}")
     public String deleteAccount(Model model, @PathVariable("id") Long id) {
-        var result=accountService.deleteAccount(id);
-        if (Objects.isNull(result)){
+        var result = accountService.deleteAccount(id);
+        if (Objects.isNull(result)) {
             model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
             model.addAttribute("accountDto", new AccountDto());
             return "account-list";

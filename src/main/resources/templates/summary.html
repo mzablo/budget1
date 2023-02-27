@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body>
+<div th:replace="fragments/header :: header"></div>
+
+<div th:include="fragments/error :: error"></div>
+
+
+
+<div style="font-size: large" class="panel-footer">
+    <div th:include="fragments/error :: error"></div>
+    <div>
+        Total income: [[${totalIncome}]] : TotalOutcome [[${totalOutcome}]]
+        &nbsp;
+        Balance: [[${balance}]]
+    </div>
+
+    <div class="pre-scrollable">
+        <table>
+            <thead>
+            <tr class="headings">
+                <th th:each="header: ${headers}" class="column-title" th:text="${header}"hh />
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr class="even pointer" th:each="row: ${rows}" id="tablerow">
+                <td th:each="header: ${headers}" th:text="${row.get(header)}"vv />
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+</body>
+</html>

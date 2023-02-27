@@ -5,6 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import mza.thy.common.TabType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -12,13 +17,24 @@ import org.springframework.ui.Model;
 public class SummaryController {
     private final SummaryService summaryService;
 
-    //@GetMapping("summary")
-    public String getSummary(Model model, TabType tabType) {
+    public String getSummary(Model model) {
         var summary = summaryService.getSummary();
         model.addAttribute("totalIncome", summary.getTotalIncome());
         model.addAttribute("totalOutcome", summary.getTotalOutcome());
         model.addAttribute("balance", summary.getBalance());
-        model.addAttribute("currentTab", tabType);
         return "summary";
     }
+
+    @GetMapping("/summary")
+    public String getSummaryView(Model model) {
+        var summary = summaryService.getSummary();
+        model.addAttribute("totalIncome", summary.getTotalIncome());
+        model.addAttribute("totalOutcome", summary.getTotalOutcome());
+        model.addAttribute("balance", summary.getBalance());
+        model.addAttribute("headers", summary.getHeaders());
+        model.addAttribute("rows", summary.getRows());
+        model.addAttribute("error", summaryService.getError());
+        return "summary";
+    }
+
 }

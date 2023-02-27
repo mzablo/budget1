@@ -4,7 +4,8 @@ import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
 
-import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
 
 @Builder
 @Value
@@ -15,5 +16,8 @@ public class SummaryDto {
     String balance;
     Integer year;
     Integer month;
+
+    List<String> headers;
+    List<Map<String, String>> rows;
 }
 
