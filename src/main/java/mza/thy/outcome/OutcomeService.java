@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -104,13 +103,8 @@ class OutcomeService {
     }
 
     private Outcome saveNewOutcome(OutcomeDto outcomeDto) {
-        if (StringUtils.hasLength(outcomeDto.getName())) {
-            log.debug("Saving new outcome {}", outcomeDto);
-            return outcomeRepository.save(outcomeDto.convert());
-        } else {
-            log.debug("Not saved - empty outcome {} ", outcomeDto);
-            return null;
-        }
+        log.debug("Saving new outcome {}", outcomeDto);
+        return outcomeRepository.save(outcomeDto.convert());
     }
 
     @Transactional

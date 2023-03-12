@@ -11,6 +11,9 @@ import java.util.Map;
 @Value
 @ToString
 public class SummaryDto {
+    String totalDeposit;
+    String totalAccounts;
+    String pocket;
     String totalIncome;
     String totalOutcome;
     String balance;
@@ -19,5 +22,8 @@ public class SummaryDto {
 
     List<String> headers;
     List<Map<String, String>> rows;
+
+    List<String> monthlyHeaders;
+    List<Map<String, String>> monthlyRows;
 }
 

@@ -1,4 +1,12 @@
 income=1000 pensja firma
-outcome=100.48 szynka Spozywka opis
-outcome=800.48 czynsz Dom ops
-outcome=807.48 prąd Prad
+outcome=0.0 jedzonko Spozywka
+outcome=0.0 dziesiecina Dziesiecina 1+
+outcome=517.85 rafal zus Inne
+outcome=29.99 internet Dom
+outcome=717.24 czynsz Dom
+outcome=100.00 kieszonkowe_basia Kieszonkowe
+outcome=150.00 kieszonkowe_daniel Kieszonkowe
+outcome=520.93 czynsz Dom3
+outcome=102.00 podatek_siedlecka_wynajem Dom3
+outcome=21.25 podatek_siedlecka_garaz Dom3
+outcome=49.99 internet Dom3

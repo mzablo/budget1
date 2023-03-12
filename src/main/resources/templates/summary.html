@@ -7,9 +7,6 @@
 <body>
 <div th:replace="fragments/header :: header"></div>
 
-<div th:include="fragments/error :: error"></div>
-
-
 
 <div style="font-size: large" class="panel-footer">
     <div th:include="fragments/error :: error"></div>
@@ -18,24 +15,62 @@
         &nbsp;
         Balance: [[${balance}]]
     </div>
+</div>
+
+<div class="form-group form-inline">
+    <label class="col-form-label" >Total Deposit:</label>
+    <label>[[${totalDeposit}]]</label>
+</div>
+<div class="form-group form-inline">
+    <label class="col-form-label" >Total Accounts:</label>
+    <label>[[${totalAccounts}]]</label>
+</div>
+<div class="form-group form-inline">
+    <label class="col-form-label" >Pocket:</label>
+    <label> [[${pocket}]]</label>
+</div>
+
+<div>
+    Yearly
+</div>
 
     <div class="pre-scrollable">
         <table>
             <thead>
             <tr class="headings">
-                <th th:each="header: ${headers}" class="column-title" th:text="${header}"hh />
+                <th th:each="header: ${headers}" class="column-title" th:text="${header}" />
             </tr>
             </thead>
 
             <tbody>
             <tr class="even pointer" th:each="row: ${rows}" id="tablerow">
-                <td th:each="header: ${headers}" th:text="${row.get(header)}"vv />
+                <td th:each="header: ${headers}" th:text="${row.get(header)}" />
             </tr>
             </tbody>
         </table>
     </div>
 </div>
 
+
+<div>
+    Monthly
+</div>
+
+<div class="pre-scrollable">
+    <table>
+        <thead>
+        <tr class="headings">
+            <th th:each="header: ${monthlyHeaders}" class="column-title" th:text="${header}" />
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr class="even pointer" th:each="row: ${monthlyRows}" id="mtablerow">
+            <td th:each="header: ${monthlyHeaders}" th:text="${row.get(header)}" />
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

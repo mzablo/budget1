@@ -32,7 +32,16 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
         filter.setBankFilter(this);
         return filter;
     }
+/*
+select year, month, sum(amount), sum(price) from Income i left join outcome o on i.year=o.year and i.month=o.month
+ group by year, month
+order by year desc,month desc
 
+
+select year, sum(amount), sum(price) from Income i left join outcome o on i.year=o.year
+ group by year order by year desc
+
+ */
     @Modifying
     @Transactional
     @Query("delete from Income I where I.operation.id =:operationId")
@@ -47,11 +56,15 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     BigDecimal sumIncome(Integer year);
 
     @Query(value = "select new mza.thy.common.YearlyBalanceDto(year, sum(amount)) from Income group by year order by year desc")
-    List<YearlyBalanceDto> yearlyBalanceIncome();
+/*@Query(value="select new mza.thy.common.YearlyBalanceDto(year, sum(amount), sum(price)) " +
+        " from Income i, Outcome o where i.year = o.year " +
+        " group by year " +
+        " order by year desc ")
+  */  List<YearlyBalanceDto> yearlyBalanceIncome();
 
- /*   @Query(value = "select new mza.thy.common.MonthlyBalanceDto(year, month, sum(amount)) from Income group by year, month order by year, month desc")
+    @Query(value = "select new mza.thy.common.MonthlyBalanceDto(year, month, sum(amount)) from Income group by year, month order by year desc, month desc")
     List<MonthlyBalanceDto> monthlyBalanceIncome();
-*/
+
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name order by id desc")
     Stream<Income> findAllByNameLike(String name);

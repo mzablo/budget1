@@ -33,6 +33,8 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
             "WHERE O.name like :name order by id desc")
     Stream<Operation> findAllByNameLike(String name);
 
+    @Query(value = "SELECT O FROM Operation O LEFT JOIN FETCH O.account A " +
+            "WHERE O.description like :description order by id desc")
     Stream<Operation> findAllByDescriptionLike(String description);
 
     Stream<Operation> findAllByDate(LocalDate date);
@@ -46,7 +48,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
     @Query("select o from Operation o where amount =:amount")
     Stream<Operation> findAllByAmount(@Param("amount") BigDecimal amount);
 
-    @Query("select o from Operation o left join fetch o.account a where a.bank like :bankName")
+    @Query("select o from Operation o left join fetch o.account a where a.bank like :bankName order by id desc")
     Stream<Operation> findAllByBankLike(@Param("bankName") String bankName);
 
     boolean existsByAccountId(Long accountId);
@@ -56,4 +58,7 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
 
     @Query(value = "SELECT sum(amount) FROM Operation O WHERE O.account.id =:accountId")
     BigDecimal balanceByAccount(Long accountId);
+
+    @Query(value = "SELECT sum(amount) FROM Operation O WHERE NAME NOT LIKE '%ADB%'")
+    BigDecimal sumOperations();
 }
