@@ -61,4 +61,6 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
 
     @Query(value = "SELECT sum(amount) FROM Operation O WHERE NAME NOT LIKE '%ADB%'")
     BigDecimal sumOperations();
-}
+
+    @Query(value = "SELECT sum(amount) FROM Operation O WHERE NAME LIKE '%ADB%'")
+    BigDecimal sumAdbOperations();}

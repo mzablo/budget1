@@ -5,6 +5,7 @@ import mza.thy.domain.Account;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.filter.FilterHandler;
 import mza.thy.repository.AccountRepository;
+import mza.thy.repository.DepositRepository;
 import mza.thy.repository.OperationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.util.StringUtils;
 
 import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,12 +26,14 @@ import java.util.stream.Collectors;
 class AccountService implements AccountFacade {
 
     private final AccountRepository accountRepository;
+    private final DepositRepository depositRepository;
     private final OperationRepository operationRepository;
     private final DecimalFormat decimalFormat;
     private FilterHandler<Account> filter;
 
-    public AccountService(AccountRepository accountRepository, OperationRepository operationRepository, DecimalFormat decimalFormat) {
+    public AccountService(AccountRepository accountRepository, OperationRepository operationRepository, DecimalFormat decimalFormat, DepositRepository depositRepository) {
         this.accountRepository = accountRepository;
+        this.depositRepository = depositRepository;
         this.operationRepository = operationRepository;
         this.decimalFormat = decimalFormat;
         this.filter = accountRepository.getFilter();
@@ -123,4 +127,10 @@ class AccountService implements AccountFacade {
         accountRepository.save(account);
     }
 
+    @Transactional(readOnly = true)
+    public List<Map<String, String>> getDepositsRows() {
+        return depositRepository.sumActiveDepositByBank().stream()
+                .map(b -> b.getMap(decimalFormat))
+                .collect(Collectors.toList());
+    }
 }

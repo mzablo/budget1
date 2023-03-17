@@ -28,12 +28,14 @@ public class SummaryController {
     @GetMapping("/summary")
     public String getSummaryView(Model model) {
         var summary = summaryService.getSummary();
-        model.addAttribute("totalDeposit", summary.getTotalDeposit());
+        model.addAttribute("summaryDto", summary);
+        /*model.addAttribute("totalDeposit", summary.getTotalDeposit());
         model.addAttribute("totalAccounts", summary.getTotalAccounts());
         model.addAttribute("pocket", summary.getPocket());
         model.addAttribute("totalIncome", summary.getTotalIncome());
         model.addAttribute("totalOutcome", summary.getTotalOutcome());
         model.addAttribute("balance", summary.getBalance());
+        model.addAttribute("realBalance", summary.getRealBalance());*/
         model.addAttribute("headers", summary.getHeaders());
         model.addAttribute("rows", summary.getRows());
 

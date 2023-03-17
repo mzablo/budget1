@@ -1,5 +1,6 @@
 package mza.thy.repository;
 
+import mza.thy.common.YearlyBalanceDto;
 import mza.thy.domain.Income;
 import mza.thy.domain.Outcome;
 import mza.thy.filter.*;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 

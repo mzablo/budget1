@@ -1,5 +1,6 @@
 package mza.thy.common;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.ToString;
 import lombok.Value;
@@ -13,9 +14,10 @@ import java.util.Map;
 @Builder
 @Value
 @ToString
-//@AllArgsConstructor
+@AllArgsConstructor
 public class YearlyBalanceDto {
-    public static final List<String> YEARLY_BALANCE = List.of("Year", "|",
+    public static final List<String> YEARLY_BALANCE = List.of(
+            "Year", "|",
             "Income", "|",
             "Outcome", "|",
             "Balance", "|",
@@ -24,24 +26,15 @@ public class YearlyBalanceDto {
     Integer year;
     BigDecimal income;
     BigDecimal outcome;
-    BigDecimal balance = BigDecimal.ZERO;
+    BigDecimal balance;
     BigDecimal totalBalance = BigDecimal.ZERO;
 
     public YearlyBalanceDto(Integer year, BigDecimal income, BigDecimal outcome) {
         this.year = year;
         this.income = income;
         this.outcome = outcome;
+        this.balance = BigDecimal.ZERO;
     }
-    public YearlyBalanceDto(Integer year, BigDecimal income) {
-        this.year = year;
-        this.income = income;
-        this.outcome = BigDecimal.ZERO;
-    }
-   /* public YearlyBalanceDto(Integer year, String income, String outcome) {
-        this.year = year;
-        this.income = BigDecimal.ZERO;//income;
-        this.outcome = BigDecimal.ZERO;//outcome;
-    }*/
 
     public Map<String, String> getMap(DecimalFormat decimalFormat) {
         Map<String, String> result = new HashMap<>();
@@ -57,8 +50,6 @@ public class YearlyBalanceDto {
         return result;
     }
 
-    //year  income, outcome, balance, total balance
     //year month income, outcome, balance, total balance
-
 }
 

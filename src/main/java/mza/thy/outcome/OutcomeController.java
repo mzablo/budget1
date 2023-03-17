@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountFacade;
 import mza.thy.domain.filter.FilterParams;
-import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ public class OutcomeController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final OutcomeService outcomeService;
     private final AccountFacade accountService;
-    private final SummaryController summaryController;
 
     @GetMapping("outcome")
     public String getOutcomeList(Model model,
@@ -50,7 +48,6 @@ public class OutcomeController {
 
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("total", outcomeService.getTotal());
-        summaryController.getSummary(model);
         return "outcome-list";
     }
 

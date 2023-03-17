@@ -3,8 +3,6 @@ package mza.thy.account;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.filter.FilterParams;
-import mza.thy.summary.SummaryController;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.Clock;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -22,7 +20,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountController {
-    private final SummaryController summaryController;
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final AccountService accountService;
     private final Clock clock;
@@ -38,7 +35,9 @@ public class AccountController {
         model.addAttribute("accountDto", new AccountDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
-        summaryController.getSummary(model);
+
+        model.addAttribute("headers", List.of("BANK", "BALANCE"));
+        model.addAttribute("rows", accountService.getDepositsRows());
         return "account-list";
     }
 
@@ -47,6 +46,9 @@ public class AccountController {
         sort = Optional.ofNullable(sort).orElse(Sort.by(Sort.Direction.ASC, "id"));
         model.addAttribute("accountList", accountService.getAccountList(null, sort));
         model.addAttribute("accountDto", accountService.getAccount(id));
+
+        model.addAttribute("headers", List.of("BANK", "BALANCE"));
+        model.addAttribute("rows", accountService.getDepositsRows());
         return "account-list";
     }
 
@@ -55,6 +57,9 @@ public class AccountController {
         model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
         model.addAttribute("accountDto", accountService.getAccount(id));
         model.addAttribute("error", "");
+
+        model.addAttribute("headers", List.of("BANK", "BALANCE"));
+        model.addAttribute("rows", accountService.getDepositsRows());
         return "account-delete";
     }
 
@@ -78,16 +83,5 @@ public class AccountController {
         model.addAttribute("accountList", accountService.getAccountList(null, defaultSort));
         model.addAttribute("accountDto", new AccountDto());
         return "account-list";
-    }
-
-
-    private void extracted(Model model, Integer pageNumber, Integer pageSize) {
-        var page = accountService.getAccountPage(PageRequest.of(pageNumber, pageSize, Sort.Direction.DESC, "date"));
-        model.addAttribute("incomeList", page.stream().toList());
-        model.addAttribute("incomeDto", new AccountDto());
-        model.addAttribute("totalPages", page.getTotalPages());
-        model.addAttribute("incomePage", page);
-        model.addAttribute("currentPage", pageNumber);
-        model.addAttribute("defDate", LocalDate.now(clock));
     }
 }

@@ -1,7 +1,7 @@
 package mza.thy.repository;
 
+import mza.thy.account.DepositDto;
 import mza.thy.domain.Deposit;
-import mza.thy.domain.Outcome;
 import mza.thy.filter.*;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -64,4 +64,12 @@ public interface DepositRepository extends JpaRepository<Deposit, Long>,
     @Query(value = "SELECT SUM(D.amount) FROM Deposit D " +
             "WHERE ACTIVE is true AND DESCRIPTION NOT LIKE '%ADB%'")
     BigDecimal sumActiveDeposit();
+
+    @Query(value = "SELECT SUM(D.amount) FROM Deposit D " +
+            "WHERE ACTIVE is true AND DESCRIPTION LIKE '%ADB%'")
+    BigDecimal sumAdbActiveDeposit();
+
+    @Query(value = "SELECT new mza.thy.account.DepositDto(D.bank, SUM(D.amount)) FROM Deposit D " +
+            "WHERE ACTIVE is true GROUP BY D.bank")
+    List<DepositDto> sumActiveDepositByBank();
 }

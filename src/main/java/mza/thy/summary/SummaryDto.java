@@ -13,9 +13,11 @@ import java.util.Map;
 public class SummaryDto {
     String totalDeposit;
     String totalAccounts;
+    String totalAdb;
     String pocket;
     String totalIncome;
     String totalOutcome;
+    String realBalance;
     String balance;
     Integer year;
     Integer month;

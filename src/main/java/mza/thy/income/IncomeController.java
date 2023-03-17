@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.account.AccountFacade;
 import mza.thy.domain.filter.FilterParams;
-import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
@@ -24,7 +23,7 @@ import java.util.Optional;
 //!!! view, wykresy?
 //dzienniczek biegowy
 //sql utrzymywanie stanu
-
+//zblizajace sie koniec lokat - powiadomienia
 @Controller
 @RequiredArgsConstructor
 @Slf4j
@@ -32,7 +31,6 @@ public class IncomeController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final IncomeService incomeService;
     private final AccountFacade accountService;
-    private final SummaryController summaryController;
     private final Clock clock;
 
     @GetMapping("income")
@@ -47,7 +45,6 @@ public class IncomeController {
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("accountList", accountService.getAccountList());
         model.addAttribute("filterParams", new FilterParams());
-        summaryController.getSummary(model);
         return "income-list";
     }
 

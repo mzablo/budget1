@@ -37,18 +37,21 @@ public class SummaryService {
         var outcome = Optional.ofNullable(outcomeRepository.sumOutcome()).orElse(BigDecimal.ZERO);
         var balance = income.subtract(outcome);
         var sumActiveDeposit = depositRepository.sumActiveDeposit();
+        var sumAdbActiveDeposit = depositRepository.sumAdbActiveDeposit();
         var sumOperations = operationRepository.sumOperations();
+        var sumAdbOperations = operationRepository.sumAdbOperations();
         var pocket = balance.subtract(sumActiveDeposit).subtract(sumOperations);
 
         log.debug("Getting summary {} - {}", income, outcome);
         return SummaryDto.builder()
                 .totalDeposit(decimalFormat.format(sumActiveDeposit))
                 .totalAccounts(decimalFormat.format(sumOperations))
+                .totalAdb(decimalFormat.format(sumAdbActiveDeposit.add(sumAdbOperations)))
                 .pocket(decimalFormat.format(pocket))
                 .totalIncome(decimalFormat.format(income))
                 .totalOutcome(decimalFormat.format(outcome))
                 .balance(decimalFormat.format(balance))
-
+                .realBalance(decimalFormat.format(sumActiveDeposit.add(sumOperations)))
                 .headers(YearlyBalanceDto.YEARLY_BALANCE)
                 .rows(buildRows())
 
@@ -58,13 +61,13 @@ public class SummaryService {
     }
 
     private List<Map<String, String>> buildRows() {
-        return incomeRepository.yearlyBalanceIncome().stream()
+        return incomeRepository.yearlyBalance().stream()
                 .map(b -> b.getMap(decimalFormat))
                 .collect(Collectors.toList());
     }
 
     private List<Map<String, String>> buildMonthlyRows() {
-        return incomeRepository.monthlyBalanceIncome().stream()
+        return incomeRepository.monthlyBalance().stream()
                 .map(b -> b.getMap(decimalFormat))
                 .collect(Collectors.toList());
     }

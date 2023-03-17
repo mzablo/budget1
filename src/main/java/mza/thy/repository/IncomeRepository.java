@@ -52,18 +52,16 @@ select year, sum(amount), sum(price) from Income i left join outcome o on i.year
     @Query(value = "SELECT sum(amount) FROM Income")
     BigDecimal sumIncome();
 
-    @Query(value = "SELECT sum(amount) FROM Income where year =:year")
-    BigDecimal sumIncome(Integer year);
+    @Query(value="select new mza.thy.common.YearlyBalanceDto(i.year, sum(i.amount), sum(o.price*o.counter)) " +
+            " from Income i, Outcome o where i.year = o.year " +
+            " group by i.year " +
+            " order by i.year desc ")
+    List<YearlyBalanceDto> yearlyBalance();
 
-    @Query(value = "select new mza.thy.common.YearlyBalanceDto(year, sum(amount)) from Income group by year order by year desc")
-/*@Query(value="select new mza.thy.common.YearlyBalanceDto(year, sum(amount), sum(price)) " +
-        " from Income i, Outcome o where i.year = o.year " +
-        " group by year " +
-        " order by year desc ")
-  */  List<YearlyBalanceDto> yearlyBalanceIncome();
-
-    @Query(value = "select new mza.thy.common.MonthlyBalanceDto(year, month, sum(amount)) from Income group by year, month order by year desc, month desc")
-    List<MonthlyBalanceDto> monthlyBalanceIncome();
+    @Query(value = "select new mza.thy.common.MonthlyBalanceDto(i.year, i.month, sum(i.amount), sum(o.price*o.counter)) " +
+            " from Income i, Outcome o where i.year = o.year and i.month = o.month " +
+            " group by i.year, i.month order by i.year desc, i.month desc")
+    List<MonthlyBalanceDto> monthlyBalance();
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name order by id desc")

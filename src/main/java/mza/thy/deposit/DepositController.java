@@ -3,7 +3,6 @@ package mza.thy.deposit;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.filter.FilterParams;
-import mza.thy.summary.SummaryController;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +19,6 @@ import java.util.Optional;
 class DepositController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final DepositService depositService;
-    private final SummaryController summaryController;
 
     @GetMapping("deposit")
     public String getDepositList(Model model,
@@ -39,7 +37,6 @@ class DepositController {
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
 
-        summaryController.getSummary(model);
         return "deposit-list";
     }
 

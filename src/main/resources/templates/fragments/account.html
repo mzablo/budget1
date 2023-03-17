@@ -1,33 +1,55 @@
 <account th:fragment="account">
-<form class="col card p-3 my-5" method="post" th:action="@{/account}" th:object="${accountDto}">
-    <div class="form-group form-inline">
-        <label for="id">Id</label>
-        <input class="form-control" id="id" readonly
-               th:field="*{id}"
-               type="text"/>
+    <div style="width: 60%; float:left; height:60%; background:#eee; margin:5px">
+        <form class="col card p-3 my-5" method="post" th:action="@{/account}" th:object="${accountDto}">
+        <div class="form-group form-inline">
+            <label for="id">Id</label>
+            <input class="form-control" id="id" readonly
+                   th:field="*{id}"
+                   type="text"/>
+        </div>
+        <div>
+            <label for="name">Name</label>
+            <input class="form-control" id="name" autocomplete="off"
+                   th:field="*{name}"
+                   type="text"/>
+        </div>
+        <div class="form-group">
+            <label for="bank">Bank</label>
+            <input class="form-control" id="bank" autocomplete="off"
+                   th:field="*{bank}"
+                   type="text"/>
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit" value="Update">
+            <a class="btn btn-primary" th:href="'/account/'">Reset</a>
+            <div class="btn btn-dark" th:if="${accountDto.id > 0}">
+                <a th:href="'/account/delete/' + ${accountDto.id}">Delete</a>
+            </div>
+        </div>
+    </form>
     </div>
-    <div>
-        <label for="name">Name</label>
-        <input class="form-control" id="name" autocomplete="off"
-               th:field="*{name}"
-               type="text"/>
-    </div>
-    <div class="form-group">
-        <label for="bank">Bank</label>
-        <input class="form-control" id="bank" autocomplete="off"
-               th:field="*{bank}"
-               type="text"/>
-    </div>
-    <div>
-        <input class="btn btn-primary" type="submit" value="Update">
-        <a class="btn btn-primary" th:href="'/account/'">Reset</a>
-        <div class="btn btn-dark" th:if="${accountDto.id > 0}">
-            <a th:href="'/account/delete/' + ${accountDto.id}">Delete</a>
+
+    <div style="width: 30%; float:left; height:60%; background:#eee; margin:10px">
+        <div class="pre-scrollable">
+            <table>
+                <thead>
+                <tr class="headings">
+                    <th th:each="header: ${headers}" class="column-title" th:text="${header}" />
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="even pointer" th:each="row: ${rows}" id="mtablerow">
+                    <td th:each="header: ${headers}" th:text="${row.get(header)}" />
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-</form>
 
-<table class="table table-striped table-bordered ">
+
+
+    <table class="table table-striped table-bordered ">
     <tr>
         <th>
             <div th:if="${isAscending}">
@@ -97,4 +119,14 @@
         </td>
     </tr>
 </table>
+
+    <!--
+    <div style="width: 100px; float:left; height:100px; background:gray; margin:10px">
+        First DIV
+    </div>
+    <div style="width: 100px; float:left; height:100px; background:yellow; margin:10px">
+        Second DIV
+    </div>
+-->
+
 </account>
