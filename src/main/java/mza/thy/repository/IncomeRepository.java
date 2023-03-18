@@ -1,7 +1,9 @@
 package mza.thy.repository;
 
 import mza.thy.common.MonthlyBalanceDto;
+import mza.thy.common.MonthlyBalanceHelperDto;
 import mza.thy.common.YearlyBalanceDto;
+import mza.thy.common.YearlyBalanceHelperDto;
 import mza.thy.domain.Income;
 import mza.thy.filter.*;
 import org.springframework.data.domain.Sort;
@@ -32,16 +34,6 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
         filter.setBankFilter(this);
         return filter;
     }
-/*
-select year, month, sum(amount), sum(price) from Income i left join outcome o on i.year=o.year and i.month=o.month
- group by year, month
-order by year desc,month desc
-
-
-select year, sum(amount), sum(price) from Income i left join outcome o on i.year=o.year
- group by year order by year desc
-
- */
     @Modifying
     @Transactional
     @Query("delete from Income I where I.operation.id =:operationId")
@@ -52,16 +44,16 @@ select year, sum(amount), sum(price) from Income i left join outcome o on i.year
     @Query(value = "SELECT sum(amount) FROM Income")
     BigDecimal sumIncome();
 
-    @Query(value="select new mza.thy.common.YearlyBalanceDto(i.year, sum(i.amount), sum(o.price*o.counter)) " +
-            " from Income i, Outcome o where i.year = o.year " +
+    @Query(value="select new mza.thy.common.YearlyBalanceHelperDto(i.year, sum(i.amount)) " +
+            " from Income i " +
             " group by i.year " +
             " order by i.year desc ")
-    List<YearlyBalanceDto> yearlyBalance();
+    List<YearlyBalanceHelperDto> yearlyBalance();
 
-    @Query(value = "select new mza.thy.common.MonthlyBalanceDto(i.year, i.month, sum(i.amount), sum(o.price*o.counter)) " +
-            " from Income i, Outcome o where i.year = o.year and i.month = o.month " +
+    @Query(value = "select new mza.thy.common.MonthlyBalanceHelperDto(i.year, i.month, sum(i.amount)) " +
+            " from Income i " +
             " group by i.year, i.month order by i.year desc, i.month desc")
-    List<MonthlyBalanceDto> monthlyBalance();
+    List<MonthlyBalanceHelperDto> monthlyBalance();
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name order by id desc")

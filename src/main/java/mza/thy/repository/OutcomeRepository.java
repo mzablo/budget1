@@ -1,6 +1,8 @@
 package mza.thy.repository;
 
+import mza.thy.common.MonthlyBalanceHelperDto;
 import mza.thy.common.YearlyBalanceDto;
+import mza.thy.common.YearlyBalanceHelperDto;
 import mza.thy.domain.Income;
 import mza.thy.domain.Outcome;
 import mza.thy.filter.*;
@@ -44,11 +46,17 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
     @Query(value = "SELECT sum(price*counter) FROM Outcome")
     BigDecimal sumOutcome();
 
-    @Query(value = "SELECT sum(price*counter) FROM Outcome where year =:year")
-    BigDecimal sumOutcome(Integer year);
+    @Query(value="select new mza.thy.common.YearlyBalanceHelperDto(o.year, sum(o.price*o.counter)) " +
+            " from Outcome o " +
+            " group by o.year " +
+            " order by o.year desc ")
+    List<YearlyBalanceHelperDto> yearlyBalance();
 
-    @Query(value = "SELECT sum(price*counter) FROM Outcome where year =:year AND month =:month")
-    BigDecimal sumOutcome(Integer year, Integer month);
+    @Query(value = "select new mza.thy.common.MonthlyBalanceHelperDto(o.year, o.month, sum(o.price*o.counter)) " +
+            " from Outcome o " +
+            " group by o.year, o.month order by o.year desc, o.month desc")
+    List<MonthlyBalanceHelperDto> monthlyBalance();
+
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name order by id desc")

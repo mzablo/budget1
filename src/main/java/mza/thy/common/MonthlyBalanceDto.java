@@ -1,18 +1,16 @@
 package mza.thy.common;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.ToString;
-import lombok.Value;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Builder
-@Value
+@Data
 @ToString
 @AllArgsConstructor
 public class MonthlyBalanceDto {
@@ -24,19 +22,21 @@ public class MonthlyBalanceDto {
             "Balance", "|",
             "Total balance"
     );
-    Integer year;
-    Integer month;
-    BigDecimal income;
-    BigDecimal outcome;
-    BigDecimal balance;
-    BigDecimal totalBalance = BigDecimal.ZERO;
+    private Integer year;
+    private Integer month;
+    private BigDecimal income;
+    private BigDecimal outcome;
+    private BigDecimal balance;
+    private BigDecimal totalBalance = BigDecimal.ZERO;
 
     public MonthlyBalanceDto(Integer year, Integer month, BigDecimal income, BigDecimal outcome) {
         this.year = year;
         this.month = month;
         this.income = income;
         this.outcome = outcome;
-        this.balance = BigDecimal.ZERO;
+        if (Objects.nonNull(income) && Objects.nonNull(outcome)) {
+            this.balance = income.subtract(outcome);
+        }
     }
 
     public Map<String, String> getMap(DecimalFormat decimalFormat) {

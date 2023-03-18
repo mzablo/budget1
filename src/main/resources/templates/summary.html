@@ -30,46 +30,48 @@
     </div>
 </div>
 
-<div>
-    Yearly
+<div style="width: 30%; float:left; height:60%; background:#eee; margin:10px">
+    <div class="nav-sm">
+        Yearly
+    </div>
+    <div class="pre-scrollable">
+            <table>
+                <thead>
+                <tr class="headings">
+                    <th th:each="header: ${headers}" class="column-title" th:text="${header}" />
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="even pointer" th:each="row: ${rows}" id="tablerow">
+                    <td th:each="header: ${headers}" th:text="${row.get(header)}" />
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
+
+<div style="width: 40%; float:left; height:60%; background:#eee; margin:10px">
+    <div class="profile_info span">
+        Monthly
+    </div>
 
     <div class="pre-scrollable">
         <table>
             <thead>
             <tr class="headings">
-                <th th:each="header: ${headers}" class="column-title" th:text="${header}" />
+                <th th:each="header: ${monthlyHeaders}" class="column-title" th:text="${header}" />
             </tr>
             </thead>
 
             <tbody>
-            <tr class="even pointer" th:each="row: ${rows}" id="tablerow">
-                <td th:each="header: ${headers}" th:text="${row.get(header)}" />
+            <tr class="even pointer" th:each="row: ${monthlyRows}" id="mtablerow">
+                <td th:each="header: ${monthlyHeaders}" th:text="${row.get(header)}" />
             </tr>
             </tbody>
         </table>
     </div>
-</div>
-
-
-<div>
-    Monthly
-</div>
-
-<div class="pre-scrollable">
-    <table>
-        <thead>
-        <tr class="headings">
-            <th th:each="header: ${monthlyHeaders}" class="column-title" th:text="${header}" />
-        </tr>
-        </thead>
-
-        <tbody>
-        <tr class="even pointer" th:each="row: ${monthlyRows}" id="mtablerow">
-            <td th:each="header: ${monthlyHeaders}" th:text="${row.get(header)}" />
-        </tr>
-        </tbody>
-    </table>
 </div>
 
 </body>
