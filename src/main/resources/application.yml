@@ -16,7 +16,7 @@ spring:
     baselineOnMigrate: ${DB.FIRST_TIME:false}
     locations: classpath:db/migration
 budget.path: ${DB_URL:value}
-aspect.enabled: true
+aspect.enabled: false
 logging:
   level:
 #    org.hibernate.SQL: DEBUG

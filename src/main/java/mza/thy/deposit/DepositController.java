@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Comparator;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,7 +31,12 @@ class DepositController {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
         var depositList = depositService.getDepositList(filterParams, Sort.by(sortDirection, sortField));
+        var activeDepositList = depositList.stream()
+                .filter(DepositDto::getActive)
+                .sorted(Comparator.comparing(DepositDto::getDate).reversed())
+                .collect(Collectors.toList());
         model.addAttribute("depositList", depositList);
+        model.addAttribute("activeDepositList", activeDepositList);
         model.addAttribute("depositDto", new DepositDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());

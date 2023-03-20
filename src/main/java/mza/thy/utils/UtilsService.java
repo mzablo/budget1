@@ -13,12 +13,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 class UtilsService {
+    private final static String EXAMPLE = "income=amount:1000;name:pensja;description:firma";
+    private final static String NAME = "name";
+    private final static String AMOUNT = "amount";
+    private final static String PRICE = "price";
+    private final static String DESCRIPTION = "description";
+    private final static String COUNTER = "counter";
+    private final static String CATEGORY = "category";
     private final Path path;
     private String error;
     private final OutcomeRepository outcomeRepository;
@@ -78,58 +88,53 @@ class UtilsService {
                 .forEach(t -> createIncome(utilsDto.getDate(), t));
     }
 
-    private Outcome createOutcome(LocalDate date, String def) {
-        String[] afterEqual = def.split("=");
-        if (afterEqual.length < 1) {
-            error = "Template should have values after =";
-            return new Outcome();
+    private Outcome createOutcome(LocalDate date, String template) {
+        Map<String, String> values = createValueMap(template);
+        if (Objects.isNull(values) || values.size() < 2) {
+            error = "Outcome template should have at least 2 values, example " + EXAMPLE;
         }
-        String[] values = afterEqual[1].split(" ");
         var outcome = new Outcome();
-        if (values.length < 2) {
-            error = "Outcome template should have at least 2 values";
-            return new Outcome();
-        }
-        outcome.setPrice(map(values[0]));
+        outcome.setPrice(map(values.get(PRICE)));
         outcome.setCounter(1);
         outcome.setDate(date);
-        outcome.setName(values[1]);
-        if (values.length > 2) {
-            outcome.setCategory(values[2]);
-        }
-        if (values.length > 3) {
-            outcome.setDescription(values[3]);
-        }
+        outcome.setName(values.get(NAME));
+        outcome.setCategory(values.get(CATEGORY));
+        outcome.setDescription(values.get(DESCRIPTION));
         outcome = outcomeRepository.save(outcome);
         log.debug("Created outcome {}", outcome);
         return outcome;
     }
 
-    private Income createIncome(LocalDate date, String def) {
-        String[] afterEqual = def.split("=");
-        if (afterEqual.length < 1) {
-            error = "Template should have values after =";
-            return new Income();
+    private void createIncome(LocalDate date, String template) {
+        Map<String, String> values = createValueMap(template);
+        if (Objects.isNull(values) || values.size() < 2) {
+            error = "Income template should have at least 2 values, example " + EXAMPLE;
         }
-        String[] values = afterEqual[1].split(" ");
         var income = new Income();
-        if (values.length < 2) {
-            error = "Outcome template should have at least 2 values";
-            return new Income();
-        }
-        income.setAmount(map(values[0]));
+        income.setAmount(map(values.get(AMOUNT)));
         income.setDate(date);
-        income.setName(values[1]);
-        if (values.length > 2) {
-            income.setDescription(values[2]);
-        }
+        income.setName(values.get(NAME));
+        income.setDescription(values.get(DESCRIPTION));
 
         income = incomeRepository.save(income);
         log.debug("Created income {}", income);
-        return income;
+    }
+
+    private Map<String, String> createValueMap(String template) {
+        String[] afterEqual = template.split("=");
+        if (afterEqual.length < 1) {
+            error = "Template should have values after =, example " + EXAMPLE;
+            return null;
+        }
+        return Arrays.stream(afterEqual[1].split(";"))
+                .map(s -> s.split(":"))
+                .collect(Collectors.toMap(e -> e[0], e -> e[1]));
     }
 
     private BigDecimal map(String string) {
+        if (Objects.isNull(string)) {
+            return BigDecimal.ZERO;
+        }
         try {
             return new BigDecimal(string);
         } catch (Exception e) {
