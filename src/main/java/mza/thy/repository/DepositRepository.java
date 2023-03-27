@@ -72,4 +72,9 @@ public interface DepositRepository extends JpaRepository<Deposit, Long>,
     @Query(value = "SELECT new mza.thy.account.DepositDto(D.bank, SUM(D.amount)) FROM Deposit D " +
             "WHERE ACTIVE is true GROUP BY D.bank")
     List<DepositDto> sumActiveDepositByBank();
+
+
+    @Query(value = "SELECT D from Deposit D " +
+            "WHERE D.endDate <=:endDateFrom and D.endDate <=:endDateTo and D.active is true")
+    Stream<Deposit> findAllToRemind(LocalDate endDateFrom, LocalDate endDateTo);
 }

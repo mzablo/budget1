@@ -23,8 +23,7 @@ import java.util.Optional;
 //!!! view, wykresy?
 //dzienniczek biegowy
 //sql utrzymywanie stanu
-//zblizajace sie koniec lokat - powiadomienia. koniec lokat nie pokazuje?
-//SELECT * from lokata D WHERE D.end_Date <= '2023-03-29' and   D.active is true
+//zblizajace sie koniec lokat - powiadomienia
 @Controller
 @RequiredArgsConstructor
 @Slf4j

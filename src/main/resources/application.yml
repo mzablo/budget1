@@ -17,6 +17,7 @@ spring:
     locations: classpath:db/migration
 budget.path: ${DB_URL:value}
 aspect.enabled: false
+deposit.reminder.days: 5
 logging:
   level:
 #    org.hibernate.SQL: DEBUG

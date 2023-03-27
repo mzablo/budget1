@@ -34,11 +34,11 @@ class DepositService {
     @Transactional(readOnly = true)
     public Process getProcessInfo() {
         List<String> closedResult = depositRepository.findAllToProcess(LocalDate.now(clock))
-                .map(d -> d.getId() + " " + d.getTotalAmount())
+                .map(d -> d.getId() + " " + d.getTotalAmount()+" "+d.getBank())
                 .collect(Collectors.toList());
         var prolongedResult = depositRepository.findAllToProcess(LocalDate.now(clock))
                 .filter(Deposit::getProlonged)
-                .map(d -> d.getId() + " " + d.getTotalAmount() + " " + d.getEndDate())
+                .map(d -> d.getId() + " " + d.getTotalAmount() + " " + d.getEndDate()+" "+d.getBank())
                 .collect(Collectors.toList());
         return new Process(closedResult, prolongedResult);
     }
@@ -90,42 +90,6 @@ class DepositService {
         return filter.getFiltered(filterParams)
                 .map(DepositDto::convert)
                 .collect(Collectors.toList());
-        /*
-        if (Objects.nonNull(filterParams.getFilterId())) {
-            log.debug("Filter deposit by id {}", filterParams.getFilterId());
-            return depositRepository.findById(filterParams.getFilterId())
-                    .map(DepositDto::convert)
-                    .map(List::of)
-                    .orElse(Collections.emptyList());
-        }
-        if (Objects.nonNull(filterParams.getFilterBank())) {
-            log.debug("Filter deposit by bank {}", filterParams.getFilterBank());
-            return depositRepository.findAllByBankLike(filterParams.getFilterBank().getValue())
-                    .map(DepositDto::convert)
-                    .collect(Collectors.toList());
-        }
-
-        if (Objects.nonNull(filterParams.getFilterDescription())) {
-            log.debug("Filter deposit by description {}", filterParams.getFilterDescription());
-            return depositRepository.findAllByDescriptionLike(filterParams.getFilterDescription().getValue())
-                    .map(DepositDto::convert)
-                    .collect(Collectors.toList());
-        }
-
-        if (Objects.nonNull(filterParams.getFilterDate())) {
-            log.debug("Filter deposit by date {}", filterParams.getFilterDate());
-            return depositRepository.findAllByDate(filterParams.getFilterDate())
-                    .map(DepositDto::convert)
-                    .collect(Collectors.toList());
-        }
-        if (Objects.nonNull(filterParams.getFilterAmount())) {
-            log.debug("Filter deposit by amount {}", filterParams.getFilterAmount());
-            return depositRepository.findAllByAmount(filterParams.getFilterAmount())
-                    .map(DepositDto::convert)
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
-   */
     }
 
     @Transactional(readOnly = true)

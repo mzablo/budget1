@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 class DepositController {
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final DepositService depositService;
+    private final DepositReminder depositReminder;
 
     @GetMapping("deposit")
     public String getDepositList(Model model,
@@ -30,6 +31,7 @@ class DepositController {
     ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
+        depositReminder.getReminders();//todo
         var depositList = depositService.getDepositList(filterParams, Sort.by(sortDirection, sortField));
         var activeDepositList = depositList.stream()
                 .filter(DepositDto::getActive)

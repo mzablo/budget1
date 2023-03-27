@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.thymeleaf.util.StringUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -50,7 +51,7 @@ public class Deposit {
     public Deposit update(BigDecimal amount, LocalDate date, BigDecimal interest, String description, BigDecimal percent, String period, String bank, Boolean active, Boolean prolonged) {
         this.amount = amount;
         this.date = date;
-        this.description = description;
+        this.description = StringUtils.abbreviate(description, 200);
         this.percent = percent;
         this.period = period;
         this.bank = bank;
