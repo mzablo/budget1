@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+//przy dodaniu lokaty dwie sie zalozyly
 @Controller
 @RequiredArgsConstructor
 @Slf4j

@@ -1,13 +1,13 @@
 package mza.thy.common;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Builder
 @Data
@@ -32,11 +32,11 @@ public class MonthlyBalanceDto {
     public MonthlyBalanceDto(Integer year, Integer month, BigDecimal income, BigDecimal outcome) {
         this.year = year;
         this.month = month;
-        this.income = income;
-        this.outcome = outcome;
+        this.income = Optional.ofNullable(income).map(i -> income).orElse(BigDecimal.ZERO);
+        this.outcome = Optional.ofNullable(outcome).map(i -> outcome).orElse(BigDecimal.ZERO);
         if (Objects.nonNull(income) && Objects.nonNull(outcome)) {
             this.balance = income.subtract(outcome);
-        }
+        } else this.balance = BigDecimal.ZERO;
     }
 
     public Map<String, String> getMap(DecimalFormat decimalFormat) {

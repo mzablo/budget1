@@ -24,6 +24,7 @@ import java.util.Optional;
 //dzienniczek biegowy
 //sql utrzymywanie stanu
 //zblizajace sie koniec lokat - powiadomienia
+// odstep miedzy kolumnami w tabeli
 @Controller
 @RequiredArgsConstructor
 @Slf4j

@@ -137,7 +137,9 @@ public class SummaryService {
                 .collect(Collectors.toList());
         BigDecimal helpBalance = BigDecimal.ZERO;
         for (int i = balance.size() - 1; i >= 0; i--) {
-            helpBalance = balance.get(i).getBalance().add(helpBalance);
+            if (Objects.nonNull(balance.get(i).getBalance())) {
+                helpBalance = balance.get(i).getBalance().add(helpBalance);
+            }
             balance.get(i).setTotalBalance(helpBalance);
         }
 
