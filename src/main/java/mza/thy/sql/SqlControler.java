@@ -13,7 +13,7 @@ import java.util.Optional;
 @Controller
 @RequiredArgsConstructor
 @Slf4j
-public class SqlController {
+public class SqlControler {
     private final SqlService sqlService;
 
     @PostMapping("sql")

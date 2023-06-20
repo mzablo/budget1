@@ -1,6 +1,5 @@
 package mza.thy.deposit;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mza.thy.domain.Deposit;
 import mza.thy.domain.DepositPeriod;
@@ -34,11 +33,12 @@ class DepositService {
     @Transactional(readOnly = true)
     public Process getProcessInfo() {
         List<String> closedResult = depositRepository.findAllToProcess(LocalDate.now(clock))
-                .map(d -> d.getId() + " " + d.getTotalAmount()+" "+d.getBank())
+                .filter(d -> !d.getProlonged())
+                .map(d -> d.getId() + " " + d.getTotalAmount() + " " + d.getBank())
                 .collect(Collectors.toList());
         var prolongedResult = depositRepository.findAllToProcess(LocalDate.now(clock))
                 .filter(Deposit::getProlonged)
-                .map(d -> d.getId() + " " + d.getTotalAmount() + " " + d.getEndDate()+" "+d.getBank())
+                .map(d -> d.getId() + " " + d.getTotalAmount() + " " + d.getEndDate() + " " + d.getBank())
                 .collect(Collectors.toList());
         return new Process(closedResult, prolongedResult);
     }

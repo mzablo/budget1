@@ -20,7 +20,7 @@ import java.util.Optional;
 //https://www-thymeleaf-org.translate.goog/doc/articles/layouts.html?_x_tr_sl=auto&_x_tr_tl=pl&_x_tr_hl=pl
 //!! jak blad przy zapisie to ladnie obsluzyc
 //!!! pytanie czy zapisac zmiany
-//!!! view, wykresy?
+//!!! view, wykresy?`
 //dzienniczek biegowy
 //sql utrzymywanie stanu
 //zblizajace sie koniec lokat - powiadomienia

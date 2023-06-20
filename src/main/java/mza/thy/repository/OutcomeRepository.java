@@ -1,9 +1,8 @@
 package mza.thy.repository;
 
 import mza.thy.common.MonthlyBalanceHelperDto;
-import mza.thy.common.YearlyBalanceDto;
+import mza.thy.common.OutcomeByCategoryHelperDto;
 import mza.thy.common.YearlyBalanceHelperDto;
-import mza.thy.domain.Income;
 import mza.thy.domain.Outcome;
 import mza.thy.filter.*;
 import org.springframework.data.domain.Pageable;
@@ -46,7 +45,7 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
     @Query(value = "SELECT sum(price*counter) FROM Outcome")
     BigDecimal sumOutcome();
 
-    @Query(value="select new mza.thy.common.YearlyBalanceHelperDto(o.year, sum(o.price*o.counter)) " +
+    @Query(value = "select new mza.thy.common.YearlyBalanceHelperDto(o.year, sum(o.price*o.counter)) " +
             " from Outcome o " +
             " group by o.year " +
             " order by o.year desc ")
@@ -57,6 +56,10 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
             " group by o.year, o.month order by o.year desc, o.month desc")
     List<MonthlyBalanceHelperDto> monthlyBalance();
 
+    @Query(value = "select new mza.thy.common.OutcomeByCategoryHelperDto(o.category, sum(o.price*o.counter)) " +
+            " from Outcome o " +
+            " where o.year =:year and o.month =:month group by o.category")
+    Stream<OutcomeByCategoryHelperDto> outcomeByCategory(int year, int month);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
             "WHERE I.name like :name order by id desc")

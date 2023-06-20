@@ -1,8 +1,6 @@
 package mza.thy.repository;
 
-import mza.thy.common.MonthlyBalanceDto;
 import mza.thy.common.MonthlyBalanceHelperDto;
-import mza.thy.common.YearlyBalanceDto;
 import mza.thy.common.YearlyBalanceHelperDto;
 import mza.thy.domain.Income;
 import mza.thy.filter.*;
@@ -34,6 +32,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
         filter.setBankFilter(this);
         return filter;
     }
+
     @Modifying
     @Transactional
     @Query("delete from Income I where I.operation.id =:operationId")
@@ -44,7 +43,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     @Query(value = "SELECT sum(amount) FROM Income")
     BigDecimal sumIncome();
 
-    @Query(value="select new mza.thy.common.YearlyBalanceHelperDto(i.year, sum(i.amount)) " +
+    @Query(value = "select new mza.thy.common.YearlyBalanceHelperDto(i.year, sum(i.amount)) " +
             " from Income i " +
             " group by i.year " +
             " order by i.year desc ")

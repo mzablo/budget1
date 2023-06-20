@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 //przy dodaniu lokaty dwie sie zalozyly
@@ -33,12 +34,8 @@ class DepositController {
                 .orElse(Sort.Direction.DESC);
         depositReminder.getReminders();//todo
         var depositList = depositService.getDepositList(filterParams, Sort.by(sortDirection, sortField));
-        var activeDepositList = depositList.stream()
-                .filter(DepositDto::getActive)
-                .sorted(Comparator.comparing(DepositDto::getDate).reversed())
-                .collect(Collectors.toList());
         model.addAttribute("depositList", depositList);
-        model.addAttribute("activeDepositList", activeDepositList);
+        model.addAttribute("activeDepositList", getActiveDepositList(depositList));
         model.addAttribute("depositDto", new DepositDto());
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
@@ -68,8 +65,10 @@ class DepositController {
     @GetMapping("/deposit/{id}")
     public String getDepositListWithGivenDeposit(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
         sort = Optional.ofNullable(sort).orElse(defaultSort);
-        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), sort));
+        var depositList = depositService.getDepositList(new FilterParams(), sort);
+        model.addAttribute("depositList", depositList);
         model.addAttribute("depositDto", depositService.getDepositDto(id));
+        model.addAttribute("activeDepositList", getActiveDepositList(depositList));
 
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
@@ -101,5 +100,12 @@ class DepositController {
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
         return "deposit-list";
+    }
+
+    private List<DepositDto> getActiveDepositList(List<DepositDto> depositList) {
+        return depositList.stream()
+                .filter(DepositDto::getActive)
+                .sorted(Comparator.comparing(DepositDto::getEndDate))
+                .collect(Collectors.toList());
     }
 }

@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class SummaryService {
+class SummaryService {
 
     private final IncomeRepository incomeRepository;
     private final OutcomeRepository outcomeRepository;
@@ -44,13 +44,13 @@ public class SummaryService {
         var sumAdbActiveDeposit = getSumAdbActiveDeposit();
         var sumOperations = getSumOperations();
         var sumAdbOperations = getSumAdbOperations();
+        var totalAdb = sumAdbActiveDeposit.add(sumAdbOperations);
         var pocket = balance.subtract(sumActiveDeposit).subtract(sumOperations);
-
         log.debug("Getting summary {} - {}", income, outcome);
         return SummaryDto.builder()
                 .totalDeposit(decimalFormat.format(sumActiveDeposit))
                 .totalAccounts(decimalFormat.format(sumOperations))
-                .totalAdb(decimalFormat.format(sumAdbActiveDeposit.add(sumAdbOperations)))
+                .totalAdb(decimalFormat.format(totalAdb))
                 .pocket(decimalFormat.format(pocket))
                 .totalIncome(decimalFormat.format(income))
                 .totalOutcome(decimalFormat.format(outcome))
@@ -63,6 +63,9 @@ public class SummaryService {
                 .build();
     }
 
+    String getError() {
+        return error;
+    }
 
     private BigDecimal getSumAdbOperations() {
         return operationRepository.sumAdbOperations();
@@ -147,9 +150,5 @@ public class SummaryService {
                 .stream()
                 .map(b -> b.getMap(decimalFormat))
                 .collect(Collectors.toList());
-    }
-
-    String getError() {
-        return error;
     }
 }

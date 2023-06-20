@@ -61,8 +61,8 @@ public interface DepositRepository extends JpaRepository<Deposit, Long>,
             "WHERE D.endDate <=:endDate and D.active is true")
     Stream<Deposit> findAllToProcess(LocalDate endDate);
 
-    @Query(value = "SELECT SUM(D.amount) FROM Deposit D " +
-            "WHERE ACTIVE is true AND DESCRIPTION NOT LIKE '%ADB%'")
+    @Query(value = "SELECT SUM(D.amount) FROM Deposit D WHERE ACTIVE is true " +
+            "AND DESCRIPTION NOT LIKE '%ADB%'")
     BigDecimal sumActiveDeposit();
 
     @Query(value = "SELECT SUM(D.amount) FROM Deposit D " +
