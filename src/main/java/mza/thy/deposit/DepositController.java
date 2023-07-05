@@ -32,7 +32,6 @@ class DepositController {
     ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        depositReminder.getReminders();//todo
         var depositList = depositService.getDepositList(filterParams, Sort.by(sortDirection, sortField));
         model.addAttribute("depositList", depositList);
         model.addAttribute("activeDepositList", getActiveDepositList(depositList));
@@ -105,7 +104,11 @@ class DepositController {
     private List<DepositDto> getActiveDepositList(List<DepositDto> depositList) {
         return depositList.stream()
                 .filter(DepositDto::getActive)
-                .sorted(Comparator.comparing(DepositDto::getEndDate))
+                .sorted(getComparing())
                 .collect(Collectors.toList());
+    }
+
+    private Comparator<DepositDto> getComparing() {
+        return Comparator.comparing(DepositDto::getEndDate);
     }
 }

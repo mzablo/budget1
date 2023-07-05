@@ -1,11 +1,14 @@
 package mza.thy.deposit;
 
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.YearlyBalanceDto;
 import mza.thy.domain.Deposit;
 import mza.thy.domain.DepositPeriod;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.filter.FilterHandler;
 import mza.thy.repository.DepositRepository;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +18,7 @@ import java.time.Clock;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +26,7 @@ import java.util.stream.Collectors;
 class DepositService {
     private final Clock clock;
     private final DepositRepository depositRepository;
-    private FilterHandler<Deposit> filter;
+    private final FilterHandler<Deposit> filter;
 
     public DepositService(Clock clock, DepositRepository depositRepository) {
         this.clock = clock;

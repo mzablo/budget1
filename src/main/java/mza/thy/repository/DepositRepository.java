@@ -75,6 +75,7 @@ public interface DepositRepository extends JpaRepository<Deposit, Long>,
 
 
     @Query(value = "SELECT D from Deposit D " +
-            "WHERE D.endDate <=:endDateFrom and D.endDate <=:endDateTo and D.active is true")
+            "WHERE D.endDate >=:endDateFrom and D.endDate <=:endDateTo and D.active is true" +
+            " ORDER By D.endDate")
     Stream<Deposit> findAllToRemind(LocalDate endDateFrom, LocalDate endDateTo);
 }

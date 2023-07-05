@@ -1,4 +1,8 @@
 <header th:fragment="header">
+    <head>
+        <script type="text/javascript" th:src="@{/actions.js}"></script>
+    </head>
+
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <a class="navbar-brand" th:href="@{/utils}">
             Utils
@@ -39,6 +43,7 @@
         </div>
         <a class="navbar-brand" th:href="@{/exit}">
             Exit
+            <button type="button" th:onclick="showAlert()">Alert</button>
         </a>
     </nav>
 </header>

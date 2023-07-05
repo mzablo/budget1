@@ -1,5 +1,12 @@
 spring:
-#??  jpa.open-in-view: false
+  thymeleaf:
+    cache: false
+  mail:
+    properties.mail.smtp.auth: true
+    properties.mail.smtp.starttls.enable: true
+    properties.mail.smtp.starttls.required: true
+    properties.mail.smtp.ssl.enable: true
+  #??  jpa.open-in-view: false
   datasource:
     driverClassName: org.hsqldb.jdbc.JDBCDriver
 #    driverClassName: org.h2.Driver
@@ -17,7 +24,7 @@ spring:
     locations: classpath:db/migration
 budget.path: ${DB_URL:value}
 aspect.enabled: false
-deposit.reminder.days: 5
+deposit.reminder.days: 7
 logging:
   level:
 #    org.hibernate.SQL: DEBUG
