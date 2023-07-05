@@ -33,24 +33,37 @@ class DepositReminder {
     @Scheduled(cron = "0 0 0/8 ? * *")
     @Transactional(readOnly = true)
     public List<DepositDto> getReminders() {
-        var endDateFrom = LocalDate.now(clock).minusDays(days);
-        var endDateTo = LocalDate.now(clock).plusDays(days);
-        var result = depositRepository.findAllToRemind(endDateFrom, endDateTo)
-                .map(DepositDto::convert)
-                .collect(Collectors.toList());
+        List<DepositDto> result = buildReminderList();
         log.debug("Processing deposits' reminders for {} deposits finishing within {} days.", result.size(), days);
         sendEvent(result);
         return result;
     }
 
+    @Transactional(readOnly = true)
+    public String getReminderInfo() {
+        return buildReminderInfo(buildReminderList());
+    }
+
+    private List<DepositDto> buildReminderList() {
+        var endDateFrom = LocalDate.now(clock).minusDays(days);
+        var endDateTo = LocalDate.now(clock).plusDays(days);
+        return depositRepository.findAllToRemind(endDateFrom, endDateTo)
+                .map(DepositDto::convert)
+                .collect(Collectors.toList());
+    }
+
     private void sendEvent(List<DepositDto> finishingDeposits) {
+        applicationEventPublisher.publishEvent(new EmailDepositReminder(buildReminderInfo(finishingDeposits)));
+    }
+
+    private String buildReminderInfo(List<DepositDto> finishingDeposits) {
         if (finishingDeposits.size() > 0) {
-            var finishingDepositsDescription = finishingDeposits.stream()
+            return finishingDeposits.stream()
                     .map(this::convert)
                     .reduce((x, y) -> x + ", \n" + y)
                     .get();
-            applicationEventPublisher.publishEvent(new EmailDepositReminder(finishingDepositsDescription));
         }
+        return null;
     }
 
     private String convert(DepositDto depositDto) {

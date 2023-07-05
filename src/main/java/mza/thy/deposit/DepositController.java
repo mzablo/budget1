@@ -15,6 +15,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
 //przy dodaniu lokaty dwie sie zalozyly
 @Controller
 @RequiredArgsConstructor
@@ -32,16 +33,10 @@ class DepositController {
     ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        var depositList = depositService.getDepositList(filterParams, Sort.by(sortDirection, sortField));
-        model.addAttribute("depositList", depositList);
-        model.addAttribute("activeDepositList", getActiveDepositList(depositList));
-        model.addAttribute("depositDto", new DepositDto());
+        buildModel(model, new DepositDto(),Sort.by(sortDirection, sortField));
+
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
-
-        model.addAttribute("total", depositService.getTotal());
-        model.addAttribute("periodList", depositService.getPeriodList());
-
         return "deposit-list";
     }
 
@@ -54,23 +49,13 @@ class DepositController {
     @PostMapping("/deposit/process")
     public String process(Model model) {
         depositService.process();
-        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
-        model.addAttribute("depositDto", new DepositDto());
-        model.addAttribute("total", depositService.getTotal());
-        model.addAttribute("periodList", depositService.getPeriodList());
+        buildModel(model, new DepositDto(),null);
         return "deposit-list";
     }
 
     @GetMapping("/deposit/{id}")
     public String getDepositListWithGivenDeposit(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
-        sort = Optional.ofNullable(sort).orElse(defaultSort);
-        var depositList = depositService.getDepositList(new FilterParams(), sort);
-        model.addAttribute("depositList", depositList);
-        model.addAttribute("depositDto", depositService.getDepositDto(id));
-        model.addAttribute("activeDepositList", getActiveDepositList(depositList));
-
-        model.addAttribute("total", depositService.getTotal());
-        model.addAttribute("periodList", depositService.getPeriodList());
+        buildModel(model, depositService.getDepositDto(id), Optional.ofNullable(sort).orElse(defaultSort));
         return "deposit-list";
     }
 
@@ -84,21 +69,25 @@ class DepositController {
     @PostMapping("/deposit/delete/{id}")
     public String deleteDeposit(Model model, @PathVariable("id") Long id) {
         depositService.deleteDeposit(id);
-        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
-        model.addAttribute("depositDto", new DepositDto());
-        model.addAttribute("total", depositService.getTotal());
-        model.addAttribute("periodList", depositService.getPeriodList());
+        buildModel(model, new DepositDto(),null);
         return "deposit-list";
     }
 
     @PostMapping("/deposit")
     public String saveDeposit(Model model, DepositDto deposit) {
         var result = depositService.saveDeposit(deposit);
-        model.addAttribute("depositList", depositService.getDepositList(new FilterParams(), defaultSort));
+        buildModel(model, result, null);
+        return "deposit-list";
+    }
+
+    private void buildModel(Model model, DepositDto result, Sort sort) {
+        var depositList = depositService.getDepositList(new FilterParams(), sort);
+        model.addAttribute("depositList", depositList);
         model.addAttribute("depositDto", result);
         model.addAttribute("total", depositService.getTotal());
         model.addAttribute("periodList", depositService.getPeriodList());
-        return "deposit-list";
+        model.addAttribute("activeDepositList", getActiveDepositList(depositList));
+        model.addAttribute("reminder", depositReminder.getReminderInfo());
     }
 
     private List<DepositDto> getActiveDepositList(List<DepositDto> depositList) {

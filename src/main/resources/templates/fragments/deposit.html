@@ -3,6 +3,11 @@
       <div class="btn btn-dark">
           <a th:href="'/deposit/process/'">Process</a>
       </div>
+      <div>
+          <div th:if="${reminder}!=null">
+              <span style="white-space: pre-line" th:text="${reminder}"></span>
+          </div>
+      </div>
   </div>
     <div style="width: 40%; float:left; height:50%; background:#eee; margin:5px">
 
