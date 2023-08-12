@@ -33,7 +33,7 @@ class DepositController {
     ) {
         sortDirection = Optional.ofNullable(sortDirection)
                 .orElse(Sort.Direction.DESC);
-        buildModel(model, new DepositDto(),Sort.by(sortDirection, sortField));
+        buildModel(model, filterParams, new DepositDto(), Sort.by(sortDirection, sortField));
 
         model.addAttribute("isAscending", sortDirection.isAscending());
         model.addAttribute("filterParams", new FilterParams());
@@ -49,13 +49,13 @@ class DepositController {
     @PostMapping("/deposit/process")
     public String process(Model model) {
         depositService.process();
-        buildModel(model, new DepositDto(),null);
+        buildModel(model, new FilterParams(), new DepositDto(), defaultSort);
         return "deposit-list";
     }
 
     @GetMapping("/deposit/{id}")
     public String getDepositListWithGivenDeposit(Model model, @PathVariable("id") Long id, @RequestParam(required = false) Sort sort) {
-        buildModel(model, depositService.getDepositDto(id), Optional.ofNullable(sort).orElse(defaultSort));
+        buildModel(model, new FilterParams(), depositService.getDepositDto(id), Optional.ofNullable(sort).orElse(defaultSort));
         return "deposit-list";
     }
 
@@ -69,19 +69,19 @@ class DepositController {
     @PostMapping("/deposit/delete/{id}")
     public String deleteDeposit(Model model, @PathVariable("id") Long id) {
         depositService.deleteDeposit(id);
-        buildModel(model, new DepositDto(),null);
+        buildModel(model, new FilterParams(), new DepositDto(), defaultSort);
         return "deposit-list";
     }
 
     @PostMapping("/deposit")
     public String saveDeposit(Model model, DepositDto deposit) {
         var result = depositService.saveDeposit(deposit);
-        buildModel(model, result, null);
+        buildModel(model, new FilterParams(), result, defaultSort);
         return "deposit-list";
     }
 
-    private void buildModel(Model model, DepositDto result, Sort sort) {
-        var depositList = depositService.getDepositList(new FilterParams(), sort);
+    private void buildModel(Model model, FilterParams filterParams, DepositDto result, Sort sort) {
+        var depositList = depositService.getDepositList(filterParams, sort);
         model.addAttribute("depositList", depositList);
         model.addAttribute("depositDto", result);
         model.addAttribute("total", depositService.getTotal());

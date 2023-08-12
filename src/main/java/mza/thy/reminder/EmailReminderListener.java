@@ -9,6 +9,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 @RequiredArgsConstructor
 @Log4j2
@@ -22,8 +24,10 @@ class EmailReminderListener {
 
     @EventListener
     public void sendEmail(EmailDepositReminder emailReminder) {
-        log.debug("sending email " + emailReminder);
-        sendEmail(emailReminder.getText());
+        if (Objects.nonNull(emailReminder.getText())) {
+            log.debug("sending email " + emailReminder.getText());
+            sendEmail(emailReminder.getText());
+        }
     }
 
     private void sendEmail(String text) {

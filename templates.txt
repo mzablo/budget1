@@ -1,11 +1,11 @@
 income=amount:1000;name:pensja;description:firma
 outcome=price:0.0;name:jedzonko;category:Spozywka
 outcome=price:0.0;name:dziesiecina;category:Dziesiecina;description:1+
-outcome=price:517.85;name:rafal zus;category::Inne
+outcome=price:534.16;name:rafal zus;category::Inne
 outcome=price:29.00;name:internet;category:Dom
 outcome=price:714.07;name:czynsz;category:Dom
 outcome=price:100.00;name:kieszonkowe basia;category:Kieszonkowe
 outcome=price:500.00;name:usamodzielnienie daniel;category:Daniel
 outcome=price:659.35;name:czynsz;category:Dom3
-outcome=price:102.00;name:podatek siedlecka wynajem;category:Dom3
+outcome=price:153.00;name:podatek siedlecka wynajem;category:Dom3
 outcome=price:21.25;name:podatek siedlecka garaz;category:Dom3
