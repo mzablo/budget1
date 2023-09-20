@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -23,10 +24,11 @@ class EmailReminderListener {
     private final JavaMailSender javaMailSender;
 
     @EventListener
+    @Async
     public void sendEmail(EmailDepositReminder emailReminder) {
         if (Objects.nonNull(emailReminder.getText())) {
             log.debug("sending email " + emailReminder.getText());
-            sendEmail(emailReminder.getText());
+            sendEmail(emailReminder.getText());//Ania w razie co zakomentuj tą linijke
         }
     }
 

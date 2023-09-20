@@ -1,12 +1,16 @@
 spring:
+  jpa.open-in-view: false
   thymeleaf:
     cache: false
   mail:
+    host: poczta.interia.pl
+    port: 465
+    username:
+    password:
     properties.mail.smtp.auth: true
     properties.mail.smtp.starttls.enable: true
     properties.mail.smtp.starttls.required: true
     properties.mail.smtp.ssl.enable: true
-  #??  jpa.open-in-view: false
   datasource:
     driverClassName: org.hsqldb.jdbc.JDBCDriver
 #    driverClassName: org.h2.Driver
