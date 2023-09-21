@@ -1,0 +1,45 @@
+<sql th:fragment="sql">
+    <form class="col card p-3 my-5" method="post" th:action="@{/sql}" th:object="${sqlReqDto}">
+        <div>
+            <label>Sql</label>
+        </div>
+        <div>
+            <textarea cols="130" id="s" autocomplete="off" rows="3"
+                      th:field="*{sql}"
+                      type="text"/>
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit" value="Go">
+        </div>
+    </form>
+
+    <div th:include="fragments/error :: error"></div>
+
+    <div class="col card p-3 my-5">
+        <label>Helpers</label>
+        <div>
+            <textarea cols="130" autocomplete="off" rows="4"
+                      th:text="${sqls}"/>
+        </div>
+    </div>
+
+    <div>
+        <label>Result</label>
+    </div>
+
+    <div class="pre-scrollable">
+        <table>
+            <thead>
+            <tr class="headings">
+                <th th:each="header: ${headers}" class="column-title" th:text="${header}" />
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr class="even pointer" th:each="row: ${rows}" id="tablerow">
+                <td th:each="header: ${headers}" th:text="${row.get(header)}" />
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</sql>

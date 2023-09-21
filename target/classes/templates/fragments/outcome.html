@@ -1,0 +1,202 @@
+<outcome th:fragment="outcome">
+    <form method="post" th:action="@{/outcome}" th:object="${outcomeDto}">
+        <div class="table">
+            <div class="form-group form-inline">
+                <label for="id">Id</label>
+                <input class="form-control" id="id" readonly
+                       th:field="*{id}"
+                       type="text"/>
+                <label for="name">Name</label>
+                <input id="name" autocomplete="off"
+                       th:field="*{name}"
+                       type="text"/>
+                <label>Bank </label>
+                <select  id="bank" name="bank" th:field="*{bankName}" >
+                    <option th:each="account : ${accountList}" th:value="${account.bank}" th:utext="${account.bank}"/>
+                </select>
+            </div>
+
+            <div class="form-group col-md-8">
+                <label for="date">Date</label>
+                <input id="date" placeholder="Enter date" required autocomplete="off"
+                       th:field="*{date}"
+                       th:value="${{defDate}}"
+                       type="date"/>
+                <label for="category">Category</label>
+                <select id="category" name="bank" th:field="*{category}" >
+                    <option th:each="category : ${categoryList}" th:value="${category}" th:utext="${category}"/>
+                </select>
+                <input autocomplete="off"
+                       th:field="*{categoryFreeText}"
+                       type="text"/>
+            </div>
+
+            <div class="form-group col-md-8">
+                <label for="price">Price</label>
+                <input id="price" placeholder="Enter price"  autocomplete="off"
+                       th:field="*{price}" step="0.01" data-decimals="2"
+                       type="number"/>
+                <label for="counter">Counter</label>
+                <input id="counter" placeholder="Counter"  autocomplete="off"
+                       th:field="*{counter}" step="1.00" data-decimals="0"
+                       type="number"/>
+            </div>
+
+            <div class="form-group col-md-8">
+                <label for="add">Add</label>
+                <input id="add" placeholder="Add"  autocomplete="off"
+                       th:field="*{add}" step="0.01" data-decimals="2"
+                       type="number"/>
+            </div>
+
+            <div class="form-group col-md-8">
+                <div ><label for="description">Description</label></div>
+                <textarea cols="100" id="description" autocomplete="off" rows="3"
+                          th:field="*{description}"
+                          type="text"/>
+            </div>
+
+            <div class="form-group">
+                <input type="hidden" class="form-control" id="operationId" autocomplete="off"
+                       th:field="*{operationId}"/>
+            </div>
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit" value="Update">
+            <a class="btn btn-primary" th:href="'/outcome/'">Reset</a>
+            <div class="btn btn-dark" th:if="${outcomeDto.id > 0}">
+                <a th:href="'/outcome/delete/' + ${outcomeDto.id}">Delete</a>
+            </div>
+        </div>
+        <div>
+            <a th:href="@{'/outcome/?pageSize=100&pageNumber='+${pageNumber-1}}">Back</a>
+            Current page: [[${pageNumber}]]
+            <a th:href="@{'/outcome/?pageSize=100&pageNumber='+${pageNumber+1}}">Next</a>
+            Total records: [[${total}]]
+        </div>
+    </form>
+    <div th:if="${isAscending}">
+        <a th:href="'/outcome?sortField=id&sortDirection=DESC'">Id</a>
+    </div>
+    <table class="table table-striped table-bordered ">
+        <tr>
+            <th>
+                <div th:if="${isAscending}">
+                    <a th:href="'/outcome?sortField=id&sortDirection=DESC'">Id</a>
+                </div>
+                <div th:unless="${isAscending}">"
+                    <a th:href="'/outcome?sortField=id&sortDirection=ASC'">Id</a>
+                </div>
+                <div>
+                    <form method="get" th:action="@{/outcome}">
+                        <div class="form-group">
+                            <input type="number" name="filterId" th:value="${filterId}" size="10" >
+                        </div>
+                    </form>
+                </div>
+            </th>
+
+            <th>
+                <div th:if="${isAscending}">
+                    <a th:href="'/outcome?sortField=date&sortDirection=DESC'">Date</a>
+                </div>
+                <div th:unless="${isAscending}">"
+                    <a th:href="'/outcome?sortField=date&sortDirection=ASC'">Date</a>
+                </div>
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="number" name="filterYear" th:value="${filterYear}" size="4" >
+                        <input type="number" name="filterMonth" th:value="${filterMonth}" size="2" >
+                        <input type="date" name="filterDate" th:value="${filterDate}" size="8" >
+                        <input class="btn" type="submit" value="Go">
+                    </div>
+                </form>
+            </th>
+
+            <th>
+                <div th:if="${isAscending}">
+                    <a th:href="'/outcome?sortField=price&sortDirection=DESC'">Price</a>
+                </div>
+                <div th:unless="${isAscending}">"
+                    <a th:href="'/outcome?sortField=price&sortDirection=ASC'">Price</a>
+                </div>
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="number" step="0.01" data-decimals="2" name="filterAmount" th:value="${filterAmount}" size="10" >
+                    </div>
+                </form>
+            </th>
+            <th>Counter</th>
+            <th>
+                <div th:if="${isAscending}">
+                    <a th:href="'/outcome?sortField=name&sortDirection=DESC'">Name</a>
+                </div>
+                <div th:unless="${isAscending}">"
+                    <a th:href="'/outcome?sortField=name&sortDirection=ASC'">Name</a>
+                </div>
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="text" name="filterName" th:value="${filterName}" size="20" >
+                    </div>
+                </form>
+            </th>
+
+            <th>
+                <div th:if="${isAscending}">
+                    <a th:href="'/outcome?sortField=description&sortDirection=DESC'">Description</a>
+                </div>
+                <div th:unless="${isAscending}">"
+                    <a th:href="'/outcome?sortField=description&sortDirection=ASC'">Description</a>
+                </div>
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="description" name="filterDescription" th:value="${filterDescription}" size="20" >
+                    </div>
+                </form>
+            </th>
+            <th>
+                <div th:if="${isAscending}">
+                    <a th:href="'/outcome?sortField=category&sortDirection=DESC'">Category</a>
+                </div>
+                <div th:unless="${isAscending}">"
+                    <a th:href="'/outcome?sortField=category&sortDirection=ASC'">Category</a>
+                </div>
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="category" name="filterCategory" th:value="${filterCategory}" size="20" >
+                    </div>
+                </form>
+            </th>
+            <th>Bank name
+                <form method="get" th:action="@{/outcome}">
+                    <div class="form-group">
+                        <input type="text" name="filterBank" th:value="${filterBank}" size="20" >
+                    </div>
+                </form>
+            </th>
+            <th>Actions
+                <a th:href="'/outcome'">Clean</a>
+            </th>
+        </tr>
+        <tr th:if="${#lists.isEmpty(outcomeList)}">
+            <td class="text-center" colspan="7">No Records found. Add some...!</td>
+        </tr>
+        <tr th:each="outcome : ${outcomeList}">
+            <td class="align-middle">
+                <a th:href="'/outcome/' + ${outcome.id}">
+                    <span th:text="${outcome.id}"></span>
+                </a>
+            </td>        <td class="align-middle" th:text="${outcome.date}"></td>
+            <td class="align-middle" th:text="${outcome.price}"></td>
+            <td class="align-middle" th:text="${outcome.counter}"></td>
+            <td class="align-middle" th:text="${outcome.name}"></td>
+            <td class="align-middle" th:text="${outcome.description}"></td>
+            <td class="align-middle" th:text="${outcome.category}"></td>
+            <td class="align-middle" th:text="${outcome.bankName}"></td>
+            <td class="align-middle text-center form-inline">
+                <!--  <a class="btn btn-secondary" th:href="'/outcome/' + ${outcome.id}">✏</a> -->
+                <a th:href="'/outcome/delete/' + ${outcome.id}">&#9988;</a>
+            </td>
+        </tr>
+    </table>
+</outcome>
