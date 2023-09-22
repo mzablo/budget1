@@ -1,40 +1,63 @@
 <income th:fragment="income">
     <div class="container-sm mt-sm-auto">
         <form class="col card p-3 my-5" method="post" th:action="@{/income}" th:object="${incomeDto}">
-            <div class="form-group form-inline">
-                <label for="id">Id</label>
-                <input class="form-control" id="id" readonly
-                       th:field="*{id}"
-                       type="text"/>
-                <label for="name">Name</label>
-                <input class="form-control" id="name" autocomplete="off"
-                       th:field="*{name}"
-                       type="text"/>
-                <label class="col-form-label">Bank </label>
-                <select id="bank" name="bank" th:field="*{bankName}">
-                    <option th:each="account : ${accountList}" th:value="${account.bank}" th:utext="${account.bank}"/>
-                </select>
-
-            </div>
-            <div class="form-group form-inline">
-                <label for="description">Date</label>
-                <input class="form-control" id="date" placeholder="Enter date" required autocomplete="off"
-                       th:field="*{date}"
-                       th:value="${{defDate}}"
-                       type="date"/>
-            </div>
-            <div class="form-group form-inline">
-                <label for="amount">Amount</label>
-                <input class="form-control" id="amount" placeholder="Enter amount" autocomplete="off"
-                       th:field="*{amount}" step="0.01" data-decimals="2"
-                       type="number"/>
-            </div>
-
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea cols="100" id="description" autocomplete="off" rows="3"
+            <div class="form-group p-5 m-3">
+                <div class="row form-inline">
+                    <div class="form-group col-sm-1">
+                        <label for="id">Id</label>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <input class="form-control" id="id" readonly
+                               th:field="*{id}"
+                               type="text"/>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="name">Name</label>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <input class="form-control" id="name" autocomplete="off"
+                               th:field="*{name}"
+                               type="text"/>
+                    </div>
+                </div>
+                <div class="row form-inline">
+                    <div class="form-group col-md-1">
+                        <label class="col-form-label">Bank </label>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <select id="bank" name="bank" th:field="*{bankName}">
+                            <option th:each="account : ${accountList}" th:value="${account.bank}"
+                                    th:utext="${account.bank}"/>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="date">Date</label>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <input class="form-control" id="date" placeholder="Enter date" required autocomplete="off"
+                               th:field="*{date}"
+                               th:value="${{defDate}}"
+                               type="date"/>
+                    </div>
+                </div>
+                <div class="row form-inline">
+                    <div class="form-group col-md-1">
+                        <label for="amount">Amount</label>
+                    </div>
+                    <div class="form-group col-md-5">
+                        <input class="form-control" id="amount" placeholder="Enter amount" autocomplete="off"
+                               th:field="*{amount}" step="0.01" data-decimals="2"
+                               type="number"/>
+                    </div>
+                    <div class="form-group col-md-1">
+                        <label for="description">Description</label>
+                    </div>
+                    <div class="form-group col-md-5">
+                <textarea class="form-control" id="description" autocomplete="off"
                           th:field="*{description}"
                           type="text"/>
+                    </div>
+                </div>
             </div>
             <div class="form-group">
                 <input type="hidden" class="form-control" id="operationId" autocomplete="off"
@@ -56,115 +79,121 @@
         <a th:href="'/income?sortField=id&sortDirection=DESC'">Id</a>
     </div> -->
     <div class="container-lg">
-    <table class="table table-responsive-md table-striped table-bordered ">
-        <tr>
-            <th>
-                <div th:if="${isAscending}">
-                    <a th:href="'/income?sortField=id&sortDirection=DESC'">Id</a>
-                </div>
-                <div th:unless="${isAscending}">"
-                    <a th:href="'/income?sortField=id&sortDirection=ASC'">Id</a>
-                </div>
-                <div>
+        <table class="table table-responsive-md table-striped table-bordered ">
+            <tr>
+                <th>
+                    <div th:if="${isAscending}">
+                        <a th:href="'/income?sortField=id&sortDirection=DESC'">Id</a>
+                    </div>
+                    <div th:unless="${isAscending}">"
+                        <a th:href="'/income?sortField=id&sortDirection=ASC'">Id</a>
+                    </div>
+                    <div>
+                        <form method="get" th:action="@{/income}">
+                            <div class="form-group">
+                                <input class="form-control" type="number" name="filterId" th:value="${filterId}"
+                                       size="10">
+                            </div>
+                        </form>
+                    </div>
+                </th>
+
+                <th>
+                    <div th:if="${isAscending}">
+                        <a th:href="'/income?sortField=date&sortDirection=DESC'">Date</a>
+                    </div>
+                    <div th:unless="${isAscending}">"
+                        <a th:href="'/income?sortField=date&sortDirection=ASC'">Date</a>
+                    </div>
                     <form method="get" th:action="@{/income}">
                         <div class="form-group">
-                            <input class="form-control" type="number" name="filterId" th:value="${filterId}" size="10">
+                            <input class="form-control" type="number" name="filterYear" th:value="${filterYear}"
+                                   size="4">
+                            <input class="form-control" type="number" name="filterMonth" th:value="${filterMonth}"
+                                   size="2">
+                            <input class="form-control" type="date" name="filterDate" th:value="${filterDate}" size="8">
+                            <input class="btn form-control" type="submit" value="Go">
                         </div>
                     </form>
-                </div>
-            </th>
+                </th>
 
-            <th>
-                <div th:if="${isAscending}">
-                    <a th:href="'/income?sortField=date&sortDirection=DESC'">Date</a>
-                </div>
-                <div th:unless="${isAscending}">"
-                    <a th:href="'/income?sortField=date&sortDirection=ASC'">Date</a>
-                </div>
-                <form method="get" th:action="@{/income}">
-                    <div class="form-group">
-                        <input class="form-control" type="number" name="filterYear" th:value="${filterYear}" size="4">
-                        <input class="form-control" type="number" name="filterMonth" th:value="${filterMonth}" size="2">
-                        <input class="form-control" type="date" name="filterDate" th:value="${filterDate}" size="8">
-                        <input class="btn form-control" type="submit" value="Go">
+                <th>
+                    <div th:if="${isAscending}">
+                        <a th:href="'/income?sortField=amount&sortDirection=DESC'">Amount</a>
                     </div>
-                </form>
-            </th>
+                    <div th:unless="${isAscending}">"
+                        <a th:href="'/income?sortField=amount&sortDirection=ASC'">Amount</a>
+                    </div>
+                    <form method="get" th:action="@{/income}">
+                        <div class="form-group">
+                            <input class="form-control" type="number" step="0.01" data-decimals="2" name="filterAmount"
+                                   th:value="${filterAmount}" size="10">
+                        </div>
+                    </form>
 
-            <th>
-                <div th:if="${isAscending}">
-                    <a th:href="'/income?sortField=amount&sortDirection=DESC'">Amount</a>
-                </div>
-                <div th:unless="${isAscending}">"
-                    <a th:href="'/income?sortField=amount&sortDirection=ASC'">Amount</a>
-                </div>
-                <form method="get" th:action="@{/income}">
-                    <div class="form-group">
-                        <input class="form-control" type="number" step="0.01" data-decimals="2" name="filterAmount"
-                               th:value="${filterAmount}" size="10">
+                </th>
+                <th>
+                    <div th:if="${isAscending}">
+                        <a th:href="'/income?sortField=name&sortDirection=DESC'">Name</a>
                     </div>
-                </form>
+                    <div th:unless="${isAscending}">"
+                        <a th:href="'/income?sortField=name&sortDirection=ASC'">Name</a>
+                    </div>
+                    <form method="get" th:action="@{/income}">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="filterName" th:value="${filterName}"
+                                   size="20">
+                        </div>
+                    </form>
+                </th>
 
-            </th>
-            <th>
-                <div th:if="${isAscending}">
-                    <a th:href="'/income?sortField=name&sortDirection=DESC'">Name</a>
-                </div>
-                <div th:unless="${isAscending}">"
-                    <a th:href="'/income?sortField=name&sortDirection=ASC'">Name</a>
-                </div>
-                <form method="get" th:action="@{/income}">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="filterName" th:value="${filterName}" size="20">
+                <th>
+                    <div th:if="${isAscending}">
+                        <a th:href="'/income?sortField=description&sortDirection=DESC'">Description</a>
                     </div>
-                </form>
-            </th>
+                    <div th:unless="${isAscending}">"
+                        <a th:href="'/income?sortField=description&sortDirection=ASC'">Description</a>
+                    </div>
+                    <form method="get" th:action="@{/income}">
+                        <div class="form-group">
+                            <input class="form-control" type="description" name="filterDescription"
+                                   th:value="${filterDescription}"
+                                   size="20">
+                        </div>
+                    </form>
+                </th>
 
-            <th>
-                <div th:if="${isAscending}">
-                    <a th:href="'/income?sortField=description&sortDirection=DESC'">Description</a>
-                </div>
-                <div th:unless="${isAscending}">"
-                    <a th:href="'/income?sortField=description&sortDirection=ASC'">Description</a>
-                </div>
-                <form method="get" th:action="@{/income}">
-                    <div class="form-group">
-                        <input class="form-control" type="description" name="filterDescription" th:value="${filterDescription}"
-                               size="20">
-                    </div>
-                </form>
-            </th>
-
-            <th>Bank name
-                <form method="get" th:action="@{/income}">
-                    <div class="form-group">
-                        <input class="form-control" type="text" name="filterBank" th:value="${filterBank}" size="20">
-                    </div>
-                </form>
-            </th>
-            <th>Actions
-                <a th:href="'/income'">Clean</a>
-            </th>
-        </tr>
-        <tr th:if="${#lists.isEmpty(incomeList)}">
-            <td class="text-center" colspan="7">No Records found. Add some...!</td>
-        </tr>
-        <tr th:each="income : ${incomeList}">
-            <td class="align-middle">
-                <a th:href="'/income/' + ${income.id}">
-                    <span th:text="${income.id}"></span>
-                </a>
-            </td>
-            <td class="align-middle" th:text="${income.date}"></td>
-            <td class="align-middle" th:text="${income.amount}"></td>
-            <td class="align-middle" th:text="${income.name}"></td>
-            <td class="align-middle" th:text="${income.description}"></td>
-            <td class="align-middle" th:text="${income.bankName}"></td>
-            <td class="align-middle text-center form-inline">
-                <!--    <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a> -->
-                <a th:href="'/income/delete/' + ${income.id}">&#9988;</a>
-            </td>
-        </tr>
-    </table>
+                <th>Bank name
+                    <form method="get" th:action="@{/income}">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="filterBank" th:value="${filterBank}"
+                                   size="20">
+                        </div>
+                    </form>
+                </th>
+                <th>Actions
+                    <a th:href="'/income'">Clean</a>
+                </th>
+            </tr>
+            <tr th:if="${#lists.isEmpty(incomeList)}">
+                <td class="text-center" colspan="7">No Records found. Add some...!</td>
+            </tr>
+            <tr th:each="income : ${incomeList}">
+                <td class="align-middle">
+                    <a th:href="'/income/' + ${income.id}">
+                        <span th:text="${income.id}"></span>
+                    </a>
+                </td>
+                <td class="align-middle" th:text="${income.date}"></td>
+                <td class="align-middle" th:text="${income.amount}"></td>
+                <td class="align-middle" th:text="${income.name}"></td>
+                <td class="align-middle" th:text="${income.description}"></td>
+                <td class="align-middle" th:text="${income.bankName}"></td>
+                <td class="align-middle text-center form-inline">
+                    <!--    <a class="btn btn-secondary" th:href="'/income/' + ${income.id}">✏</a> -->
+                    <a th:href="'/income/delete/' + ${income.id}">&#9988;</a>
+                </td>
+            </tr>
+        </table>
     </div>
 </income>
