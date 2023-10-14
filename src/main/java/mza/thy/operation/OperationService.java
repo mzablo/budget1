@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 class OperationService {
+    private static final int NO_OF_RECORDS_TO_FIND_DUBLE = 100;
 
     private final OperationRepository operationRepository;
     private final IncomeRepository incomeRepository;
@@ -78,6 +79,12 @@ class OperationService {
         } else {
             log.debug("Not saved - empty operation {}", operationDto);
         }
+    }
+
+    boolean isAmountAlreadyExist(OperationDto operationDto) {
+        var idFrom = operationRepository.findMaxId() - NO_OF_RECORDS_TO_FIND_DUBLE;
+        return operationRepository.findAllByAmountAndIdGreaterThanAndIdNot(operationDto.getAmount(), idFrom, operationDto.getId() == null ? 0 : operationDto.getId())
+                .stream().findFirst().isPresent();
     }
 
     private Account getAccountForBankName(String bankName) {

@@ -18,6 +18,9 @@
         <input class="form-control" id="amount" placeholder="Enter amount" required autocomplete="off"
                th:field="*{amount}" step="0.01" data-decimals="2"
                type="number"/>
+        <div th:if="${#fields.hasErrors('global')}">
+            <p th:each="err : ${#fields.errors('global')}" th:text="${err}" class="error" />
+        </div>
     </div>
 
     <div>
@@ -40,13 +43,17 @@
     </div>
 
     <div>
-        <input class="btn btn-primary" type="submit" value="&#10004;">
+        <button class="btn btn-primary" type="submit" th:name="action" th:value="validate">update</button>
         <a class="btn btn-primary" th:href="'/operation/'">Reset</a>
         <div class="btn btn-dark" th:if="${operationDto.id > 0}">
             <a th:href="'/operation/delete/' + ${operationDto.id}">Delete</a>
         </div>
+        <button class="btn btn-primary" type="submit" th:name="action" th:value="save">force update</button>
     </div>
 </form>
+
+
+
 <div th:if="${isAscending}">
     <a th:href="'/operation?sortField=id&sortDirection=DESC'">Id</a>
 </div>

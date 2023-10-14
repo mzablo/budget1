@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.stream.Stream;
 
 //!!!todo  zrobic graf aby pozenic pageable i fetch aby nie bylo n+1
@@ -63,4 +64,14 @@ public interface OperationRepository extends JpaRepository<Operation, Long>,
     BigDecimal sumOperations();
 
     @Query(value = "SELECT sum(amount) FROM Operation O WHERE NAME LIKE '%ADB%'")
-    BigDecimal sumAdbOperations();}
+    BigDecimal sumAdbOperations();
+
+    @Query(value = "SELECT max(id) FROM Operation O")
+    Long findMaxId();
+
+    @Query("select o from Operation o where amount =:amount AND id > :idFrom AND id <> :notId")
+    List<Operation> findAllByAmountAndIdGreaterThanAndIdNot(@Param("amount") BigDecimal amount,
+                                                    @Param("idFrom") Long idFrom,
+                                                    @Param("notId") Long notId
+                                                    );
+}
