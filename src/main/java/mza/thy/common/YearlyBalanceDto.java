@@ -22,7 +22,7 @@ public class YearlyBalanceDto {
     private Integer year;
     private BigDecimal income;
     private BigDecimal outcome;
-    private BigDecimal balance;
+    private BigDecimal balance = BigDecimal.ZERO;
     private BigDecimal totalBalance = BigDecimal.ZERO;
 
 

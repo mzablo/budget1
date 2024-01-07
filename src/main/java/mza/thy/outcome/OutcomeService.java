@@ -121,7 +121,7 @@ class OutcomeService {
 
     private Outcome updateOutcome(Long id, OutcomeDto changedOutcomeDto) {
         var outcome = getOutcome(id);
-        outcome.setPrice(changedOutcomeDto.getPrice().add(getAddSafe(changedOutcomeDto.getAdd())));
+        outcome.setPrice(getPriceSave(changedOutcomeDto).add(getAddSafe(changedOutcomeDto.getAdd())));
         outcome.setDate(changedOutcomeDto.getDate());
         outcome.setName(changedOutcomeDto.getName());
         outcome.setCategory(changedOutcomeDto.getAnyCategory());
@@ -129,6 +129,10 @@ class OutcomeService {
         outcome.setDescription(changedOutcomeDto.getDescription());
         log.debug("Update outcome {}", changedOutcomeDto);
         return outcomeRepository.save(outcome);
+    }
+
+    private BigDecimal getPriceSave(OutcomeDto changedOutcomeDto) {
+        return Optional.ofNullable(changedOutcomeDto.getPrice()).orElse(BigDecimal.ZERO);
     }
 
     private BigDecimal getAddSafe(BigDecimal add) {
