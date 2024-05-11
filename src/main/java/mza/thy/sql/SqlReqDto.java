@@ -18,8 +18,8 @@ class SqlReqDto {
         return StringUtils.hasLength(sql) ? sql : "select top 100 * from outcome order by id desc";
     }
 
-    boolean isSelect() {
-        return getSql().toUpperCase().contains("SELECT");
+    boolean isUpdate() {
+        return getSql().toUpperCase().contains("UPDATE");
     }
 }
 

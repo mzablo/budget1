@@ -59,7 +59,7 @@ class SqlService {
         try {
             log.debug("Sql: {}", sql);
             var statement = ((org.hibernate.engine.spi.SessionImplementor) entityManager.getDelegate()).connection().createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            return sql.isSelect() ? processSelect(statement, sql.getSql()) : processUpdate(statement, sql.getSql());
+            return sql.isUpdate() ? processUpdate(statement, sql.getSql()) : processSelect(statement, sql.getSql());
         } catch (SQLException e) {
             e.printStackTrace();
             error = e.getMessage();

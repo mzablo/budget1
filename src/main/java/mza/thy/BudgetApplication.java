@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 @EnableScheduling
 //@EnableAspectJAutoProxy
+//todo edycja w tabeli
 public class BudgetApplication {
 
     public static void main(String[] args) {

@@ -1,12 +1,12 @@
-income=amount:1800;name:wynajem siedlecka;description:-153 podatek = 1647 dzies nie poszla
-income=amount:690;name:czynsz siedlecka;description:
-income=amount:250;name:garaz siedlecka;description:-21,25 podatek= 228,75 dzies nie poszla
+income=amount:1800;name:wynajem siedlecka;description:-153 podatek, czyli 1647 dzies nie poszla
+income=amount:800;name:czynsz siedlecka
+income=amount:250;name:garaz siedlecka;description:-21,25 podatek,  czyli 228,75 dzies nie poszla
 outcome=price:0.0;name:jedzonko;category:Spozywka
 outcome=price:0.0;name:dziesiecina;category:Dziesiecina;description:1+
-outcome=price:534.16;name:rafal zus;category:Inne
+outcome=price:629.43;name:rafal zus;category:Inne
 outcome=price:39.00;name:internet;category:Dom
 outcome=price:714.07;name:czynsz;category:Dom
-outcome=price:100.00;name:kieszonkowe basia;category:Kieszonkowe
-outcome=price:659.35;name:czynsz;category:Dom3
+outcome=price:110.00;name:kieszonkowe basia;category:Kieszonkowe
+outcome=price:669.35;name:czynsz;category:Dom3
 outcome=price:153.00;name:podatek siedlecka wynajem;category:Dom3
 outcome=price:21.25;name:podatek siedlecka garaz;category:Dom3

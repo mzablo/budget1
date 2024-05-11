@@ -6,6 +6,7 @@ import mza.thy.domain.Outcome;
 import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OutcomeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -82,6 +83,7 @@ class UtilsService {
                 .forEach(t -> createOutcome(utilsDto.getDate(), t));
     }
 
+    @Transactional
     public void generateIncome(UtilsDto utilsDto) {
         log.debug("Generating incomes from templates for date {}", utilsDto.getDate());
         getAllTemplates("income")
