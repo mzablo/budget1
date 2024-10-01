@@ -2,6 +2,7 @@ select * from outcome
 select * from outcome where cathegory
 select * from outcome where name like '% %' order by date desc
 update income set description ='dzies poszla' where id in (select id from income where description ='dzies nie poszla')
+select year(end_date), month(end_date), sum(interest_net) from lokata group by year(end_date), month(end_date) order by year(end_date), month(end_date)
 select * from account
 select * from account_operation
 select * from account_operation where account_id=1 order by date desc

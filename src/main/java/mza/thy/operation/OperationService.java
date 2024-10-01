@@ -81,7 +81,7 @@ class OperationService {
         }
     }
 
-    boolean isAmountAlreadyExist(OperationDto operationDto) {
+    boolean isAmountAlreadyExist(OperationDto operationDto) {//todo and account id?
         var idFrom = operationRepository.findMaxId() - NO_OF_RECORDS_TO_FIND_DUBLE;
         return operationRepository.findAllByAmountAndIdGreaterThanAndIdNot(operationDto.getAmount(), idFrom, operationDto.getId() == null ? 0 : operationDto.getId())
                 .stream().findFirst().isPresent();

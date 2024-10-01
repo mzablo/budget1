@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+//dodac koło z suma lokat w kazdym z bankow
+    //kolo z suma kont
 class ChartService {
     private final Clock clock;
     private final IncomeRepository incomeRepository;

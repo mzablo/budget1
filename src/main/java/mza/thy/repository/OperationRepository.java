@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.stream.Stream;
 
 //!!!todo  zrobic graf aby pozenic pageable i fetch aby nie bylo n+1
+//todo zrobic przypominajke todo
+//buton < > by nie trzeb bylo do tabeli zjezdzacF
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long>,
         FilterCommonType<Operation>, FilterNameType<Operation>, FilterDescriptionType<Operation>, FilterDateType<Operation>, FilterAmountType<Operation>, FilterBankNameType<Operation> {

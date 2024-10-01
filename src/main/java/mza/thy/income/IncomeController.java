@@ -21,9 +21,7 @@ import java.util.Optional;
 //!! jak blad przy zapisie to ladnie obsluzyc
 //!!! pytanie czy zapisac zmiany
 //!!! view, wykresy?`
-//dzienniczek biegowy
 //sql utrzymywanie stanu
-//zblizajace sie koniec lokat - powiadomienia
 // odstep miedzy kolumnami w tabeli
 @Controller
 @RequiredArgsConstructor

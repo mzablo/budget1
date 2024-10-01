@@ -1,7 +1,10 @@
 <footer style="font-size: large" class="panel-footer">
-    Total income  [[${totalIncome}]]
-    Total outcome [[${totalOutcome}]]
-    Balance [[${balance}]]
+    <tbody>
+    <tr th:each="account : ${accountList}">
+        <td><span th:text="${account.bank}"> Bank: </span></td>
+        <td><span th:text="${account.balance}"> Balance </span></td>
+    </tr>
+    </tbody>
     <nav class="navbar navbar-expand-md bg-dark navbar-dark">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#topNavbar">
             <span class="navbar-toggler-icon">

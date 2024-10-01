@@ -8,11 +8,13 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.stereotype.Component;
-
+/*
+https://docs.spring.io/spring-framework/reference/core/aop/ataspectj/pointcuts.html
+ */
 @Aspect
 @Slf4j
 @Component
-@ConditionalOnExpression("${aspect.enabled:true}")
+@ConditionalOnExpression("${aspect.enabled:true}")//w application.localdev.yml set to true to turn on the time mesurement
 public class MeasureExecutionTimeAspect {
 
     @Pointcut("execution (public * mza.thy..*(..))")
@@ -29,14 +31,13 @@ public class MeasureExecutionTimeAspect {
         log.info("Processing of method {} ended in time {} ms", pjp.getSignature().getName(), endTime);
         return result;
     }
-/*
-    @Around("@annotation(mza.thy.infrastructure.TrackExecutionTime)")
+//inny przyklad:
+ /*   @Around("@annotation(mza.thy.infrastructure.TrackExecutionTime)")
     public Object executionTime(ProceedingJoinPoint point) throws Throwable {
         long startTime = System.currentTimeMillis();
         Object object = point.proceed();
         long endtime = System.currentTimeMillis();
         log.info("Class Name: " + point.getSignature().getDeclaringTypeName() + ". Method Name: " + point.getSignature().getName() + ". Time taken for Execution is : " + (endtime - startTime) + "ms");
         return object;
-    }
- */
+    }*/
 }

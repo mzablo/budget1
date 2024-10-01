@@ -17,14 +17,6 @@ import java.util.Optional;
 public class SummaryController {
     private final SummaryService summaryService;
 
-    public String getSummary(Model model) {
-        var summary = summaryService.getSummary();
-        model.addAttribute("totalIncome", summary.getTotalIncome());
-        model.addAttribute("totalOutcome", summary.getTotalOutcome());
-        model.addAttribute("balance", summary.getBalance());
-        return "summary";
-    }
-
     @GetMapping("/summary")
     public String getSummaryView(Model model) {
         var summary = summaryService.getSummary();
@@ -38,5 +30,4 @@ public class SummaryController {
         model.addAttribute("error", summaryService.getError());
         return "summary";
     }
-
 }
