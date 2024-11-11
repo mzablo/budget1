@@ -68,7 +68,8 @@ class SummaryService {
     }
 
     private BigDecimal getSumAdbOperations() {
-        return operationRepository.sumAdbOperations();
+        var result = operationRepository.sumAdbOperations();
+        return result == null ? BigDecimal.ZERO : result;
     }
 
     private BigDecimal getSumOperations() {
@@ -76,11 +77,13 @@ class SummaryService {
     }
 
     private BigDecimal getSumAdbActiveDeposit() {
-        return depositRepository.sumAdbActiveDeposit();
+        var result = depositRepository.sumAdbActiveDeposit();
+        return result == null ? BigDecimal.ZERO : result;
     }
 
     private BigDecimal getSumActiveDeposit() {
-        return depositRepository.sumActiveDeposit();
+        var result = depositRepository.sumActiveDeposit();
+        return result == null ? BigDecimal.ZERO : result;
     }
 
     private BigDecimal getOutcome() {

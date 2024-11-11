@@ -2,6 +2,7 @@ package mza.thy.domain;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.CacheService;
 import mza.thy.repository.AccountRepository;
 import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OperationRepository;
@@ -22,6 +23,7 @@ public class OperationHandler {
     private final OperationRepository operationRepository;
     private final IncomeRepository incomeRepository;
     private final OutcomeRepository outcomeRepository;
+    private final CacheService cacheService;
 
     @Transactional
     public void handleOperation(Long operationId, String bankName, Income income) {
@@ -40,6 +42,7 @@ public class OperationHandler {
         } else {
             updateOperation(operation, bankName, income);
         }
+        cacheService.removeCache(CacheService.ACCOUNT_LIST);
     }
 
     public void handleOperation(Long operationId, String bankName, Outcome outcome) {
@@ -58,6 +61,7 @@ public class OperationHandler {
         } else {
             updateOperation(operation, bankName, outcome);
         }
+        cacheService.removeCache(CacheService.ACCOUNT_LIST);
     }
 
     private void deleteOperation(Income income, Operation operation) {

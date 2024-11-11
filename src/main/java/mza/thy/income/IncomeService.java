@@ -35,11 +35,11 @@ class IncomeService {
     }
 
     @Transactional(readOnly = true)
-    public List<IncomeDto> getIncomeList(FilterParams filterParams, @NotNull Sort sort) {
+    public List<IncomeDto> getIncomeList(FilterParams filterParams, Pageable pageable) {
         if (FilterParams.isFilled(filterParams)) {
             return doFilter(filterParams);
         }
-        return incomeRepository.findTotalAll(sort)
+        return incomeRepository.findTotalAll(pageable)
                 .map(IncomeDto::convert)
                 .collect(Collectors.toList());
     }

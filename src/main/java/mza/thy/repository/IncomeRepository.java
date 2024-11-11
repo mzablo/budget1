@@ -4,6 +4,7 @@ import mza.thy.common.MonthlyBalanceHelperDto;
 import mza.thy.common.YearlyBalanceHelperDto;
 import mza.thy.domain.Income;
 import mza.thy.filter.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -87,6 +88,6 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     Stream<Income> findAllByBankLike(@Param("bankName") String bankName);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")
-    Stream<Income> findTotalAll(Sort sort);
+    Stream<Income> findTotalAll(Pageable pageable);
 //    Page<Income> findAllX(Pageable pageable);
 }

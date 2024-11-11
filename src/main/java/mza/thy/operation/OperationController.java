@@ -27,7 +27,7 @@ public class OperationController {
     private static final String DEFAULT_NAME = "platnosc karta";
     private static final String VALIDATE = "validate";
     private final int pageNumberDefault = 0;
-    private final int pageSizeDefault = 100000;
+    private final int pageSizeDefault = 500;
     private final Sort defaultSort = Sort.by(Sort.Direction.DESC, "id");
     private final PageRequest pageableDefault = PageRequest.of(pageNumberDefault, pageSizeDefault, defaultSort);
     private final OperationService operationService;

@@ -2,6 +2,7 @@ package mza.thy.outcome;
 
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.CacheService;
 import mza.thy.domain.OperationHandler;
 import mza.thy.domain.Outcome;
 import mza.thy.domain.filter.FilterParams;
@@ -62,13 +63,13 @@ class OutcomeService {
         }
         return outcomeRepository.findTotalAll(page)
                 .map(OutcomeDto::convert)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<OutcomeDto> doFilter(FilterParams filterParams) {
         return filter.getFiltered(filterParams)
                 .map(OutcomeDto::convert)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -99,6 +100,7 @@ class OutcomeService {
             outcome = saveNewOutcome(outcomeDto);
         }
         operationHandler.handleOperation(outcomeDto.getOperationId(), outcomeDto.getBankName(), outcome);
+
         return outcome.getId();
     }
 

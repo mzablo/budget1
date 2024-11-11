@@ -1,12 +1,8 @@
 package mza.thy.infrastructure;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import javax.persistence.EntityManagerFactory;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.Clock;

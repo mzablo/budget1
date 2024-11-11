@@ -1,12 +1,15 @@
 package mza.thy.account;
 
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.CacheService;
 import mza.thy.domain.Account;
 import mza.thy.domain.filter.FilterParams;
 import mza.thy.filter.FilterHandler;
 import mza.thy.repository.AccountRepository;
 import mza.thy.repository.DepositRepository;
 import mza.thy.repository.OperationRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,17 +32,20 @@ class AccountService implements AccountFacade {
     private final DepositRepository depositRepository;
     private final OperationRepository operationRepository;
     private final DecimalFormat decimalFormat;
+    private final CacheService cacheService;
     private FilterHandler<Account> filter;
 
-    public AccountService(AccountRepository accountRepository, OperationRepository operationRepository, DecimalFormat decimalFormat, DepositRepository depositRepository) {
+    public AccountService(AccountRepository accountRepository, OperationRepository operationRepository, DecimalFormat decimalFormat, DepositRepository depositRepository, CacheService cacheService) {
         this.accountRepository = accountRepository;
         this.depositRepository = depositRepository;
         this.operationRepository = operationRepository;
         this.decimalFormat = decimalFormat;
+        this.cacheService = cacheService;
         this.filter = accountRepository.getFilter();
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = CacheService.ACCOUNT_LIST)
     public List<AccountDto> getAccountList() {
         var result = accountRepository.findAll()
                 .stream()
@@ -58,7 +64,7 @@ class AccountService implements AccountFacade {
                 .orElse(accountRepository.findAll())
                 .stream()
                 .map(a -> AccountDto.convertToDto(a, getAccountBalance(a)))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private String getAccountBalance(Account account) {
@@ -96,6 +102,11 @@ class AccountService implements AccountFacade {
         } else {
             saveNewAccount(accountDto);
         }
+        removeCache();
+    }
+
+    private void removeCache() {
+        cacheService.removeCache(CacheService.ACCOUNT_LIST);
     }
 
     private void saveNewAccount(AccountDto accountDto) {
@@ -114,6 +125,7 @@ class AccountService implements AccountFacade {
             return "Cannot delete - operations exists for account " + id;
         }
         accountRepository.deleteById(id);
+        removeCache();
         log.debug("Deleted account {}", id);
         return null;
     }

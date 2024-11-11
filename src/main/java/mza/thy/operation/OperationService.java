@@ -1,6 +1,7 @@
 package mza.thy.operation;
 
 import lombok.extern.slf4j.Slf4j;
+import mza.thy.common.CacheService;
 import mza.thy.domain.Account;
 import mza.thy.domain.Operation;
 import mza.thy.domain.filter.FilterParams;
@@ -9,6 +10,7 @@ import mza.thy.repository.AccountRepository;
 import mza.thy.repository.IncomeRepository;
 import mza.thy.repository.OperationRepository;
 import mza.thy.repository.OutcomeRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,13 +29,15 @@ class OperationService {
     private final IncomeRepository incomeRepository;
     private final OutcomeRepository outcomeRepository;
     private final AccountRepository accountRepository;
+    private final CacheService cacheService;
     private FilterHandler<Operation> filter;
 
-    public OperationService(OperationRepository operationRepository, IncomeRepository incomeRepository, OutcomeRepository outcomeRepository, AccountRepository accountRepository) {
+    public OperationService(OperationRepository operationRepository, IncomeRepository incomeRepository, OutcomeRepository outcomeRepository, AccountRepository accountRepository, CacheService cacheService) {
         this.operationRepository = operationRepository;
         this.incomeRepository = incomeRepository;
         this.outcomeRepository = outcomeRepository;
         this.accountRepository = accountRepository;
+        this.cacheService = cacheService;
         this.filter = operationRepository.getFilter();
     }
 
@@ -45,7 +49,7 @@ class OperationService {
         return operationRepository.findAll(pageable)
                 .stream()
                 .map(OperationDto::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     private List<OperationDto> doFilter(FilterParams filterParams) {
@@ -70,6 +74,7 @@ class OperationService {
         } else {
             saveNewOperation(operationDto);
         }
+        cacheService.removeCache(CacheService.ACCOUNT_LIST);
     }
 
     private void saveNewOperation(OperationDto operationDto) {
@@ -101,6 +106,7 @@ class OperationService {
         log.debug("Deleted operation {}", id);
         log.debug("Number of deleted income {}", deletedIncome);
         log.debug("Number of deleted outcome {}", deletedOutcome);
+        cacheService.removeCache(CacheService.ACCOUNT_LIST);
     }
 
     private void updateOperation(Long id, OperationDto operationDto) {
