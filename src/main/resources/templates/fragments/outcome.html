@@ -73,6 +73,7 @@
             Current page: [[${pageNumber}]]
             <a th:href="@{'/outcome/?pageSize=100&pageNumber='+${pageNumber+1}}">Next</a>
             Total records: [[${total}]]
+            <a th:href="@{'/outcome/?filterName=jedzonko'}">Filter by jedzonko</a>
         </div>
     </form>
     <div th:if="${isAscending}">
