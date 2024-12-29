@@ -62,7 +62,7 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
     Stream<OutcomeByCategoryHelperDto> outcomeByCategory(int year, int month);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE I.name like :name order by id desc")
+            "WHERE lower(I.name) like :name order by id desc")
     Stream<Outcome> findAllByNameLike(String name);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
@@ -82,11 +82,11 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
     Stream<Outcome> findAllByYearAndMonth(int year, int month);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE I.description like :description order by id desc")
+            "WHERE lower(I.description) like :description order by id desc")
     Stream<Outcome> findAllByDescriptionLike(String description);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE I.category like :category order by id desc")
+            "WHERE lower(I.category) like :category order by id desc")
     Stream<Outcome> findAllByCategoryLike(String category);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
@@ -94,7 +94,7 @@ public interface OutcomeRepository extends JpaRepository<Outcome, Long>,
     Stream<Outcome> findAllByAmount(BigDecimal price);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE A.bank like :bankName order by id desc")
+            "WHERE lower(A.bank) like :bankName order by id desc")
     Stream<Outcome> findAllByBankLike(@Param("bankName") String bankName);
 
     @Query(value = "SELECT I FROM Outcome I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")

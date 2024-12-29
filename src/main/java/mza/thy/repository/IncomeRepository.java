@@ -56,7 +56,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     List<MonthlyBalanceHelperDto> monthlyBalance();
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE I.name like :name order by id desc")
+            "WHERE lower(I.name) like :name order by id desc")
     Stream<Income> findAllByNameLike(String name);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
@@ -76,7 +76,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     Stream<Income> findAllByYearAndMonth(int year, int month);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE I.description like :description order by id desc")
+            "WHERE lower(I.description) like :description order by id desc")
     Stream<Income> findAllByDescriptionLike(String description);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
@@ -84,7 +84,7 @@ public interface IncomeRepository extends JpaRepository<Income, Long>,
     Stream<Income> findAllByAmount(BigDecimal amount);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A " +
-            "WHERE A.bank like :bankName order by id desc")
+            "WHERE lower(A.bank) like :bankName order by id desc")
     Stream<Income> findAllByBankLike(@Param("bankName") String bankName);
 
     @Query(value = "SELECT I FROM Income I LEFT JOIN FETCH I.operation O LEFT JOIN FETCH O.account A")

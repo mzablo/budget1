@@ -28,11 +28,11 @@ public interface DepositRepository extends JpaRepository<Deposit, Long>,
     }
 
     @Query(value = "SELECT D FROM Deposit D " +
-            "WHERE D.bank like :name order by id desc")
+            "WHERE lower(D.bank) like :name order by id desc")
     Stream<Deposit> findAllByBankLike(String name);
 
     @Query(value = "SELECT D FROM Deposit D " +
-            "WHERE D.description like :description order by id desc")
+            "WHERE lower(D.description) like :description order by id desc")
     Stream<Deposit> findAllByDescriptionLike(String description);
 
     @Query(value = "SELECT D from Deposit D " +

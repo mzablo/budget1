@@ -25,7 +25,7 @@ public interface IllnessRepository extends JpaRepository<Illness, Long>,
     }
 
     @Query(value = "SELECT I FROM Illness I " +
-            "WHERE I.name like :name order by id desc")
+            "WHERE lower(I.name) like :name order by id desc")
     Stream<Illness> findAllByNameLike(String name);
 
     @Query(value = "SELECT I FROM Illness I " +
@@ -45,7 +45,7 @@ public interface IllnessRepository extends JpaRepository<Illness, Long>,
     Stream<Illness> findAllByYearAndMonth(int year, int month);
 
     @Query(value = "SELECT I FROM Illness I " +
-            "WHERE I.description like :description order by id desc")
+            "WHERE lower(I.description) like :description order by id desc")
     Stream<Illness> findAllByDescriptionLike(String description);
 
     @Query(value = "SELECT I FROM Illness I " +

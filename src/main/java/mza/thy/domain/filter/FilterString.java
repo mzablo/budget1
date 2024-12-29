@@ -9,6 +9,6 @@ public class FilterString {
     private String value;
 
     public String getValue() {
-        return ("%" + value + "%");
+        return ("%" + value.toLowerCase() + "%");
     }
 }
