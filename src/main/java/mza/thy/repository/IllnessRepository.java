@@ -49,6 +49,6 @@ public interface IllnessRepository extends JpaRepository<Illness, Long>,
     Stream<Illness> findAllByDescriptionLike(String description);
 
     @Query(value = "SELECT I FROM Illness I " +
-            "WHERE I.who like :who order by id desc")
+            "WHERE lower(I.who) like :who order by id desc")
     Stream<Illness> findAllByWhoLike(String who);
 }

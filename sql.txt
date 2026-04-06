@@ -1,7 +1,10 @@
+select sum(price*counter), year, month, cathegory from outcome where cathegory not like '%Chotomo%' and year = 2025 group by year,month,cathegory  order by year desc, month desc, cathegory 
+select sum(price*counter), year, month from outcome where cathegory not like '%Chotomow%' group by year,month order by year desc, month desc
 select * from outcome
+select sum(price*counter) from outcome where cathegory ='Chotomow remont'
 select * from outcome where cathegory
 select * from outcome where name like '% %' order by date desc
-update income set description ='dzies poszla' where id in (select id from income where description ='dzies nie poszla')
+update income set description ='dzies poszla' where id in (select id from income where description like '%dzies nie poszla%')
 select year(end_date), month(end_date), sum(interest_net) from lokata group by year(end_date), month(end_date) order by year(end_date), month(end_date)
 select * from account
 select * from account_operation

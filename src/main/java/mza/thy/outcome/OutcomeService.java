@@ -25,18 +25,16 @@ class OutcomeService {
 
     private final OperationHandler operationHandler;
     private final OutcomeRepository outcomeRepository;
-    private final List<String> categoryList;
     private final FilterHandler<Outcome> filter;
 
     public OutcomeService(OperationHandler operationHandler, OutcomeRepository outcomeRepository) {
         this.operationHandler = operationHandler;
         this.outcomeRepository = outcomeRepository;
         this.filter = outcomeRepository.getFilter();
-        this.categoryList = prepareCategoryList();
     }
 
     List<String> getCategoryList() {
-        return categoryList;
+        return prepareCategoryList();
     }
 
     private List<String> prepareCategoryList() {
@@ -46,7 +44,7 @@ class OutcomeService {
             String categories = prop.getProperty("outcomeCat", "brak");
             return Arrays.asList(categories.split(";"));
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("failed getting categories: {}", e.getMessage());
         }
         return List.of("empty");
     }

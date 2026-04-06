@@ -108,6 +108,7 @@ public class Deposit {
     }
 
     private void calculateInterest() {
+        if (amount == null) return;
         interest = amount.multiply(percent)
                 .divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_UP)
                 .divide(BigDecimal.valueOf(12), 2, RoundingMode.HALF_UP)
